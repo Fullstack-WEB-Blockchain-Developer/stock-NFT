@@ -83,9 +83,9 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
   });
   const muiClasses = useStyles();
 
-  const loadIcon = ({src}) => {
+  const loadIcon = ({ src }) => {
     return `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
-  }
+  };
 
   const sendOfferToServer = async () => {
     const {
@@ -180,12 +180,12 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
           title: "The network has been changed successfully.",
         })
       );
-    }else {
+    } else {
       // await tokenContract.deposit({from: account, value:ethers.utils.parseEther('0.1')})
       const value = modalData.amount;
       const offerClass = new Offer({ contractAddress: tokenAddr, signer: library?.getSigner(), library });
       const nonce = await tokenContract.nonces(account);
-      console.log(modalData)
+      console.log(modalData);
       const { offer, signature } = await offerClass.makeOffer(
         account,
         stokeMarketAddr,
@@ -243,11 +243,11 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
 
   useEffect(() => {
     if (library) {
-      if(tokenNetwork === "ethereum") {
+      if (tokenNetwork === "ethereum") {
         tokenAddr = eth_tokenAddr;
         stokeMarketAddr = eth_stokeMarketAddr;
-        supportNetwork = etherChain
-      }else if(tokenNetwork === "polygon") {
+        supportNetwork = etherChain;
+      } else if (tokenNetwork === "polygon") {
         tokenAddr = pol_tokenAddr;
         stokeMarketAddr = pol_stokeMarketAddr;
         supportNetwork = polygonChain;
@@ -265,7 +265,6 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
         console.log("---account", account);
         account && getTokenBalance();
       }
-
     }
   }, [account, library]);
 

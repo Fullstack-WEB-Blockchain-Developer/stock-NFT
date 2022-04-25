@@ -372,7 +372,10 @@ export const RightSideInfoWrapper = ({
       </div>
       <MakeOfferModal
         isOpened={isMakeOfferModalOpened}
-        handleClose={() => setIsMakeOfferModalOpened(false)}
+        handleClose={() => {
+          console.log("aa");
+          setIsMakeOfferModalOpened(false);
+        }}
         tokenNetwork={tokenNetwork}
       />
       <AcceptOfferModal

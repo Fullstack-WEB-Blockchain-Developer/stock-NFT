@@ -10,11 +10,11 @@ import { ChooseWalletBox } from "../../components/ChooseWalletBox/ChooseWalletBo
 import { styles as jsStyles } from "./ConnectWalletModal.utils";
 import cssStyles from "./ConnectWalletModal.module.css";
 
-export const ConnectWalletModal = ({ isOpened, handleClose }) => {
+export const ConnectWalletModal = ({ isOpened, onClose }) => {
   return (
     <Modal
       open={isOpened}
-      onClose={handleClose}
+      onClose={onClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -22,13 +22,13 @@ export const ConnectWalletModal = ({ isOpened, handleClose }) => {
         <div className={cssStyles.chooseBoxWrapper}>
           <Typography id="modal-modal-title" variant="h6" component="h2" style={jsStyles.header}>
             <span>Please connect wallet</span>
-            <div className={cssStyles.cross} onClick={handleClose}>
+            <div className={cssStyles.cross} onClick={onClose}>
               <Image
                 src="/create-nft/Icon-Close.svg"
                 alt="close-icon"
                 width={15}
                 height={15}
-                onClick={handleClose}
+                onClick={onClose}
               />
             </div>
           </Typography>
