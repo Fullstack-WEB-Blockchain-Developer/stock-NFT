@@ -17,7 +17,7 @@ contract StokeNFT is ERC721URIStorage {
         uint256 tokenId;
     }
     
-     mapping(uint256 => Token) public tokens;
+    mapping(uint256 => Token) public tokens;
 
      function totalSupply() public view returns (uint256) {
         return _tokenCounter.current();
@@ -45,7 +45,21 @@ contract StokeNFT is ERC721URIStorage {
         return _tokenId;
     }
 
-     function IsExistToken(uint256 _tokenId) public view returns(bool){
+    function createOrder(string memory _tokenURI, uint256 _tokenId, address marketContract) public {
+        _tokenCounter.increment();
+        uint256 id = _tokenCounter.current();
+
+        _safeMint(msg.sender, _tokenId);
+        _setTokenURI(_tokenId, _tokenURI);
+
+        tokens[id] = Token(
+            _tokenId
+        );
+
+        _approve(marketContract, _tokenId);
+    }
+
+    function IsExistToken(uint256 _tokenId) public view returns(bool){
         bool state = _exists(_tokenId);
 
         return state;

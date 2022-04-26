@@ -68,11 +68,8 @@ contract StokeMarketplace is ReentrancyGuard {
 
         //transfer weth token
         IERC20(WETH).transferFrom(offer.sender, msg.sender, (offer.amount - serviceFee));
+        //transfer market fee to market owner
         IERC20(WETH).transferFrom(offer.sender, marketowner, serviceFee);
-    }
-
-    function transferAmount(address payable _recipient) external payable {
-        _recipient.transfer(msg.value);
     }
 
     function buyOrder(address payable _recipient, uint256 _tokenId, address _nftContract) public payable {
