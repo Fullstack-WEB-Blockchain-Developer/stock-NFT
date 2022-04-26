@@ -4,6 +4,7 @@ import FavoritedIcon from "./icons/Icon-Heart.svg";
 import ActivityIcon from "./icons/Icon-Activity.svg";
 import OfferIcon from "./icons/Icon-Offers.svg";
 import { getEtherPrice } from "../../../../utils";
+import { getDateAgo } from "../../../../helpers/getDateAgo";
 
 export const fakeActivities = [
   {
@@ -12,14 +13,14 @@ export const fakeActivities = [
       icon: "32aab398-0c84-4f05-80c9-524589c24319.svg",
     },
     buyer: {
-      name: "some buyer",
+      name: "some buyerrrrrr",
     },
-    seller: { name: "Some seller" },
+    seller: { name: "Some sellerrrrr" },
     nft: {
       fileName: "32aab398-0c84-4f05-80c9-524589c24319.svg",
-      name: "Some token",
+      name: "Some tokennnnnnnnnnnn",
       collection: {
-        name: "Collection 1",
+        name: "Collection 114141234123412341234",
       },
       price: {
         currency: { name: "ETH", icon: "32aab398-0c84-4f05-80c9-524589c24319.svg" },
@@ -27,7 +28,7 @@ export const fakeActivities = [
       },
     },
     quantity: 1,
-    date: new Date() - 10000,
+    date: new Date() - 10000000,
     id: "1",
   },
   {
@@ -48,7 +49,7 @@ export const fakeActivities = [
       price: null,
     },
     quantity: 1,
-    date: new Date() - 50000,
+    date: new Date() - 50000000,
     id: "2",
   },
   {
@@ -120,7 +121,7 @@ export const fakeActivities = [
       },
     },
     quantity: 1,
-    date: new Date() - 50000,
+    date: new Date() - 100000,
     id: "5",
   },
 ];
@@ -171,8 +172,9 @@ export const adaptActivities = async (activities) => {
                     usd: (result * elem.nft.price.amount).toFixed(2),
                   },
                 },
+                date: getDateAgo(elem.date),
               }
-            : elem
+            : { ...elem, date: getDateAgo(elem.date) }
         )
     )
   );

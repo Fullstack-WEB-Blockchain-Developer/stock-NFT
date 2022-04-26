@@ -17,7 +17,6 @@ import { SquareNFTCard } from "../../../../components/SquareNFTCard/SquareNFTCar
 import { SmallNFTCard } from "../../../../components/SmallNFTCard/SmallNFTCard";
 //utils & helpers
 import { adaptActivities, chooseSections, fakeActivities } from "./ContentWrapper.utils";
-import { getDateAgo } from "../../../../helpers/getDateAgo";
 //styles
 import styles from "./ContentWrapper.module.scss";
 
@@ -210,16 +209,16 @@ export const ContentWrapper = () => {
                             )}
                           </div>
                           <div className={styles.quantityColumn}>
-                            <span>Quantity</span>
+                            <span>{quantity}</span>
                           </div>
                           <div className={styles.fromColumn}>
-                            <span>From</span>
+                            <span>{buyer.name || buyer.publicAddress || '———'}</span>
                           </div>
                           <div className={styles.toColumn}>
-                            <span>To</span>
+                            <span>{seller.name || seller.publicAddress || '———'}</span>
                           </div>
                           <div className={styles.timeColumn}>
-                            <span>Time</span>
+                            <span>{date}</span>
                           </div>
                         </div>
                       ))}

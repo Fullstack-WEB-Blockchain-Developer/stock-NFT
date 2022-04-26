@@ -114,6 +114,12 @@
   font-size: 18px;
   letter-spacing: 0.02px;
   color: var(--white);
+
+  div {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 
 .activityRow {
@@ -152,8 +158,8 @@
 }
 
 .itemImageWrapper {
-  height: 63px;
-  width: 63px;
+  min-height: 63px;
+  min-width: 63px;
 
   border: 1px solid #707070;
   border-radius: 8px;
