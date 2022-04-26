@@ -3,6 +3,7 @@ import CreatedIcon from "./icons/Icon-Created.svg";
 import FavoritedIcon from "./icons/Icon-Heart.svg";
 import ActivityIcon from "./icons/Icon-Activity.svg";
 import OfferIcon from "./icons/Icon-Offers.svg";
+import { getEtherPrice } from "../../../../utils";
 
 export const fakeActivities = [
   {
@@ -123,6 +124,7 @@ export const fakeActivities = [
     id: "5",
   },
 ];
+
 export const chooseSections = [
   {
     text: "Collected",
@@ -153,3 +155,25 @@ export const chooseSections = [
     nameForBE: "offers",
   },
 ];
+
+export const adaptActivities = async (activities) => {
+  return Promise.all(
+    [...activities].map(
+      async (elem) =>
+        await getEtherPrice().then((result) =>
+          elem.nft.price
+            ? {
+                ...elem,
+                nft: {
+                  ...elem.nft,
+                  price: {
+                    ...elem.nft.price,
+                    usd: (result * elem.nft.price.amount).toFixed(2),
+                  },
+                },
+              }
+            : elem
+        )
+    )
+  );
+};
