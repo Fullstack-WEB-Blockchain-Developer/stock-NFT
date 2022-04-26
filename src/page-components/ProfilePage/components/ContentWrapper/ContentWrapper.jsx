@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 //next
 import Image from "next/image";
 //redux
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setField } from "../../../../redux/slices/userDataSlice";
 //axios
 import axios from "axios";
 //classnames
@@ -22,21 +23,21 @@ import { getEtherPrice } from "../../../../utils";
 import styles from "./ContentWrapper.module.scss";
 
 export const ContentWrapper = () => {
-  const [choosenSection, setChoosenSection] = useState("activity");
+  const dispatch = useDispatch();
+  const [choosenSection, setChoosenSection] = useState("collected");
   const [isSidebarOpened, setIsSidebarOpened] = useState(true);
   const [tokens, setTokens] = useState(fakeActivities);
 
   const { readyFilterOption, tokensGridScale } = useSelector((state) => state.profileFiltration);
+  const { userData } = useSelector((state) => state);
 
   //later it should be changed to icons, not nftMedia
   const imageLoader = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
 
   // const getTokens = useCallback(async () => {
-  //   const accessToken = localStorage.getItem("accessToken");
-  //   const { sortOrder, sortBy } = readyFilterOption;
-
+ 
   //   const {
-  //     data: { data },
+  //     data: { data, createdNfts, ownedNfts, favoritedNfts, totalValue },
   //   } = await axios.get(
   //     `${process.env.BACKEND_URL}/users/account/assets?tab=${choosenSection}&sortOrder=${sortOrder}&sortBy=${sortBy}`,
   //     {
@@ -45,9 +46,13 @@ export const ContentWrapper = () => {
   //       },
   //     }
   //   );
-  //     console.log('---data', data)
+  //   dispatch(setField({ field: "createdNfts", value: createdNfts }));
+  //   dispatch(setField({ field: "ownedNfts", value: ownedNfts }));
+  //   dispatch(setField({ field: "favoritedNfts", value: favoritedNfts }));
+  //   dispatch(setField({ field: "totalValue", value: totalValue }));
+
   //   return data;
-  // }, [choosenSection, readyFilterOption]);
+  // }, [choosenSection, readyFilterOption, dispatch]);
 
   // useEffect(() => {
   //   getTokens().then((result) => setTokens(result));
@@ -56,7 +61,7 @@ export const ContentWrapper = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.chooseSectionWrapper}>
-        {chooseSections.map(({ text, icon, nameForBE }) => (
+        {chooseSections.map(({ text, icon, nameForBE, forRedux }) => (
           <div
             className={cn(styles.chooseSection, {
               [styles.chooseSectionActive]: choosenSection === nameForBE,
@@ -65,7 +70,9 @@ export const ContentWrapper = () => {
             key={text}
           >
             {icon}
-            <span>{text}</span>
+            <span>
+              {text}{nameForBE !== 'activity' && nameForBE !== 'offers' && `(${userData[forRedux]})`}
+            </span>
           </div>
         ))}
       </div>

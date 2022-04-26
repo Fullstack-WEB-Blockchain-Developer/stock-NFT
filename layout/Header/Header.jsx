@@ -54,7 +54,6 @@ export const Header = () => {
       const { data } = await axios.get(`${process.env.BACKEND_URL}/users/${publicAddress}`, {
         headers: { Authorization: "Bearer " + accessToken },
       });
-      console.log("---data", data);
       dispatch(setImage(data.profileImage));
       dispatch(setBanner(data.profileBanner));
       dispatch(setUsername(data.username));
@@ -81,7 +80,6 @@ export const Header = () => {
   const openWalletPopup = () => {
     dispatch(openWalletPopupReducer());
   };
-  console.log("---username", username);
 
   return (
     <header className={styles.header}>
