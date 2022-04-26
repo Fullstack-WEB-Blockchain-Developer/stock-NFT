@@ -34,6 +34,9 @@ export const ContentWrapper = () => {
   const imageLoader = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
 
   const getTokens = useCallback(async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const { sortOrder, sortBy } = readyFilterOption;
+
     const {
       data: { data, createdNfts, ownedNfts, favoritedNfts, totalValue },
     } = await axios.get(
@@ -44,13 +47,15 @@ export const ContentWrapper = () => {
         },
       }
     );
-    dispatch(setField({ field: "createdNfts", value: createdNfts }));
-    dispatch(setField({ field: "ownedNfts", value: ownedNfts }));
-    dispatch(setField({ field: "favoritedNfts", value: favoritedNfts }));
-    dispatch(setField({ field: "totalValue", value: totalValue }));
-console.log('---data', data)
+    if (userData.ownedNfts === 0) {
+      dispatch(setField({ field: "createdNfts", value: createdNfts }));
+      dispatch(setField({ field: "ownedNfts", value: ownedNfts }));
+      dispatch(setField({ field: "favoritedNfts", value: favoritedNfts }));
+      dispatch(setField({ field: "totalValue", value: totalValue }));
+    }
+
     return data;
-  }, [choosenSection, readyFilterOption, dispatch]);
+  }, [choosenSection, readyFilterOption, dispatch, userData.ownedNfts]);
 
   useEffect(() => {
     getTokens().then((result) => setTokens(result));
@@ -211,10 +216,10 @@ console.log('---data', data)
                             <span>{quantity}</span>
                           </div>
                           <div className={styles.fromColumn}>
-                            <span>{buyer.name || buyer.publicAddress || '———'}</span>
+                            <span>{buyer.name || buyer.publicAddress || "———"}</span>
                           </div>
                           <div className={styles.toColumn}>
-                            <span>{seller.name || seller.publicAddress || '———'}</span>
+                            <span>{seller.name || seller.publicAddress || "———"}</span>
                           </div>
                           <div className={styles.timeColumn}>
                             <span>{date}</span>

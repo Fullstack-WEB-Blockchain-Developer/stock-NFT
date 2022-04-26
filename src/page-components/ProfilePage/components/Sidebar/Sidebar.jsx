@@ -51,9 +51,10 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
   const handleToggleSection = (section) =>
     setOpenedSections({ ...openedSections, [section]: !openedSections[section] });
-
+console.log('---selectedStatuses', selectedStatuses)
   const handleToggleStatus = (status, text) => {
     const statusesStringsArray = selectedStatuses.map((elem) => elem.name);
+    console.log('---statusesStringsArray', statusesStringsArray)
     if (statusesStringsArray.includes(status)) {
       dispatch(deleteFromArrayOfObjects({ field: "selectedStatuses", objectField: "name", data: status }));
     } else {
@@ -63,12 +64,11 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
   const handleToggleEventType = (eventType, text) => {
     const eventTypesStringsArray = selectedEventTypes.map((elem) => elem.name);
-    console.log('---eventTypesStringsArray', eventTypesStringsArray)
     if (eventTypesStringsArray.includes(eventType)) {
       dispatch(deleteFromArrayOfObjects({ field: "selectedEventTypes", objectField: "name", data: eventType }));
     } else {
       dispatch(
-        setData({ field: "selectedEventTypes", data: [...eventTypesStringsArray, { name: eventType, text }] })
+        setData({ field: "selectedEventTypes", data: [...selectedEventTypes, { name: eventType, text }] })
       );
     }
   };

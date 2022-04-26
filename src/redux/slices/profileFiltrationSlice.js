@@ -59,6 +59,7 @@ export const profileFiltration = createSlice({
       state.selectedCollections = { filter: "", rows: [] };
       state.selectedChains = [];
       state.selectedOnSaleIn = { filter: "", rows: [] };
+      state.selectedEventTypes = [];
     },
   },
 });
