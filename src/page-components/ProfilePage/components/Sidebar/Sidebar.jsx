@@ -21,7 +21,7 @@ import { useDebounce } from "../../../../hooks/useDebounce";
 //classnames
 import cn from "classnames";
 //utils
-import { getSections, statuses, getSectionsForUseState, fakeOnSaleIn } from "./Sidebar.utils";
+import { getSections, statuses, getSectionsForUseState, fakeOnSaleIn, eventTypes } from "./Sidebar.utils";
 //styles
 import styles from "./Sidebar.module.scss";
 
@@ -30,9 +30,8 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   const muiClasses = useStyles();
 
   //useSelectors
-  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections } = useSelector(
-    (state) => state.profileFiltration
-  );
+  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections, selectedEventTypes } =
+    useSelector((state) => state.profileFiltration);
   const { chains, collections, error } = useSelector((state) => state.generalData);
 
   //useStates
@@ -59,6 +58,18 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
       dispatch(deleteFromArrayOfObjects({ field: "selectedStatuses", objectField: "name", data: status }));
     } else {
       dispatch(setData({ field: "selectedStatuses", data: [...selectedStatuses, { name: status, text }] }));
+    }
+  };
+
+  const handleToggleEventType = (eventType, text) => {
+    const eventTypesStringsArray = selectedEventTypes.map((elem) => elem.name);
+    console.log('---eventTypesStringsArray', eventTypesStringsArray)
+    if (eventTypesStringsArray.includes(eventType)) {
+      dispatch(deleteFromArrayOfObjects({ field: "selectedEventTypes", objectField: "name", data: eventType }));
+    } else {
+      dispatch(
+        setData({ field: "selectedEventTypes", data: [...eventTypesStringsArray, { name: eventType, text }] })
+      );
     }
   };
 
@@ -158,6 +169,8 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     );
   }, [debouncedCollectionSearch, collections]);
 
+  console.log('---selectedEventTypes', selectedEventTypes)
+
   return (
     <div
       className={cn(styles.wrapper, {
@@ -200,6 +213,25 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
                   })}
                   key={status}
                   onClick={() => handleToggleStatus(status, text)}
+                >
+                  <span>{text}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          {section === "eventType" && (
+            <div
+              className={cn(styles.sectionContent, styles.statusesWrapper, {
+                [styles.sectionClosed]: !openedSections.eventType,
+              })}
+            >
+              {eventTypes.map(({ text, eventType }) => (
+                <div
+                  className={cn(styles.status, {
+                    [styles.statusChoosen]: selectedEventTypes.map((elem) => elem.name).includes(eventType),
+                  })}
+                  key={eventType}
+                  onClick={() => handleToggleEventType(eventType, text)}
                 >
                   <span>{text}</span>
                 </div>

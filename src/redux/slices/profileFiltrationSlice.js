@@ -11,6 +11,7 @@ const initialState = {
   selectedCollections: { filter: "", rows: [] },
   selectedChains: [],
   selectedOnSaleIn: { filter: "", rows: [] },
+  selectedEventTypes: [],
   filterText: "",
   itemsSelect: "Single Items",
   readyFilterOption: { text: "Price: High to Low", sortOrder: "ASC", sortBy: "price" },

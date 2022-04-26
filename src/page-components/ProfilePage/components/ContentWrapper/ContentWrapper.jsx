@@ -22,9 +22,9 @@ import styles from "./ContentWrapper.module.scss";
 
 export const ContentWrapper = () => {
   const dispatch = useDispatch();
-  const [choosenSection, setChoosenSection] = useState("activity");
+  const [choosenSection, setChoosenSection] = useState("created");
   const [isSidebarOpened, setIsSidebarOpened] = useState(true);
-  const [tokens, setTokens] = useState(fakeActivities);
+  const [tokens, setTokens] = useState([]);
   const [activities, setActivities] = useState([]);
 
   const { readyFilterOption, tokensGridScale } = useSelector((state) => state.profileFiltration);
@@ -33,29 +33,28 @@ export const ContentWrapper = () => {
   //later it should be changed to icons, not nftMedia
   const imageLoader = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
 
-  // const getTokens = useCallback(async () => {
+  const getTokens = useCallback(async () => {
+    const {
+      data: { data, createdNfts, ownedNfts, favoritedNfts, totalValue },
+    } = await axios.get(
+      `${process.env.BACKEND_URL}/users/account/assets?tab=${choosenSection}&sortOrder=${sortOrder}&sortBy=${sortBy}`,
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+    dispatch(setField({ field: "createdNfts", value: createdNfts }));
+    dispatch(setField({ field: "ownedNfts", value: ownedNfts }));
+    dispatch(setField({ field: "favoritedNfts", value: favoritedNfts }));
+    dispatch(setField({ field: "totalValue", value: totalValue }));
+console.log('---data', data)
+    return data;
+  }, [choosenSection, readyFilterOption, dispatch]);
 
-  //   const {
-  //     data: { data, createdNfts, ownedNfts, favoritedNfts, totalValue },
-  //   } = await axios.get(
-  //     `${process.env.BACKEND_URL}/users/account/assets?tab=${choosenSection}&sortOrder=${sortOrder}&sortBy=${sortBy}`,
-  //     {
-  //       headers: {
-  //         Authorization: "Bearer " + accessToken,
-  //       },
-  //     }
-  //   );
-  //   dispatch(setField({ field: "createdNfts", value: createdNfts }));
-  //   dispatch(setField({ field: "ownedNfts", value: ownedNfts }));
-  //   dispatch(setField({ field: "favoritedNfts", value: favoritedNfts }));
-  //   dispatch(setField({ field: "totalValue", value: totalValue }));
-
-  //   return data;
-  // }, [choosenSection, readyFilterOption, dispatch]);
-
-  // useEffect(() => {
-  //   getTokens().then((result) => setTokens(result));
-  // }, [getTokens]);
+  useEffect(() => {
+    getTokens().then((result) => setTokens(result));
+  }, [getTokens]);
 
   const activitiesAdapter = async () =>
     await adaptActivities(fakeActivities).then((result) => setActivities(result));
