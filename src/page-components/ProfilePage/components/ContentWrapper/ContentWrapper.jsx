@@ -17,6 +17,7 @@ import { SmallNFTCard } from "../../../../components/SmallNFTCard/SmallNFTCard";
 //utils & helpers
 import { chooseSections, fakeActivities } from "./ContentWrapper.utils";
 import { getDateAgo } from "../../../../helpers/getDateAgo";
+import { getEtherPrice } from "../../../../utils";
 //styles
 import styles from "./ContentWrapper.module.scss";
 
@@ -175,16 +176,21 @@ export const ContentWrapper = () => {
                         </div>
                         <div className={cn(styles.activityRowPriceWrapper, styles.priceColumn)}>
                           {nft.price ? (
-                            <div className={styles.activityRowEthPriceWrapper}>
-                              <Image
-                                src={nft.price.currency.icon}
-                                alt={`${nft.price.currency}-icon`}
-                                loader={imageLoader}
-                                width={19}
-                                height={19}
-                              />
-                              <span>{nft.price.amount}</span>
-                            </div>
+                            <>
+                              <div className={styles.activityRowEthPriceWrapper}>
+                                <Image
+                                  src={nft.price.currency.icon}
+                                  alt={`${nft.price.currency}-icon`}
+                                  loader={imageLoader}
+                                  width={19}
+                                  height={19}
+                                />
+                                <span>{nft.price.amount}</span>
+                              </div>
+                              <div className={styles.activityRowUsdPrice}>
+                                {getEtherPrice().then(result => result * nft.price.amount)}
+                              </div>
+                            </>
                           ) : (
                             <span>———</span>
                           )}
