@@ -67,7 +67,9 @@ describe("StokeMarketPlace contract", function () {
     console.log(ethers.utils.formatUnits(amount))
   })
 
-  it("Buy feature", async() => {
-    await marketContract.connect(account1).transferAmount(account2.address, {value: 10000000});
+  it("Fixed list sale", async() => {
+    await nftContract.connect(account1).createToken(1, account1.address, 'ipfs://lion');
+    await nftContract.connect(account1).approve(marketContract.address, 1);
+    await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
   })
 })

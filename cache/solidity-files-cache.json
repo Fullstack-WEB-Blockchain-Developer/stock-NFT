@@ -1245,8 +1245,8 @@
       ]
     },
     "D:\\New folder\\stoke-frontend\\contracts\\StokeNFT.sol": {
-      "lastModificationDate": 1650205721176,
-      "contentHash": "470568a55a2e7106e0e79226d1d52b17",
+      "lastModificationDate": 1650694971183,
+      "contentHash": "1323bcce65bf766bafb35b9610bed513",
       "sourceName": "contracts/StokeNFT.sol",
       "solcConfig": {
         "version": "0.8.8",
@@ -1322,8 +1322,8 @@
       ]
     },
     "D:\\New folder\\stoke-frontend\\contracts\\StokeMarketPlace.sol": {
-      "lastModificationDate": 1650442079842,
-      "contentHash": "0a9f768d3c4e388aa469cff2768ccf5c",
+      "lastModificationDate": 1650700410426,
+      "contentHash": "d181aa50db13372aaf7c5b697a6e394f",
       "sourceName": "contracts/StokeMarketPlace.sol",
       "solcConfig": {
         "version": "0.8.8",
