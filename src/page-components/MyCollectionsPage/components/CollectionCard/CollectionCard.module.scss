@@ -7,6 +7,13 @@
   border-radius: 16px;
   overflow: hidden;
   font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.wrapper:hover {
+  transform: scale(1.015);
+  transition: transform 0.15s;
 }
 
 .collectionImageWrapper {

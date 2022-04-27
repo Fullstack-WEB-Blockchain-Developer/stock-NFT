@@ -24,8 +24,13 @@ export const CollectionCard = ({
     collection: false,
   });
 
+  const handleOpenEdit = (e) => {
+    e.stopPropagation();
+    router.push(`/my-collections/${id}/edit`);
+  };
+
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} onClick={() => router.push(`/my-collections/${id}`)}>
       <div className={styles.collectionImageWrapper}>
         {logoImage && !imageErrors.collection && (
           <Image
@@ -47,7 +52,7 @@ export const CollectionCard = ({
             />
           )}
         </div>
-        <ThreeDotsButton className={styles.threeDots} onClick={() => router.push(`/my-collections/${id}/edit`)} />
+        <ThreeDotsButton className={styles.threeDots} onClick={(e) => handleOpenEdit(e)} />
       </div>
       <div className={styles.infoWrapper}>
         <div className={styles.collectionName}>
