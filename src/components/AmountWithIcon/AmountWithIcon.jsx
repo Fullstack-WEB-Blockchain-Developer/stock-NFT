@@ -1,5 +1,10 @@
+//classnames
 import cn from "classnames";
+//next
+import Image from "next/image";
+//helpers
 import { numberWithSymbol } from "../../helpers/numberWithSymbol";
+//styles
 import styles from "./AmountWithIcon.module.css";
 
 export const AmountWithIcon = ({ amount, color, size, className }) => {
@@ -14,7 +19,10 @@ export const AmountWithIcon = ({ amount, color, size, className }) => {
         [styles.yellow]: color === "yellow",
       })}
     >
-      IC ${numberWithSymbol(amount, ",")}
+      <div className={styles.iconWrapper}>
+        {color === "red" && <Image src="/profile/Icon-Price.svg" layout="fill" alt="amount-icon" />}
+      </div>
+      <span>${numberWithSymbol(amount, ",")}</span>
     </span>
   );
 };

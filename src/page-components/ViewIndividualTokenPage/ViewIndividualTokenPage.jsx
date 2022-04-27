@@ -14,15 +14,8 @@ import { SuccessfulOrderModal } from "../../modals/SuccessfulOrderModal/Successf
 //spinner
 import { Oval } from "react-loader-spinner";
 //utils
-import {
-  audios,
-  fakeActivity,
-  fakeLikes,
-  fakeListing,
-  fakePrice,
-  images,
-  videos,
-} from "./ViewIndividualToken.utils";
+import { videos, audios, images } from "../../helpers/extentions";
+import { fakeLikes, fakeListing, fakePrice } from "./ViewIndividualToken.utils";
 //styles
 import styles from "./ViewIndividualTokenPage.module.css";
 
@@ -121,7 +114,6 @@ export const ViewIndividualTokenPage = ({
                 [styles.videoContainer]: typeOfTokenFile === "video",
                 [styles.audioContainer]: typeOfTokenFile === "audio",
               })}
-              
             >
               <div
                 className={cn(styles.tokenImage, {
@@ -213,7 +205,6 @@ export const ViewIndividualTokenPage = ({
             usdPrice={fakePrice.usd}
             ethPrice={fakePrice.eth}
             listing={fakeListing}
-
             ///
           />
         </div>
