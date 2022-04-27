@@ -43,11 +43,13 @@ export const ContentWrapper = () => {
         },
       }
     );
-    dispatch(setField({ field: "createdNfts", value: createdNfts }));
-    dispatch(setField({ field: "ownedNfts", value: ownedNfts }));
-    dispatch(setField({ field: "favoritedNfts", value: favoritedNfts }));
-    dispatch(setField({ field: "totalValue", value: totalValue }));
-
+    if (userData.ownedNfts === 0) {
+      dispatch(setField({ field: "createdNfts", value: createdNfts }));
+      dispatch(setField({ field: "ownedNfts", value: ownedNfts }));
+      dispatch(setField({ field: "favoritedNfts", value: favoritedNfts }));
+      dispatch(setField({ field: "totalValue", value: totalValue }));
+    }
+    
     return data;
   }, [choosenSection, readyFilterOption, dispatch]);
 
