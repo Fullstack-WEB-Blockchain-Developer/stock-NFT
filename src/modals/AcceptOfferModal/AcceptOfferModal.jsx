@@ -84,12 +84,12 @@ export const AcceptOfferModal = ({
   useEffect(() => {
     if (tokenFileName) {
       const end = tokenFileName.substring(tokenFileName.indexOf(".") + 1).toLowerCase();
-      if (images.includes(end)) {
+      if (images?.includes(end)) {
         setTypeOfTokenFile("image");
-      } else if (videos.includes(end)) {
+      } else if (videos?.includes(end)) {
         setTypeOfTokenFile("video");
         setTokenFileLink(`${process.env.BACKEND_ASSETS_URL}/nftMedia/${tokenFileName}`);
-      } else if (audios.includes(end)) {
+      } else if (audios?.includes(end)) {
         setIsFileLoading(false);
         setTypeOfTokenFile("audio");
       }
@@ -189,35 +189,42 @@ export const AcceptOfferModal = ({
           tokenId: Number(tokenId),
           tokenURI: `${process.env.BACKEND_URL}/nfts/metadata/${tokenId}`,
         };
-        await marketContract.accept(offerC, tokenAddr, nftAddr, Token);
+        const tx = await marketContract.accept(offerC, tokenAddr, nftAddr, Token);
+
+        console.log(tx.hash);
+
+        const res = await axios.post(
+            `${process.env.BACKEND_URL}/offers/${id}/${tx.hash}`)
+        if(res.data.status === "pending") {
+          try {
+            const accessToken = localStorage.getItem("accessToken");
+  
+            await axios.post(
+              `${process.env.BACKEND_URL}/offers/accept/${id}`,
+              {},
+              {
+                headers: {
+                  Authorization: "Bearer " + accessToken,
+                },
+              }
+            );
+            handleClose();
+            dispatch(
+              openSuccess({
+                title: "Your order was successfully accepted",
+                description:
+                  "To trade this token, you must first complete a free (plus gas) transaction. <br/> Confirm it in your wallet and keep this tab open!",
+              })
+            );
+          } catch (e) {
+            dispatch(
+              openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
+            );
+          }
+        }
+
       } else {
         dispatch(openError("Offer's owner has not enough balance"));
-      }
-
-      try {
-        const accessToken = localStorage.getItem("accessToken");
-
-        await axios.post(
-          `${process.env.BACKEND_URL}/offers/accept/${id}`,
-          {},
-          {
-            headers: {
-              Authorization: "Bearer " + accessToken,
-            },
-          }
-        );
-        handleClose();
-        dispatch(
-          openSuccess({
-            title: "Your order was successfully accepted",
-            description:
-              "To trade this token, you must first complete a free (plus gas) transaction. <br/> Confirm it in your wallet and keep this tab open!",
-          })
-        );
-      } catch (e) {
-        dispatch(
-          openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
-        );
       }
     }
   };
