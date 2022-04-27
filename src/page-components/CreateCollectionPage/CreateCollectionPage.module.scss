@@ -1,0 +1,45 @@
+.navigationBar {
+  padding: 29px 2%;
+  background-color: #212020;
+  display: flex;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.01px;
+}
+
+.navigationArrow {
+  transform: rotate(-90deg);
+  width: fit-content;
+  height: fit-content;
+  margin-right: 8px;
+}
+
+.navigationItem {
+  display: flex;
+  color: var(--light-grey);
+
+  span {
+      cursor: pointer;
+  }
+}
+
+.navigationItem:last-child {
+  color: var(--white);
+  .navigationArrow {
+    display: none;
+  }
+}
+
+.pageContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 2% 86px;
+  font-family: "Poppins", sans-serif;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 840px;
+}
