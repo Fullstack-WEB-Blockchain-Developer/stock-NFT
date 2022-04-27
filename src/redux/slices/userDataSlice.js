@@ -1,7 +1,7 @@
-import { createSlice, createAsynkThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const getUserCollections = createAsynkThunk(
+export const getUserCollections = createAsyncThunk(
   "collections/getUserCollections",
   async (userData, { rejectWithValue }) => {
     try {
