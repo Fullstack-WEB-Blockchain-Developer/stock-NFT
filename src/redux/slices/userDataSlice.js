@@ -77,3 +77,5 @@ export const userData = createSlice({
 });
 
 export const { setImage, setUsername, setBanner, setUserBio, clearError, setField } = userData.actions;
+
+export default userData.reducer;
