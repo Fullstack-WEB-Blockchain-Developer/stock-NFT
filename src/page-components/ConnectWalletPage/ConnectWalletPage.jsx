@@ -1,8 +1,23 @@
+//next
 import Link from "next/link";
+//redux
+import { useDispatch } from "react-redux";
+import { open as openError } from "../../redux/slices/errorSnackbarSlice";
+//components
 import { ChooseWalletBox } from "../../components/ChooseWalletBox/ChooseWalletBox";
+//hooks
+import useAuth from "../../hooks/useAuth";
+//styles
 import styles from "./ConnectWalletPage.module.css";
 
 export const ConnectWalletPage = () => {
+  const { error } = useAuth();
+  const dispatch = useDispatch();
+
+  if (error) {
+    dispatch(openError(`${error.statusCode + " " + error.message}`));
+  }
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.centralInfo}>
