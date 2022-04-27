@@ -47,8 +47,8 @@ export const onlyCollections = [
   },
 ];
 
-export const forNormal = ["Created", "Collected", "Favorited", "Hidden"];
-export const forCollectionsOnly = ["Offers", "Listings"];
+export const forNormal = ["created", "collected", "favorited", "hidden"];
+export const forCollectionsOnly = ["offers", "listings"];
 
 export const getSections = (choosenTopSection) => {
 

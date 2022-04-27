@@ -15,6 +15,7 @@ import { useStyles } from "../../../../../../hooks/useStyles";
 import { readyFilterOptions } from "./NormalFilterSection.utils";
 //styles
 import styles from "./NormalFilterSection.module.scss";
+import Image from "next/image";
 
 export const NormalFilterSection = () => {
   const dispatch = useDispatch();
@@ -36,8 +37,15 @@ export const NormalFilterSection = () => {
       <TextField
         className={muiClasses.textField}
         id="search"
-        InputProps={{ style: { color: "white" } }}
-        label="Search"
+        InputProps={{
+          style: { color: "white" },
+          startAdornment: (
+            <span style={{ marginRight: "8px", display: "flex", alignItems: "center" }}>
+              <Image src="/search-icon.svg" width={19} height={19} alt="search" />
+            </span>
+          ),
+        }}
+        placeholder="Search"
         onChange={({ target: { value } }) => setSearchText(value)}
         type="text"
         sx={{ width: "39%" }}
@@ -72,29 +80,35 @@ export const NormalFilterSection = () => {
         style={{
           color: "white",
         }}
-        onChange={({ target: { value } }) => dispatch(setData({ field: "readyFilterOption", data: value }))}
-        value={readyFilterOption}
+        onChange={({ target: { value } }) =>
+          dispatch(setData({ field: "readyFilterOption", data: { text: value } }))
+        }
+        value={readyFilterOption.text}
         className={muiClasses.select}
       >
-        {readyFilterOptions.map((elem) => (
-          <MenuItem key={elem} value={elem}>
-            <span>{elem}</span>
+        {readyFilterOptions.map(({ text }) => (
+          <MenuItem key={text} value={text}>
+            <span>{text}</span>
           </MenuItem>
         ))}
       </Select>
       <div className={styles.styleButtons}>
         <div
-          className={cn({
+          className={cn(styles.styleButton, {
             [styles.activeButton]: tokensGridScale === "large",
           })}
           onClick={() => dispatch(setData({ field: "tokensGridScale", data: "large" }))}
-        />
+        >
+          <Image src="/profile/SquaresFour.svg" width={27} height={27} alt="squares" />
+        </div>
         <div
-          className={cn({
-            [styles.activeButton]: tokensGridScale === "medium",
+          className={cn(styles.styleButton, {
+            [styles.activeButton]: tokensGridScale === "small",
           })}
-          onClick={() => dispatch(setData({ field: "tokensGridScale", data: "medium" }))}
-        />
+          onClick={() => dispatch(setData({ field: "tokensGridScale", data: "small" }))}
+        >
+          <Image src="/profile/SquaresFour-1.svg" width={27} height={27} alt="squares" />
+        </div>
       </div>
     </div>
   );

@@ -29,12 +29,24 @@ export const ProfileDataWrapper = () => {
     banner,
     username,
     bio,
-    nfts,
+    ownedNfts,
     totalValue,
     highestValue,
     mostCompleteCollection,
     volumeTraded,
   } = useSelector((state) => state.userData);
+  console.log(
+    "---",
+    imageUrl,
+    banner,
+    username,
+    bio,
+    ownedNfts,
+    totalValue,
+    highestValue,
+    mostCompleteCollection,
+    volumeTraded
+  );
 
   const imageLoader = ({ src }) => src;
 
@@ -99,32 +111,32 @@ export const ProfileDataWrapper = () => {
           </span>
         </div>
         <div className={styles.username}>
-          <span>{username ? username : 'Profile'}</span>
+          <span>{username ? username : "Profile"}</span>
         </div>
         <div className={styles.bio}>
           <span>{bio}</span>
         </div>
         <div className={styles.midlleSectionBottom}>
           <div>
-            <span className={styles.middleSectionBottomNumbers}>{nfts}</span>
+            <span className={styles.middleSectionBottomNumbers}>{ownedNfts || 0}</span>
             <span className={styles.middleSectionBottomDescription}>NFTs</span>
           </div>
           <div>
             <div className={styles.dataWithIcon}>
               <Image src="/profile/Icon-Price.svg" width={19} height={19} alt="price-icon" />
-              <span className={styles.middleSectionBottomNumbers}>{totalValue}</span>
+              <span className={styles.middleSectionBottomNumbers}>{totalValue || 0}</span>
             </div>
             <span className={styles.middleSectionBottomDescription}>Total Value</span>
           </div>
           <div>
             <div className={styles.dataWithIcon}>
               <Image src="/profile/Icon-Price.svg" width={19} height={19} alt="price-icon" />
-              <span className={styles.middleSectionBottomNumbers}>{highestValue}</span>
+              <span className={styles.middleSectionBottomNumbers}>{highestValue || 0}</span>
             </div>
             <span className={styles.middleSectionBottomDescription}>Highest Value</span>
           </div>
           <div>
-            <span className={styles.middleSectionBottomNumbers}>{mostCompleteCollection}</span>
+            <span className={styles.middleSectionBottomNumbers}>{mostCompleteCollection || 0}</span>
             <span className={styles.middleSectionBottomDescription}>
               Most Complete
               <br /> Collection
@@ -133,7 +145,7 @@ export const ProfileDataWrapper = () => {
           <div>
             <div className={styles.dataWithIcon}>
               <Image src="/profile/Icon-Price.svg" width={19} height={19} alt="price-icon" />
-              <span className={styles.middleSectionBottomNumbers}>{volumeTraded}</span>
+              <span className={styles.middleSectionBottomNumbers}>{volumeTraded || 0}</span>
             </div>
             <span className={styles.middleSectionBottomDescription}>Volume Traded</span>
           </div>

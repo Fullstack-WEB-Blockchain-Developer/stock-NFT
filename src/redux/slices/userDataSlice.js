@@ -24,12 +24,14 @@ const initialState = {
   bio: "",
   userCollections: [],
   error: null,
-  highestValue: 0,
   imageUrl: undefined,
-  mostCompleteCollection: 0,
-  nfts: 0,
-  totalValue: 0,
   username: "Profile",
+  ownedNfts: 0,
+  totalValue: 0,
+  maxValue: 0,
+  createdNfts: 0,
+  favoritedNfts: 0,
+  mostCompleteCollection: 0,
   volumeTraded: 0,
 };
 
@@ -57,6 +59,9 @@ export const userData = createSlice({
     setUserBio: (state, action) => {
       state.bio = action.payload;
     },
+    setField: (state, { payload: {field, value} }) => {
+      state[field] = value;
+    },
     clearError: (state) => {
       state.error = null;
     },
@@ -71,6 +76,4 @@ export const userData = createSlice({
   },
 });
 
-export const { setImage, setUsername, setBanner, setUserBio, clearError } = userData.actions;
-
-export default userData.reducer;
+export const { setImage, setUsername, setBanner, setUserBio, clearError, setField } = userData.actions;
