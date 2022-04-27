@@ -1,17 +1,21 @@
 .wrapper {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
 }
 
 .clearAll {
-  font-family: "Poppins", sans-serif;
-  font-size: 16px;
-  letter-spacing: 0.01px;
-  color: var(--primary);
-  cursor: pointer;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  margin: 24px 8px 0;
+	display: flex;
+	align-items: center;
+
+	height: 100%;
+	margin: 24px 8px 0;
+
+	cursor: pointer;
+	letter-spacing: 0.01px;
+
+	color: var(--primary);
+
+	font-family: "Poppins", sans-serif;
+	font-size: 16px;
 }

@@ -62,6 +62,9 @@ export const Price = () => {
         <MenuItem value="usd">
           <span>United States Dollar (USD)</span>
         </MenuItem>
+        <MenuItem value="eth">
+          <span>Ethers (ETH)</span>
+        </MenuItem>
       </Select>
       <div className={styles.textfields}>
         <TextField

@@ -1,11 +1,18 @@
 .span {
+	display: flex;
+	align-items: center;
+
 	letter-spacing: 0.8px;
 
-	font-family: Poppins, sans-serif;
+	font-family: 'Poppins', sans-serif;
+}
+
+.span span {
+	margin-left: 8px;
 }
 
 .red {
-	color: rgb(222 7 43);
+	color: var(--red);
 }
 
 .primary {
@@ -26,4 +33,11 @@
 
 .sm {
 	font-size: 12px;
+}
+
+.iconWrapper {
+	position: relative;
+
+	width: 19px;
+	height: 19px;
 }

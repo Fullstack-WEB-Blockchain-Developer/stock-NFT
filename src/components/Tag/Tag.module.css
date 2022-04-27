@@ -9,21 +9,21 @@
 
 	letter-spacing: 0.5px;
 
-	opacity: 1;
-	opacity: 0.45;
-	color: var(--black);
+	color: #00000080;
+
 	border-radius: 30px;
-	background: var(--light-grey) 0% 0% no-repeat padding-box;
+	background: var(--light-grey);
 
 	font-family: Poppins, sans-serif;
 	font-size: 10px;
 	line-height: 25px;
 }
 
-.tag p {
-	margin: 0;
-}
-
 .tag:last-child {
 	margin-right: 0;
+}
+
+.pending {
+	color: var(--white);
+	background-color: var(--red);
 }

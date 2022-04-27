@@ -1,0 +1,68 @@
+.wrapper {
+  height: 328px;
+  width: 190px;
+
+  background-color: var(--dark-grey);
+  border: 1px solid #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.wrapper:hover {
+  transform: scale(1.015);
+  transition: transform 0.15s;
+}
+
+.collectionImageWrapper {
+  width: 188px;
+  height: 166px;
+  position: relative;
+  background-color: var(--black);
+}
+
+.threeDots {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+}
+
+.userImageWrapper {
+  overflow: hidden;
+  width: 48px;
+  height: 48px;
+  box-shadow: 0px 3px 15px #00000066;
+  border: 1px solid var(--white);
+  border-radius: 50%;
+  position: absolute;
+  left: 17px;
+  bottom: -24px;
+  z-index: 5;
+}
+
+.infoWrapper {
+  padding: 0 17px;
+
+  div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.collectionName {
+  margin-top: 48px;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.02px;
+  color: var(--white);
+}
+
+.userName {
+  font-size: 12px;
+  letter-spacing: 0.01px;
+  color: var(--azur);
+}
+

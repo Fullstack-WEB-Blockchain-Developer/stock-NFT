@@ -8,17 +8,20 @@ export const chooseSections = [
     {
         text: 'Collected',
         icon: <CollectedIcon />,
-        nameForBE: 'collected'
+        nameForBE: 'collected',
+        forRedux: 'ownedNfts'
     },
     {
         text: 'Created',
         icon: <CreatedIcon />,
-        nameForBE: 'created'
+        nameForBE: 'created',
+        forRedux: 'createdNfts'
     },
     {
         text: 'Favorited',
         icon: <FavoritedIcon />,
-        nameForBE: 'favorited'
+        nameForBE: 'favorited',
+        forRedux: 'favoritedNfts'
     },
     {
         text: 'Activity',

@@ -26,15 +26,16 @@
 
 .profileImageWrapper {
 	position: relative;
+	z-index: 12;
 
 	overflow: hidden;
-	z-index: 12;
 
 	width: 15.5%;
 	height: fit-content;
 
 	border: 1px solid var(--primary);
 	border-radius: 50%;
+	background-color: var(--black);
 	aspect-ratio: 1 / 1.035;
 }
 

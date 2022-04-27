@@ -28,10 +28,10 @@ export const PopularNFTCard = ({ className, username, account, price, priceDiffe
       </div>
       <div className={styles.infoWrapper}>
         <p className={styles.title}>{title}</p>
-        <div className={styles.priceInfo}>
+        {price && <div className={styles.priceInfo}>
           <AmountWithIcon amount={price} color="red" size="m" />
           <AmountDifference direction={priceDifference.direction} percent={priceDifference.percent} />
-        </div>
+        </div>}
         <Username username={username} color="lightblue" isConfirmed />
         <div className={styles.codeAndTag}>
           <p className={styles.code}>{accountUpdated}</p>
