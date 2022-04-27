@@ -81,7 +81,6 @@ export const Header = () => {
   const openWalletPopup = () => {
     dispatch(openWalletPopupReducer());
   };
-  console.log("---username", username);
 
   return (
     <header className={styles.header}>
