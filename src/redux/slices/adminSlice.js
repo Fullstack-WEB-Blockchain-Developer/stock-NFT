@@ -6,7 +6,7 @@ const initialState = {
         creatorRoyalty: 10,
     },
     pagesForUnauthorized: [
-        '/', '/connect-wallet', '/token/[tokenId]', '/create-nft'
+        '/', '/connect-wallet', '/token/[tokenId]', '/create-nft', '/my-collections'
     ]
 };
 
