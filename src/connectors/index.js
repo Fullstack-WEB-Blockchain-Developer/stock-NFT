@@ -18,7 +18,7 @@ const injected = new InjectedConnector({
     supportedChainIds: [1, 3, 4, 5, 42, 137, 80001]
 });
 
-//prevent coinbase wallet in click injected
+//prevent coinbase wallet when click injected
 function activateInjectedProvider(providerName) {
     if(typeof window !== "undefined") {
       var ethereum   = window.ethereum;
