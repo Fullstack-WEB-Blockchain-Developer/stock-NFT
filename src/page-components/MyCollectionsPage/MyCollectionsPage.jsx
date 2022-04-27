@@ -1,5 +1,8 @@
+import { useEffect, useState } from "react";
 //next
 import { useRouter } from "next/router";
+//redux
+import {getUserCollections} from '../../redux/slices/userDataSlice';
 //components
 import { CustButton } from "./../../components/CustButton/CustButton";
 import { ThreeDotsButton } from "./components/ThreeDotsButton/ThreeDotsButton";
@@ -7,7 +10,13 @@ import { ThreeDotsButton } from "./components/ThreeDotsButton/ThreeDotsButton";
 import styles from "./MyCollectionsPage.module.scss";
 
 export const MyCollectionsPage = () => {
+  const [myCollections, setMyCollections] = useState([]);
+
   const router = useRouter();
+
+  
+
+  useEffect(() => {}, []);
 
   return (
     <div className={styles.pageContainer}>

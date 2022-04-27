@@ -1,15 +1,36 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsynkThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+
+export const getUserCollections = createAsynkThunk(
+  "collections/getUserCollections",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const { data } = await axios.get(`${process.env.BACKEND_URL}/collections`, {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      });
+
+      return data;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
 
 const initialState = {
-  imageUrl: undefined,
-  username: "Profile",
   banner: undefined,
-  bio: '',
+  bio: "",
+  userCollections: [],
+  error: null,
+  highestValue: 0,
+  imageUrl: undefined,
+  mostCompleteCollection: 0,
   nfts: 0,
   totalValue: 0,
-  highestValue: 0,
-  mostCompleteCollection: 0,
-  volumeTraded: 0
+  username: "Profile",
+  volumeTraded: 0,
 };
 
 export const userData = createSlice({
@@ -31,14 +52,25 @@ export const userData = createSlice({
       }
     },
     setUsername: (state, action) => {
-        state.username = action.payload;
+      state.username = action.payload;
     },
     setUserBio: (state, action) => {
-      state.bio = action.payload
-    }
+      state.bio = action.payload;
+    },
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getUserCollections.fulfilled, (state, { payload }) => {
+      state.userCollections = payload;
+    });
+    builder.addCase(getUserCollections.rejected, (state, { payload }) => {
+      state.error = payload;
+    });
   },
 });
 
-export const { setImage, setUsername, setBanner, setUserBio } = userData.actions;
+export const { setImage, setUsername, setBanner, setUserBio, clearError } = userData.actions;
 
 export default userData.reducer;

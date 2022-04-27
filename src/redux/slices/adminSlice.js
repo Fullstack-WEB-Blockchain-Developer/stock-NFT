@@ -10,7 +10,6 @@ const initialState = {
     "/connect-wallet",
     "/token/[tokenId]",
     "/create-nft",
-    "/my-collections/create-collection",
   ],
 };
 
