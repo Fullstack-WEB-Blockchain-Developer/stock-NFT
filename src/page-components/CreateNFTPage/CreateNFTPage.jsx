@@ -40,9 +40,9 @@ export const CreateNFTPage = () => {
   const inputRef = useRef();
   const videoRef = useRef();
 
-  // if (error) {
-  //   dispatch(openError(`${error.statusCode + " " + error.message}`));
-  // }
+  if (error) {
+    dispatch(openError(`${error.statusCode + " " + error.message}`));
+  }
 
   const [values, setValues] = useState({
     file: undefined,
