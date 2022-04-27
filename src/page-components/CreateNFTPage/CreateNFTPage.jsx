@@ -581,7 +581,7 @@ export const CreateNFTPage = () => {
       </div>
       <ConnectWalletModal
         isOpened={isConnectWalletOpened}
-        handleClose={() => setIsConnectWalletOpened(false)}
+        onClose={() => setIsConnectWalletOpened(false)}
       />
     </div>
   );
