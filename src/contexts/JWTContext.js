@@ -113,20 +113,26 @@ function AuthProvider({ children }) {
           router.push("/connect-wallet");
         }
       } catch (err) {
-        dispatch({
-          type: "INITIALIZE",
-          payload: {
-            isAuthorized: false,
-            account: null,
-            error: { ...err.response?.data },
-          },
-        });
-
         if (!pagesForUnauthorized.includes(router.pathname)) {
           router.replace("/connect-wallet");
+          dispatch({
+            type: "INITIALIZE",
+            payload: {
+              isAuthorized: false,
+              account: null,
+              error: { ...err.response?.data },
+            },
+          });
+          dispatch({ type: "CLEAR_ERROR" });
+        } else {
+          dispatch({
+            type: "INITIALIZE",
+            payload: {
+              isAuthorized: false,
+              account: null,
+            },
+          });
         }
-
-        dispatch({ type: "CLEAR_ERROR" });
       }
     };
 
@@ -134,21 +140,33 @@ function AuthProvider({ children }) {
   }, [router.pathname, initialState.isAuthorized]);
 
   const login = async (signature, account) => {
-    const tokenRes = await axios.post(`${process.env.BACKEND_URL}/auth`, {
-      publicAddress: account,
-      signature,
-    });
+    try {
+      const tokenRes = await axios.post(`${process.env.BACKEND_URL}/auth`, {
+        publicAddress: account,
+        signature,
+      });
 
-    localStorage.setItem("accessToken", tokenRes.data.token);
-    localStorage.setItem("account", account);
+      localStorage.setItem("accessToken", tokenRes.data.token);
+      localStorage.setItem("account", account);
 
-    dispatch({
-      type: "LOGIN",
-      payload: {
-        account,
-      },
-    });
-    router.pathname === "/connect-wallet" && router.push("/");
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          account,
+        },
+      });
+      router.pathname === "/connect-wallet" && router.push("/");
+    } catch (e) {
+      dispatch({
+        type: "INITIALIZE",
+        payload: {
+          isAuthorized: false,
+          account: null,
+          error: { ...e.response?.data },
+        },
+      });
+      dispatch({ type: "CLEAR_ERROR" });
+    }
   };
 
   const logout = async () => {
@@ -162,16 +180,16 @@ function AuthProvider({ children }) {
   };
 
   return (
-      <AuthContext.Provider
-        value={{
-          ...state,
-          method: "jwt",
-          login,
-          logout,
-        }}
-      >
-        {children}
-      </AuthContext.Provider>
+    <AuthContext.Provider
+      value={{
+        ...state,
+        method: "jwt",
+        login,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 }
 
