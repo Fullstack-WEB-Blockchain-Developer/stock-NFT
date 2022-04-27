@@ -11,7 +11,6 @@ export const getUserCollections = createAsyncThunk(
           Authorization: "Bearer " + accessToken,
         },
       });
-
       return data;
     } catch (e) {
       return rejectWithValue(e);
@@ -59,7 +58,7 @@ export const userData = createSlice({
     setUserBio: (state, action) => {
       state.bio = action.payload;
     },
-    setField: (state, { payload: {field, value} }) => {
+    setField: (state, { payload: { field, value } }) => {
       state[field] = value;
     },
     clearError: (state) => {

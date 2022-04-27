@@ -59,19 +59,22 @@ export const MyCollectionsPage = () => {
             color="primary"
             onClick={() => router.push("/my-collections/create-collection")}
           />
-          <ThreeDotsButton size="large" className={styles.threeDots} />
         </div>
         <div className={styles.collectionsWrapper}>
           {userCollections &&
-            userCollections.map(({ id, logoImage, name, user: { username, publicAddress } }) => (
-              <CollectionCard
-                key={id}
-                logoImage={logoImage}
-                name={name}
-                publicAddress={publicAddress}
-                username={username}
-              />
-            ))}
+            userCollections.map(
+              ({ id, logoImage, name, user: { username, publicAddress, profileImage } }) => (
+                <CollectionCard
+                  id={id}
+                  key={id}
+                  logoImage={logoImage}
+                  name={name}
+                  publicAddress={publicAddress}
+                  userProfileImage={profileImage}
+                  username={username}
+                />
+              )
+            )}
         </div>
       </div>
     </div>

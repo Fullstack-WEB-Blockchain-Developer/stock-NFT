@@ -105,7 +105,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
       );
     }
   };
-
+  
   //useEffects
 
   useEffect(() => {

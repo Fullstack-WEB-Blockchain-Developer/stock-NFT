@@ -1,16 +1,13 @@
+.wrapper:hover {
+  background-color: var(--shadow);
+}
+
 .wrapper {
   border: 1px solid var(--shadow);
   border-radius: 9px;
   cursor: pointer;
-}
-
-.wrapper:hover {
-    background-color: var(--shadow);
-}
-
-.large {
-  height: 49px;
-  width: 49px;
+  height: 31px;
+  width: 31px;
   display: flex;
   justify-content: center;
   align-items: center;
