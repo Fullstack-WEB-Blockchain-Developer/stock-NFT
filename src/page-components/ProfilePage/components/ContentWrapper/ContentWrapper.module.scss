@@ -28,7 +28,7 @@
 
 .chooseSectionActive {
 	color: var(--purple);
-	box-shadow:  0px -8px 0px -4px var(--purple) inset;;
+	box-shadow: 0px -8px 0px -4px var(--purple) inset;
 
 	svg {
 		fill: var(--purple);
@@ -47,4 +47,55 @@
 
 .topFiltrationSection {
 	width: inherit;
+}
+
+.tokensGrid {
+	display: grid;
+
+	padding: 40px 0;
+}
+
+.tokensGridSmall {
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	gap: 40px;
+
+	@media screen and (max-width: 1550px) {
+		gap: 40px;
+	}
+
+	@media screen and (max-width: 1400px) {
+		gap: 35px;
+	}
+}
+
+.tokensGridLarge {
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 60px;
+
+	@media screen and (max-width: 1550px) {
+		gap: 40px;
+	}
+
+	@media screen and (max-width: 1400px) {
+		gap: 35px;
+	}
+}
+
+.emptyTokens {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+
+	width: 100%;
+	height: 337px;
+	margin-top: 40px;
+
+	letter-spacing: 0.02px;
+
+	color: #FFFFFF;
+	border: 1px solid var(--dark-grey);
+	border-radius: 30px;
+
+	font-size: 24px;
 }

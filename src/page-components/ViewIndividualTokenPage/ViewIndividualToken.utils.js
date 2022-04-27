@@ -1,7 +1,3 @@
-export const images = ["svg", "jpg", "png", "gif"];
-export const videos = ["mp4", "webm"];
-export const audios = ["mp3", "wav"];
-
 export const fakePrice = {
   eth: 0.211,
   usd: 667.75,

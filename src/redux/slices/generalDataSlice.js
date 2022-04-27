@@ -3,7 +3,8 @@ import axios from "axios";
 
 const initialState = {
   chains: [],
-  error: null
+  collections: [],
+  error: null,
 };
 
 export const getAllChains = createAsyncThunk("chains/getAllChains", async (userData, { rejectWithValue }) => {
@@ -15,6 +16,24 @@ export const getAllChains = createAsyncThunk("chains/getAllChains", async (userD
   }
 });
 
+export const getAllCollections = createAsyncThunk(
+  "collections/getAllCollections",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const { data } = await axios.get(`${process.env.BACKEND_URL}/collections`, {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      });
+
+      return data;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
 export const generalData = createSlice({
   name: "generalData",
   initialState,
@@ -23,14 +42,20 @@ export const generalData = createSlice({
       state = { ...payload };
     },
     clearError: (state) => {
-      state.error = null
-    }
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllChains.fulfilled, (state, action) => {
       state.chains = action.payload;
     });
     builder.addCase(getAllChains.rejected, (state, action) => {
+      state.error = action.payload;
+    });
+    builder.addCase(getAllCollections.fulfilled, (state, action) => {
+      state.collections = action.payload;
+    });
+    builder.addCase(getAllCollections.rejected, (state, action) => {
       state.error = action.payload;
     });
   },

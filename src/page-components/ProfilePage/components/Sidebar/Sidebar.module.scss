@@ -1,182 +1,187 @@
 .wrapper {
-  overflow: hidden;
+	overflow: hidden;
 
-  width: 440px;
-  max-width: 1000px;
-  min-height: 620px;
+	width: 440px;
+	max-width: 1000px;
+	min-height: 620px;
 
-  transition: max-width 0.2s ease-in-out;
+	transition: max-width 0.2s ease-in-out;
 
-  border-right: 1px solid var(--dark-grey);
+	border-right: 1px solid var(--dark-grey);
 }
 
 .closedSidebar {
-  max-width: 75px;
+	max-width: 75px;
 
-  transition: max-width 0.1s ease-in-out;
+	transition: max-width 0.1s ease-in-out;
 
-  .filterTop {
-    padding: 25px;
 
-    border: none;
+	.filterTop {
+		padding: 25px;
 
-    div {
-      display: none;
-    }
-  }
+		border: none;
 
-  .section {
-    display: none;
-  }
+		div {
+			display: none;
+		}
+	}
+
+	.section {
+		display: none;
+	}
+
+	.sectionContent {
+		display: none;
+	}
 }
 
 .onSaleInSearch {
-  margin: 16px 0;
+	margin: 16px 0;
 }
 
 .onSaleInRow {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 
-  span {
-    white-space: nowrap;
+	span {
+		white-space: nowrap;
 
-    color: var(--white);
+		color: var(--white);
 
-    font-size: 16px;
-  }
+		font-size: 16px;
+	}
 }
 
 .section,
 .filterTop {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 
-  height: fit-content;
-  max-height: 400px;
-  padding: 25px 25px 25px 40px;
+	height: fit-content;
+	max-height: 400px;
+	padding: 25px 25px 25px 40px;
 
-  transition: max-height 0.1s ease-in;
-  transition: padding 0.1s ease-in;
+	transition: max-height 0.1s ease-in;
+	transition: padding 0.1s ease-in;
 
-  color: var(--white);
-  border-bottom: 1px solid var(--dark-grey);
+	color: var(--white);
+	border-bottom: 1px solid var(--dark-grey);
 
-  font-family: "Poppins", sans-serif;
+	font-family: "Poppins", sans-serif;
 }
 
 .section {
-  overflow: hidden;
+	overflow: hidden;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  > span {
-    font-size: 18px;
-    font-weight: 600;
-  }
+	> span {
+		font-size: 18px;
+		font-weight: 600;
+	}
 }
 
 .filterTop {
-  font-size: 16px;
+	font-size: 16px;
 
-  span {
-    img {
-      cursor: pointer;
-    }
-  }
+	span {
+		img {
+			cursor: pointer;
+		}
+	}
 
-  div {
-    display: flex;
-    align-items: center;
+	div {
+		display: flex;
+		align-items: center;
 
-    span {
-      margin-left: 12px;
-    }
-  }
+		span {
+			margin-left: 12px;
+		}
+	}
 }
 
 .sectionContent {
-  overflow: hidden;
+	overflow: hidden;
 
-  height: fit-content;
-  max-height: 400px;
-  padding: 25px 25px 25px 40px;
+	height: fit-content;
+	max-height: 400px;
+	padding: 25px 25px 25px 40px;
 
-  transition: max-height 0.1s ease-in;
+	transition: max-height 0.1s ease-in;
 
-  border-bottom: 1px solid var(--dark-grey);
+	border-bottom: 1px solid var(--dark-grey);
 }
 
 .sectionClosed {
-  max-height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
+	max-height: 0;
+	padding-top: 0;
+	padding-bottom: 0;
 
-  transition: max-height 0.1s ease-in;
-  transition: padding 0.1s ease-in;
+	transition: max-height 0.1s ease-in;
+	transition: padding 0.1s ease-in;
 
-  border-bottom: none;
+	border-bottom: none;
 }
 
 .statusesWrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
 
-  color: var(--white);
+	color: var(--white);
 }
 
 .status {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-  height: 49px;
+	height: 49px;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  border-radius: 49px;
-  background-color: var(--dark-grey);
+	border-radius: 49px;
+	background-color: var(--dark-grey);
 }
 
 .statusChoosen {
-  border: 1px solid var(--white);
-  background: #dd0d2d 0% 0% no-repeat padding-box;
+	border: 1px solid var(--white);
+	background: #DD0D2D 0% 0% no-repeat padding-box;
 }
 
 .chain, .collection {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 
-  margin-bottom: 8px;
+	margin-bottom: 8px;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  color: var(--white);
+	color: var(--white);
 
-  font-size: 16px;
-  :last-child {
-    margin-bottom: 0px;
-  }
+	font-size: 16px;
+	:last-child {
+		margin-bottom: 0px;
+	}
 }
 
 .chainIcon, .collectionIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-  width: 34px;
-  height: 34px;
-  margin-right: 8px;
+	width: 34px;
+	height: 34px;
+	margin-right: 8px;
 
-  border: 1px solid var(--shadow);
-  border-radius: 50%;
+	border: 1px solid var(--shadow);
+	border-radius: 50%;
 }
 
 .scrollable {
-  overflow: scroll !important;
-  margin: 16px 0;
+	overflow: scroll !important;
 
-  max-height: 300px;
+	max-height: 300px;
+	margin: 16px 0;
 }

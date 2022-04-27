@@ -9,7 +9,7 @@ import {
   deleteFromArrayOfObjects,
 } from "../../../../redux/slices/profileFiltrationSlice";
 import { open as openError } from "../../../../redux/slices/errorSnackbarSlice";
-import { clearError, getAllChains } from "../../../../redux/slices/generalDataSlice";
+import { clearError, getAllChains, getAllCollections } from "../../../../redux/slices/generalDataSlice";
 //mui
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
@@ -21,13 +21,7 @@ import { useDebounce } from "../../../../hooks/useDebounce";
 //classnames
 import cn from "classnames";
 //utils
-import {
-  getSections,
-  statuses,
-  getSectionsForUseState,
-  fakeOnSaleIn,
-  fakeCollections,
-} from "./Sidebar.utils";
+import { getSections, statuses, getSectionsForUseState, fakeOnSaleIn } from "./Sidebar.utils";
 //styles
 import styles from "./Sidebar.module.scss";
 
@@ -39,14 +33,14 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections } = useSelector(
     (state) => state.profileFiltration
   );
-  const { chains, error } = useSelector((state) => state.generalData);
+  const { chains, collections, error } = useSelector((state) => state.generalData);
 
   //useStates
   // this state will contain such data as { status: false, price: false, collections: false ...etc}
   const [openedSections, setOpenedSections] = useState(getSectionsForUseState(choosenTopSection));
   const [onSalesInRows, setOnSalesInRows] = useState(fakeOnSaleIn);
   const [onSalesInSearch, setOnSalesInSearch] = useState(selectedOnSaleIn.filter);
-  const [collectionsRows, setCollectionsRows] = useState(fakeCollections);
+  const [collectionsRows, setCollectionsRows] = useState(collections);
   const [collectionsSearch, setCollectionsSearch] = useState(selectedCollections.filter);
 
   const debouncedOnSalesInSearch = useDebounce(onSalesInSearch, 200);
@@ -129,6 +123,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
   useEffect(() => {
     dispatch(getAllChains());
+    dispatch(getAllCollections());
   }, [dispatch]);
 
   useEffect(() => {
@@ -159,11 +154,9 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     );
 
     setCollectionsRows(
-      fakeCollections.filter(({ name }) =>
-        name.toLowerCase().includes(debouncedCollectionSearch.toLowerCase())
-      )
+      collections.filter(({ name }) => name.toLowerCase().includes(debouncedCollectionSearch.toLowerCase()))
     );
-  }, [debouncedCollectionSearch]);
+  }, [debouncedCollectionSearch, collections]);
 
   return (
     <div
