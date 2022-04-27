@@ -19,7 +19,11 @@ export const MyCollectionsPage = () => {
           <span>Create, curate, and manage collections of unique NFTs to share and sell.</span>
         </div>
         <div className={styles.buttonsWrapper}>
-          <CustButton text="Create a Collection" color="primary" onClick={() => router.push('/create-collection')} />
+          <CustButton
+            text="Create a Collection"
+            color="primary"
+            onClick={() => router.push("/my-collections/create-collection")}
+          />
           <ThreeDotsButton size="large" className={styles.threeDots} />
         </div>
       </div>
