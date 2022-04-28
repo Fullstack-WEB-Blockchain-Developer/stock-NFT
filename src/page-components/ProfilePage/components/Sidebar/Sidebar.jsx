@@ -7,6 +7,8 @@ import {
   setData,
   deleteFromArray,
   deleteFromArrayOfObjects,
+  getTokens,
+  clearOffsetAndTokens,
 } from "../../../../redux/slices/profileFiltrationSlice";
 import { open as openError } from "../../../../redux/slices/errorSnackbarSlice";
 import {
@@ -38,7 +40,6 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections, selectedPrice } =
     useSelector((state) => state.profileFiltration);
   const { chains, collections, error, currencies } = useSelector((state) => state.generalData);
-  console.log("---selectedPrice", selectedPrice);
   //useStates
   // this state will contain such data as { status: false, price: false, collections: false ...etc}
   const [openedSections, setOpenedSections] = useState(getSectionsForUseState(choosenTopSection));
@@ -54,6 +55,12 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   const iconLoader = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`;
 
   //handlers
+  console.log("---currencies", currencies);
+
+  const handleGetNewTokens = () => {
+    dispatch(clearOffsetAndTokens());
+    dispatch(getTokens());
+  };
 
   const handleToggleSection = (section) =>
     setOpenedSections({ ...openedSections, [section]: !openedSections[section] });
@@ -62,8 +69,10 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     const statusesStringsArray = selectedStatuses.map((elem) => elem.name);
     if (statusesStringsArray.includes(status)) {
       dispatch(deleteFromArrayOfObjects({ field: "selectedStatuses", objectField: "name", data: status }));
+      handleGetNewTokens();
     } else {
       dispatch(setData({ field: "selectedStatuses", data: [...selectedStatuses, { name: status, text }] }));
+      handleGetNewTokens();
     }
   };
 
@@ -72,14 +81,17 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
     if (chainsStringsArray.includes(chain)) {
       dispatch(deleteFromArrayOfObjects({ field: "selectedChains", objectField: "name", data: chain }));
+      handleGetNewTokens();
     } else {
       dispatch(setData({ field: "selectedChains", data: [...selectedChains, { name: chain, icon }] }));
+      handleGetNewTokens();
     }
   };
 
   const handleToggleOnSaleIn = (onSaleIn) => {
     if (selectedOnSaleIn.rows.includes(onSaleIn)) {
       dispatch(deleteFromArray({ field: "selectedOnSaleIn", data: { ...selectedOnSaleIn, rows: onSaleIn } }));
+      handleGetNewTokens();
     } else {
       dispatch(
         setData({
@@ -87,6 +99,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
           data: { ...selectedOnSaleIn, rows: [...selectedOnSaleIn.rows, onSaleIn] },
         })
       );
+      handleGetNewTokens();
     }
   };
 
@@ -101,6 +114,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
           data: { rows: collection },
         })
       );
+      handleGetNewTokens();
     } else {
       dispatch(
         setData({
@@ -111,6 +125,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
           },
         })
       );
+      handleGetNewTokens();
     }
   };
 
@@ -133,8 +148,6 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     dispatch(getAllCollections());
     chains.length === 0 && dispatch(getAllChains());
     currencies.length === 0 && dispatch(getAllCurrencies());
-    !selectedPrice.currency &&
-      dispatch(setData({ field: "selectedPrice", data: { ...selectedPrice, currency: currencies[1] } }));
   }, [dispatch, currencies, chains]);
 
   useEffect(() => {
@@ -169,8 +182,6 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
       collections.filter(({ name }) => name.toLowerCase().includes(debouncedCollectionSearch.toLowerCase()))
     );
   }, [debouncedCollectionSearch, collections]);
-
-  useEffect(() => {}, []);
 
   return (
     <div

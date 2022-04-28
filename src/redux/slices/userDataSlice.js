@@ -5,13 +5,6 @@ const initialState = {
   username: "Profile",
   banner: undefined,
   bio: "",
-  ownedNfts: 0,
-  totalValue: 0,
-  maxValue: 0,
-  createdNfts: 0,
-  favoritedNfts: 0,
-  mostCompleteCollection: 0,
-  volumeTraded: 0,
 };
 
 export const userData = createSlice({

@@ -6,6 +6,8 @@ import {
   deleteFromArrayOfObjects,
   deletePrice,
   deleteAll,
+  clearOffsetAndTokens,
+  getTokens,
 } from "../../../../../../redux/slices/profileFiltrationSlice";
 //components
 import { Tag } from "./components/Tag";
@@ -43,6 +45,12 @@ export const TagsWrapper = ({ choosenSection }) => {
     selectedOnSaleIn,
   ]);
 
+  const handleClose = (callback) => {
+    dispatch(clearOffsetAndTokens())
+    dispatch(callback());
+    dispatch(getTokens())
+  };
+
   return (
     <div className={styles.wrapper}>
       {displayedSections.includes("status") &&
@@ -51,7 +59,7 @@ export const TagsWrapper = ({ choosenSection }) => {
             key={`${name}-${i}`}
             text={text}
             handleClose={() =>
-              dispatch(
+              handleClose(() =>
                 deleteFromArrayOfObjects({ field: "selectedStatuses", objectField: "name", data: name })
               )
             }
@@ -64,7 +72,9 @@ export const TagsWrapper = ({ choosenSection }) => {
             text={name}
             icon={icon}
             handleClose={() =>
-              dispatch(deleteFromArrayOfObjects({ field: "selectedChains", objectField: "name", data: name }))
+              handleClose(() =>
+                deleteFromArrayOfObjects({ field: "selectedChains", objectField: "name", data: name })
+              )
             }
           />
         ))}
@@ -74,7 +84,7 @@ export const TagsWrapper = ({ choosenSection }) => {
           currency={selectedPrice.currency}
           min={selectedPrice.min}
           max={selectedPrice.max}
-          handleClose={() => dispatch(deletePrice())}
+          handleClose={() => handleClose(() => deletePrice())}
         />
       )}
       {displayedSections.includes("collections") &&
@@ -84,7 +94,7 @@ export const TagsWrapper = ({ choosenSection }) => {
             text={name}
             icon={icon}
             handleClose={() =>
-              dispatch(
+              handleClose(() =>
                 deleteFromArrayOfObjects({
                   field: "selectedCollections",
                   objectField: "name",
@@ -100,7 +110,7 @@ export const TagsWrapper = ({ choosenSection }) => {
             key={`${elem}-${i}`}
             text={elem}
             handleClose={() =>
-              dispatch(
+              handleClose(() =>
                 deleteFromArray({ field: "selectedOnSaleIn", data: { ...selectedOnSaleIn, rows: elem } })
               )
             }
@@ -108,7 +118,7 @@ export const TagsWrapper = ({ choosenSection }) => {
         ))}
       {isClearAll && (
         <div className={styles.clearAll}>
-          <span onClick={() => dispatch(deleteAll())}>Clear All</span>
+          <span onClick={() => handleClose(() => deleteAll())}>Clear All</span>
         </div>
       )}
     </div>

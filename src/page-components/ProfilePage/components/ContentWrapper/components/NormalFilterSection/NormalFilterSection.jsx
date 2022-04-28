@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { setData } from "../../../../../../redux/slices/profileFiltrationSlice";
+import {
+  setData,
+  clearOffsetAndTokens,
+  getTokens,
+} from "../../../../../../redux/slices/profileFiltrationSlice";
 //classnames
 import cn from "classnames";
 //mui
@@ -32,6 +36,8 @@ export const NormalFilterSection = () => {
     const result = readyFilterOptions.find((elem) => elem.text === selectValue);
     const { text, sortOrder, sortBy } = result;
     dispatch(setData({ field: "readyFilterOption", data: { text, sortBy, sortOrder } }));
+    dispatch(clearOffsetAndTokens());
+    dispatch(getTokens());
   };
 
   useEffect(() => {

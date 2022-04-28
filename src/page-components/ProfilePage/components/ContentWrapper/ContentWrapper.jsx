@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import { setField } from "../../../../redux/slices/userDataSlice";
+import { getTokens, setData, clearOffsetAndTokens } from "../../../../redux/slices/profileFiltrationSlice";
 import { open as openError } from "../../../../redux/slices/errorSnackbarSlice";
 //axios
 import axios from "axios";
@@ -25,56 +25,30 @@ import styles from "./ContentWrapper.module.scss";
 
 export const ContentWrapper = () => {
   const dispatch = useDispatch();
-  const [choosenSection, setChoosenSection] = useState("collected");
   const [isSidebarOpened, setIsSidebarOpened] = useState(true);
-  const [tokens, setTokens] = useState([]);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  //const [tokens, setTokens] = useState([]);
 
-  const { readyFilterOption, tokensGridScale, selectedStatuses, selectedCollections, selectedPrice } =
-    useSelector((state) => state.profileFiltration);
-  const { userData } = useSelector((state) => state);
-
-  const getTokens = useCallback(async () => {
-    try {
-      const accessToken = localStorage.getItem("accessToken");
-      const { sortOrder, sortBy } = readyFilterOption;
-
-      let url = `${process.env.BACKEND_URL}/users/account/assets?offset=${tokens.length}&limit=30&tab=${choosenSection}&sortOrder=${sortOrder}&sortBy=${sortBy}`;
-      url = constructUrl(url, selectedStatuses, selectedCollections, selectedPrice);
-
-      const {
-        data: { data, createdNfts, ownedNfts, favoritedNfts, totalValue },
-      } = await axios.get(`${url}`, {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      });
-
-      if (userData.ownedNfts === 0) {
-        dispatch(setField({ field: "createdNfts", value: createdNfts }));
-        dispatch(setField({ field: "favoritedNfts", value: favoritedNfts }));
-        dispatch(setField({ field: "ownedNfts", value: ownedNfts }));
-        dispatch(setField({ field: "totalValue", value: totalValue }));
-      }
-
-      return data;
-    } catch (e) {
-      dispatch(
-        openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
-      );
-    }
-  }, [
+  const {
     choosenSection,
-    dispatch,
+    tokens,
     readyFilterOption,
-    selectedCollections,
+    tokensGridScale,
     selectedStatuses,
+    selectedCollections,
     selectedPrice,
-    userData.ownedNfts,
-  ]);
+  } = useSelector((state) => state.profileFiltration);
+  const filtrationOptions = useSelector((state) => state.profileFiltration);
+
+  const handleGetTokens = useCallback(() => {
+    dispatch(getTokens(choosenSection));
+  }, [choosenSection, dispatch]);
 
   useEffect(() => {
-    getTokens().then((result) => setTokens(prev => [...prev, result]));
-  }, [getTokens]);
+    dispatch(clearOffsetAndTokens())
+    handleGetTokens();
+  }, [choosenSection]);
 
   return (
     <div className={styles.wrapper}>
@@ -84,13 +58,13 @@ export const ContentWrapper = () => {
             className={cn(styles.chooseSection, {
               [styles.chooseSectionActive]: choosenSection === nameForBE,
             })}
-            onClick={() => setChoosenSection(nameForBE)}
+            onClick={() => dispatch(setData({ field: "choosenSection", data: nameForBE }))}
             key={text}
           >
             {icon}
             <span>
               {text}
-              {nameForBE !== "activity" && nameForBE !== "offers" && `(${userData[forRedux]})`}
+              {nameForBE !== "activity" && nameForBE !== "offers" && `(${filtrationOptions[forRedux]})`}
             </span>
           </div>
         ))}
@@ -109,32 +83,15 @@ export const ContentWrapper = () => {
                 {choosenSection === "Offers" && <OffersFilterSection />}
                 <TagsWrapper choosenSection={choosenSection} />
                 {tokens && tokens.length > 0 && (
-                  <div
-                    className={cn(styles.tokensGrid, {
-                      [styles.tokensGridSmall]: tokensGridScale === "small",
-                      [styles.tokensGridLarge]: tokensGridScale === "large",
-                    })}
-                  >
+                  <div>
                     <InfiniteScroll
-                      dataLength={30} //This is important field to render the next data
-                      next={getTokens}
+                      className={cn(styles.tokensGrid, {
+                        [styles.tokensGridSmall]: tokensGridScale === "small",
+                        [styles.tokensGridLarge]: tokensGridScale === "large",
+                      })}
+                      dataLength={30}
+                      next={handleGetTokens}
                       hasMore={true}
-                      loader={<h4>Loading...</h4>}
-                      endMessage={
-                        <p style={{ textAlign: "center", color: 'white' }}>
-                          <b>Yay! You have seen it all</b>
-                        </p>
-                      }
-                      // below props only if you need pull down functionality
-                      refreshFunction={this.refresh}
-                      pullDownToRefresh
-                      pullDownToRefreshThreshold={50}
-                      pullDownToRefreshContent={
-                        <h3 style={{ textAlign: "center", color: 'white' }}>&#8595; Pull down to refresh</h3>
-                      }
-                      releaseToRefreshContent={
-                        <h3 style={{ textAlign: "center", color: 'white' }}>&#8593; Release to refresh</h3>
-                      }
                     >
                       {choosenSection !== "Activity" &&
                         choosenSection !== "Offers" &&

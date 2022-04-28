@@ -3,7 +3,11 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { setData } from "../../../../../../redux/slices/profileFiltrationSlice";
+import {
+  clearOffsetAndTokens,
+  getTokens,
+  setData,
+} from "../../../../../../redux/slices/profileFiltrationSlice";
 //mui
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -19,7 +23,7 @@ export const Price = ({ currencies }) => {
   const dispatch = useDispatch();
   const { selectedPrice } = useSelector((state) => state.profileFiltration);
 
-  const [choosenCurrency, setChoosenCurrency] = useState(selectedPrice.currency);
+  const [choosenCurrency, setChoosenCurrency] = useState({ name: "none" });
   const [min, setMin] = useState(selectedPrice.min);
   const [max, setMax] = useState(selectedPrice.max);
   const [disablesButton, setDisabledButton] = useState(true);
@@ -28,15 +32,14 @@ export const Price = ({ currencies }) => {
   useEffect(() => {
     if (Number(min) < 0) setMin("0");
     if (Number(min) > Number(max)) setMin(max);
-
-    if (min && max) setDisabledButton(false);
+    if (min && max && choosenCurrency.name !== "none") setDisabledButton(false);
     else setDisabledButton(true);
-  }, [min, max]);
+  }, [min, max, choosenCurrency]);
 
   const handleChange = (value) => {
-    const result = currencies.find(({name}) => name === value);
+    const result = currencies.find(({ name }) => name === value);
     setChoosenCurrency(result);
-  }
+  };
 
   const handleClick = () => {
     dispatch(
@@ -49,6 +52,8 @@ export const Price = ({ currencies }) => {
         },
       })
     );
+    dispatch(clearOffsetAndTokens());
+    dispatch(getTokens());
   };
 
   return (
@@ -64,6 +69,11 @@ export const Price = ({ currencies }) => {
         value={choosenCurrency?.name}
         className={muiClasses.select}
       >
+        <MenuItem disabled style={{ color: "var(--dark-grey)" }} value="none">
+          <span style={{ color: "var(--dark-grey)" }} className={styles.menuItem}>
+            <span>Select a currency</span>
+          </span>
+        </MenuItem>
         {currencies.map(({ name, icon, id }) => (
           <MenuItem key={id} value={name}>
             <span className={styles.menuItem}>
