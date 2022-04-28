@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 //next
 import Image from "next/image";
+import { useRouter } from "next/router";
 //classnames
 import cn from "classnames";
 //spinner
@@ -14,10 +15,11 @@ import { videos, audios, images } from "../../helpers/extentions";
 //styles
 import styles from "./SquareNFTCard.module.scss";
 
-export const SquareNFTCard = ({ name, category, status, price, owner, fileName, collection }) => {
+export const SquareNFTCard = ({ id, name, category, status, price, owner, fileName, collection }) => {
   const [tokenFileError, setTokenFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
+  const router = useRouter();
 
   useEffect(() => {
     const end = fileName.substring(fileName.indexOf(".") + 1).toLowerCase();
@@ -43,7 +45,7 @@ export const SquareNFTCard = ({ name, category, status, price, owner, fileName, 
   const audioRef = useRef();
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} onClick={() => router.push(`/token/${id}`)}>
       <div className={styles.imageWrapperWrapper}>
         <div
           className={cn(styles.imageWrapper, {

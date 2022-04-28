@@ -98,14 +98,15 @@ export const ContentWrapper = () => {
                         tokensGridScale === "large" &&
                         tokens.map(({ name, category, status, price, collection, owner, fileName, id }) => (
                           <SquareNFTCard
+                            category={category}
+                            collection={collection}
+                            fileName={fileName}
+                            id={id}
                             key={id}
                             name={name}
-                            category={category}
-                            status={status}
-                            price={price}
                             owner={owner}
-                            fileName={fileName}
-                            collection={collection}
+                            price={price}
+                            status={status}
                           />
                         ))}
                       {choosenSection !== "Activity" &&
@@ -113,14 +114,15 @@ export const ContentWrapper = () => {
                         tokensGridScale === "small" &&
                         tokens.map(({ name, category, status, price, collection, owner, fileName, id }) => (
                           <SmallNFTCard
+                            category={category}
+                            collection={collection}
+                            fileName={fileName}
+                            id={id}
                             key={id}
                             name={name}
-                            category={category}
-                            status={status}
-                            price={price}
                             owner={owner}
-                            fileName={fileName}
-                            collection={collection}
+                            price={price}
+                            status={status}
                           />
                         ))}
                     </InfiniteScroll>
