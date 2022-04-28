@@ -7,6 +7,7 @@ import Link from "next/link";
 import { getNavigationData } from "./CreateCollectionPage.utils";
 //styles
 import styles from "./CreateCollectionPage.module.scss";
+import { ImageLoadFields } from "./components/ImageLoadFields/ImageLoadFields";
 
 export const CreateCollectionPage = () => {
   const router = useRouter();
@@ -29,7 +30,12 @@ export const CreateCollectionPage = () => {
         ))}
       </div>
       <div className={styles.pageContainer}>
-        <div className={styles.wrapper}></div>
+        <div className={styles.wrapper}>
+          <div className={styles.pageTitle}>
+            <span>Create Collection</span>
+          </div>
+          <ImageLoadFields className={styles.imageLoadFields} />
+        </div>
       </div>
     </>
   );

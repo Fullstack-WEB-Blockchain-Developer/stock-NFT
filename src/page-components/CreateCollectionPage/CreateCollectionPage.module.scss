@@ -19,7 +19,7 @@
   color: var(--light-grey);
 
   span {
-      cursor: pointer;
+    cursor: pointer;
   }
 }
 
@@ -42,4 +42,14 @@
 .wrapper {
   width: 100%;
   max-width: 840px;
+}
+
+.pageTitle {
+  font-weight: bold;
+  font-size: 36px;
+  color: var(--white);
+}
+
+.imageLoadFields {
+    margin-top: 40px;
 }
