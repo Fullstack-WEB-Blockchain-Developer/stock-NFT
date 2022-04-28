@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 //next
 import Image from "next/image";
+import { useRouter } from "next/router";
 //classnames
 import cn from "classnames";
 //spinner
@@ -14,10 +15,11 @@ import { videos, audios, images } from "../../helpers/extentions";
 //styles
 import styles from "./SmallNFTCard.module.scss";
 
-export const SmallNFTCard = ({ name, category, status, price, owner, fileName, collection }) => {
+export const SmallNFTCard = ({ id, name, category, status, price, owner, fileName, collection }) => {
   const [tokenFileError, setTokenFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
+  const router = useRouter();
 
   useEffect(() => {
     const end = fileName.substring(fileName.indexOf(".") + 1).toLowerCase();
@@ -43,7 +45,7 @@ export const SmallNFTCard = ({ name, category, status, price, owner, fileName, c
   const audioRef = useRef();
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} onClick={() => router.push(`/token/${id}`)}>
       <div className={styles.imageWrapperWrapper}>
         <div
           className={cn(styles.imageWrapper, {
@@ -110,10 +112,12 @@ export const SmallNFTCard = ({ name, category, status, price, owner, fileName, c
         <div className={styles.name}>
           <span>{name}</span>
         </div>
-        {price && <div className={styles.price}>
-          <AmountWithIcon amount={price} color="red" />
-          <AmountDifference direction="down" percent="12" />
-        </div>}
+        {price && (
+          <div className={styles.price}>
+            <AmountWithIcon amount={price} color="red" />
+            <AmountDifference direction="down" percent="12" />
+          </div>
+        )}
         <div className={styles.bottomSection}>
           <div className={styles.bottomLeft}>
             <div className={styles.collection}>
@@ -125,7 +129,7 @@ export const SmallNFTCard = ({ name, category, status, price, owner, fileName, c
             </div>
           </div>
           <div className={styles.bottomRight}>
-            <Tag text={status === 'pending' ? status : category} />
+            <Tag text={status === "pending" ? status : category} />
           </div>
         </div>
       </div>

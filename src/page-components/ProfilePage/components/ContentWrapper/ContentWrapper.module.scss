@@ -1,101 +1,103 @@
 .wrapper {
-	font-family: "Poppins", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .chooseSectionWrapper {
-	display: flex;
+  display: flex;
 
-	border-bottom: 1px solid var(--dark-grey);
+  border-bottom: 1px solid var(--dark-grey);
 }
 
 .chooseSection {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 
-	padding: 40px;
+  padding: 40px;
 
-	cursor: pointer;
-	letter-spacing: 0.01px;
+  cursor: pointer;
+  letter-spacing: 0.01px;
 
-	color: var(--light-grey);
+  color: var(--light-grey);
 
-	font-size: 16px;
+  font-size: 16px;
 
-	span {
-		margin-left: 8px;
-	}
+  span {
+    margin-left: 8px;
+  }
 }
 
 .chooseSectionActive {
-	color: var(--purple);
-	box-shadow: 0px -8px 0px -4px var(--purple) inset;
+  color: var(--purple);
+  box-shadow: 0px -8px 0px -4px var(--purple) inset;
 
-	svg {
-		fill: var(--purple);
-		stroke: var(--purple);
-	}
+  svg {
+    fill: var(--purple);
+    stroke: var(--purple);
+  }
 }
 
 .bottomSideWrapper {
-	display: flex;
+  display: flex;
 }
 
 .rightBottomSide {
-	width: 100%;
-	padding: 2%;
+  overflow: visible;
+  width: 100%;
+  padding: 2%;
 }
 
 .topFiltrationSection {
-	width: inherit;
+  width: inherit;
 }
 
 .tokensGrid {
-	display: grid;
+  display: grid;
+  overflow: visible !important;
 
-	padding: 40px 0;
+  padding: 40px 0;
 }
 
 .tokensGridSmall {
-	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-	gap: 40px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 40px;
 
-	@media screen and (max-width: 1550px) {
-		gap: 40px;
-	}
+  @media screen and (max-width: 1550px) {
+    gap: 40px;
+  }
 
-	@media screen and (max-width: 1400px) {
-		gap: 35px;
-	}
+  @media screen and (max-width: 1400px) {
+    gap: 35px;
+  }
 }
 
 .tokensGridLarge {
-	grid-template-columns: 1fr 1fr 1fr;
-	gap: 60px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 60px;
 
-	@media screen and (max-width: 1550px) {
-		gap: 40px;
-	}
+  @media screen and (max-width: 1550px) {
+    gap: 40px;
+  }
 
-	@media screen and (max-width: 1400px) {
-		gap: 35px;
-	}
+  @media screen and (max-width: 1400px) {
+    gap: 35px;
+  }
 }
 
 .emptyTokens {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 
-	width: 100%;
-	height: 337px;
-	margin-top: 40px;
+  width: 100%;
+  height: 337px;
+  margin-top: 40px;
 
-	letter-spacing: 0.02px;
+  letter-spacing: 0.02px;
 
-	color: #FFFFFF;
-	border: 1px solid var(--dark-grey);
-	border-radius: 30px;
+  color: #ffffff;
+  border: 1px solid var(--dark-grey);
+  border-radius: 30px;
 
-	font-size: 24px;
+  font-size: 24px;
 }

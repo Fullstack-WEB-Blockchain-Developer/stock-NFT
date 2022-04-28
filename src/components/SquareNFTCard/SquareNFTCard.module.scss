@@ -9,6 +9,13 @@
 
 	font-family: "Poppins", sans-serif;
 	aspect-ratio: 1 / 0.9112;
+	transition: transform 0.1s;
+	cursor: pointer;
+}
+
+.wrapper:hover {
+	transform: scale(1.015);
+	transition: transform 0.1s;
 }
 
 .imageWrapperWrapper {
