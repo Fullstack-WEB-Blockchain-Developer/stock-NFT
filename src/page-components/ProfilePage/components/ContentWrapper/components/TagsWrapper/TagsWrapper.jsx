@@ -71,7 +71,7 @@ export const TagsWrapper = ({ choosenSection }) => {
       {selectedPrice.min && (
         <PriceTag
           key="price-tag"
-          text={selectedPrice.text}
+          currency={selectedPrice.currency}
           min={selectedPrice.min}
           max={selectedPrice.max}
           handleClose={() => dispatch(deletePrice())}

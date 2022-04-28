@@ -9,7 +9,12 @@ import {
   deleteFromArrayOfObjects,
 } from "../../../../redux/slices/profileFiltrationSlice";
 import { open as openError } from "../../../../redux/slices/errorSnackbarSlice";
-import { clearError, getAllChains, getAllCollections } from "../../../../redux/slices/generalDataSlice";
+import {
+  getAllCurrencies,
+  getAllCollections,
+  getAllChains,
+  clearError,
+} from "../../../../redux/slices/generalDataSlice";
 //mui
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
@@ -30,15 +35,15 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   const muiClasses = useStyles();
 
   //useSelectors
-  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections } = useSelector(
-    (state) => state.profileFiltration
-  );
-  const { chains, collections, error } = useSelector((state) => state.generalData);
-
+  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections, selectedPrice } =
+    useSelector((state) => state.profileFiltration);
+  const { chains, collections, error, currencies } = useSelector((state) => state.generalData);
+  console.log("---selectedPrice", selectedPrice);
   //useStates
   // this state will contain such data as { status: false, price: false, collections: false ...etc}
   const [openedSections, setOpenedSections] = useState(getSectionsForUseState(choosenTopSection));
-  const [onSalesInRows, setOnSalesInRows] = useState(fakeOnSaleIn);
+  //here it was fakeOnSaleIn
+  const [onSalesInRows, setOnSalesInRows] = useState([]);
   const [onSalesInSearch, setOnSalesInSearch] = useState(selectedOnSaleIn.filter);
   const [collectionsRows, setCollectionsRows] = useState(collections);
   const [collectionsSearch, setCollectionsSearch] = useState(selectedCollections.filter);
@@ -85,7 +90,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     }
   };
 
-  const handleToggleCollections = (collection, icon) => {
+  const handleToggleCollections = (collection, id, icon) => {
     const collectionsStringsArray = selectedCollections.rows.map((elem) => elem.name);
 
     if (collectionsStringsArray.includes(collection)) {
@@ -100,7 +105,10 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
       dispatch(
         setData({
           field: "selectedCollections",
-          data: { ...selectedCollections, rows: [...selectedCollections.rows, { name: collection, icon }] },
+          data: {
+            ...selectedCollections,
+            rows: [...selectedCollections.rows, { name: collection, icon, id }],
+          },
         })
       );
     }
@@ -122,9 +130,12 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   }, [error, dispatch]);
 
   useEffect(() => {
-    dispatch(getAllChains());
     dispatch(getAllCollections());
-  }, [dispatch]);
+    chains.length === 0 && dispatch(getAllChains());
+    currencies.length === 0 && dispatch(getAllCurrencies());
+    !selectedPrice.currency &&
+      dispatch(setData({ field: "selectedPrice", data: { ...selectedPrice, currency: currencies[1] } }));
+  }, [dispatch, currencies, chains]);
 
   useEffect(() => {
     dispatch(
@@ -138,7 +149,8 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     );
 
     setOnSalesInRows(
-      fakeOnSaleIn.filter(({ name }) => name.toLowerCase().includes(debouncedOnSalesInSearch.toLowerCase()))
+      // it was fakeOnSaleIn
+      [].filter(({ name }) => name.toLowerCase().includes(debouncedOnSalesInSearch.toLowerCase()))
     );
   }, [debouncedOnSalesInSearch]);
 
@@ -157,6 +169,8 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
       collections.filter(({ name }) => name.toLowerCase().includes(debouncedCollectionSearch.toLowerCase()))
     );
   }, [debouncedCollectionSearch, collections]);
+
+  useEffect(() => {}, []);
 
   return (
     <div
@@ -212,7 +226,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
                 [styles.sectionClosed]: !openedSections.price,
               })}
             >
-              <Price />
+              <Price currencies={currencies} />
             </div>
           )}
           {section === "collections" && (
@@ -233,8 +247,12 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
                 InputProps={{ style: { color: "white" } }}
               />
               <div className={styles.scrollable}>
-                {collectionsRows.map(({ name }) => (
-                  <div key={name} className={styles.collection} onClick={() => handleToggleCollections(name)}>
+                {collectionsRows.map(({ name, id }) => (
+                  <div
+                    key={name}
+                    className={styles.collection}
+                    onClick={() => handleToggleCollections(name, id)}
+                  >
                     <div className={styles.collectionIcon}>
                       {selectedCollections.rows.map((elem) => elem.name).includes(name) ? (
                         <Image src="/Icon_Check.svg" width={19} height={19} alt="icon-checked" />

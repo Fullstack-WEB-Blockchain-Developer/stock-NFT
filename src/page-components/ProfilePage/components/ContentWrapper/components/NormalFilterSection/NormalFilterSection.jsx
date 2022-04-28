@@ -28,6 +28,12 @@ export const NormalFilterSection = () => {
 
   const debouncedSearchText = useDebounce(searchText, 200);
 
+  const handleChangeRightSelect = (selectValue) => {
+    const result = readyFilterOptions.find((elem) => elem.text === selectValue);
+    const { text, sortOrder, sortBy } = result;
+    dispatch(setData({ field: "readyFilterOption", data: { text, sortBy, sortOrder } }));
+  };
+
   useEffect(() => {
     dispatch(setData({ field: "filterText", data: debouncedSearchText }));
   }, [debouncedSearchText, dispatch]);
@@ -80,9 +86,7 @@ export const NormalFilterSection = () => {
         style={{
           color: "white",
         }}
-        onChange={({ target: { value } }) =>
-          dispatch(setData({ field: "readyFilterOption", data: { text: value } }))
-        }
+        onChange={({ target: { value } }) => handleChangeRightSelect(value)}
         value={readyFilterOption.text}
         className={muiClasses.select}
       >

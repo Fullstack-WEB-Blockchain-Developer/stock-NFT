@@ -5,8 +5,7 @@ const initialState = {
   selectedPrice: {
     min: undefined,
     max: undefined,
-    currency: "usd",
-    text: "USD",
+    currency: undefined,
   },
   selectedCollections: { filter: "", rows: [] },
   selectedChains: [],
@@ -41,10 +40,9 @@ export const profileFiltration = createSlice({
     },
     deletePrice: (state) => {
       state.selectedPrice = {
+        ...state.selectedPrice,
         min: undefined,
         max: undefined,
-        currency: "usd",
-        text: "USD",
       };
     },
     deleteAll: (state) => {
@@ -52,8 +50,7 @@ export const profileFiltration = createSlice({
       state.selectedPrice = {
         min: undefined,
         max: undefined,
-        currency: "usd",
-        text: "USD",
+        currency: undefined,
       };
       state.selectedCollections = { filter: "", rows: [] };
       state.selectedChains = [];

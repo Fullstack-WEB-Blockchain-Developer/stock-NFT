@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+//next
+import Image from "next/image";
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import { setData } from "../../../../../../redux/slices/profileFiltrationSlice";
@@ -13,7 +15,7 @@ import { useStyles } from "../../../../../../hooks/useStyles";
 //styles
 import styles from "./Price.module.scss";
 
-export const Price = () => {
+export const Price = ({ currencies }) => {
   const dispatch = useDispatch();
   const { selectedPrice } = useSelector((state) => state.profileFiltration);
 
@@ -31,8 +33,12 @@ export const Price = () => {
     else setDisabledButton(true);
   }, [min, max]);
 
+  const handleChange = (value) => {
+    const result = currencies.find(({name}) => name === value);
+    setChoosenCurrency(result);
+  }
+
   const handleClick = () => {
-    const text = choosenCurrency === "usd" && "USD";
     dispatch(
       setData({
         field: "selectedPrice",
@@ -40,7 +46,6 @@ export const Price = () => {
           min,
           max,
           currency: choosenCurrency,
-          text
         },
       })
     );
@@ -55,16 +60,24 @@ export const Price = () => {
         style={{
           color: "white",
         }}
-        onChange={({ target: { value } }) => setChoosenCurrency(value)}
-        value={choosenCurrency}
+        onChange={({ target: { value } }) => handleChange(value)}
+        value={choosenCurrency?.name}
         className={muiClasses.select}
       >
-        <MenuItem value="usd">
-          <span>United States Dollar (USD)</span>
-        </MenuItem>
-        <MenuItem value="eth">
-          <span>Ethers (ETH)</span>
-        </MenuItem>
+        {currencies.map(({ name, icon, id }) => (
+          <MenuItem key={id} value={name}>
+            <span className={styles.menuItem}>
+              <Image
+                alt={`${name}-icon`}
+                height={19}
+                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`}
+                src={icon}
+                width={19}
+              />
+              <span>{name}</span>
+            </span>
+          </MenuItem>
+        ))}
       </Select>
       <div className={styles.textfields}>
         <TextField
