@@ -3,11 +3,14 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import { setField } from "../../../../redux/slices/userDataSlice";
+import { getTokens, setData, clearOffsetAndTokens } from "../../../../redux/slices/profileFiltrationSlice";
+import { open as openError } from "../../../../redux/slices/errorSnackbarSlice";
 //axios
 import axios from "axios";
 //classnames
 import cn from "classnames";
+//infivite-scroll
+import InfiniteScroll from "react-infinite-scroll-component";
 //components
 import { Sidebar } from "../Sidebar/Sidebar";
 import { NormalFilterSection } from "./components/NormalFilterSection/NormalFilterSection";
@@ -16,46 +19,36 @@ import { TagsWrapper } from "./components/TagsWrapper/TagsWrapper";
 import { SquareNFTCard } from "../../../../components/SquareNFTCard/SquareNFTCard";
 import { SmallNFTCard } from "../../../../components/SmallNFTCard/SmallNFTCard";
 //utils
-import { chooseSections } from "./ContentWrapper.utils";
+import { chooseSections, constructUrl } from "./ContentWrapper.utils";
 //styles
 import styles from "./ContentWrapper.module.scss";
 
 export const ContentWrapper = () => {
   const dispatch = useDispatch();
-  const [choosenSection, setChoosenSection] = useState("collected");
   const [isSidebarOpened, setIsSidebarOpened] = useState(true);
-  const [tokens, setTokens] = useState([]);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  //const [tokens, setTokens] = useState([]);
 
-  const { readyFilterOption, tokensGridScale } = useSelector((state) => state.profileFiltration);
-  const { userData } = useSelector((state) => state);
+  const {
+    choosenSection,
+    tokens,
+    readyFilterOption,
+    tokensGridScale,
+    selectedStatuses,
+    selectedCollections,
+    selectedPrice,
+  } = useSelector((state) => state.profileFiltration);
+  const filtrationOptions = useSelector((state) => state.profileFiltration);
 
-  const getTokens = useCallback(async () => {
-    const accessToken = localStorage.getItem("accessToken");
-    const { sortOrder, sortBy } = readyFilterOption;
-
-    const {
-      data: { data, createdNfts, ownedNfts, favoritedNfts, totalValue },
-    } = await axios.get(
-      `${process.env.BACKEND_URL}/users/account/assets?tab=${choosenSection}&sortOrder=${sortOrder}&sortBy=${sortBy}`,
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      }
-    );
-    if (userData.ownedNfts === 0) {
-      dispatch(setField({ field: "createdNfts", value: createdNfts }));
-      dispatch(setField({ field: "ownedNfts", value: ownedNfts }));
-      dispatch(setField({ field: "favoritedNfts", value: favoritedNfts }));
-      dispatch(setField({ field: "totalValue", value: totalValue }));
-    }
-    
-    return data;
-  }, [choosenSection, readyFilterOption, dispatch]);
+  const handleGetTokens = useCallback(() => {
+    dispatch(getTokens(choosenSection));
+  }, [choosenSection, dispatch]);
 
   useEffect(() => {
-    getTokens().then((result) => setTokens(result));
-  }, [getTokens]);
+    dispatch(clearOffsetAndTokens())
+    handleGetTokens();
+  }, [choosenSection]);
 
   return (
     <div className={styles.wrapper}>
@@ -65,12 +58,13 @@ export const ContentWrapper = () => {
             className={cn(styles.chooseSection, {
               [styles.chooseSectionActive]: choosenSection === nameForBE,
             })}
-            onClick={() => setChoosenSection(nameForBE)}
+            onClick={() => dispatch(setData({ field: "choosenSection", data: nameForBE }))}
             key={text}
           >
             {icon}
             <span>
-              {text}{nameForBE !== 'activity' && nameForBE !== 'offers' && `(${userData[forRedux]})`}
+              {text}
+              {nameForBE !== "activity" && nameForBE !== "offers" && `(${filtrationOptions[forRedux]})`}
             </span>
           </div>
         ))}
@@ -89,42 +83,47 @@ export const ContentWrapper = () => {
                 {choosenSection === "Offers" && <OffersFilterSection />}
                 <TagsWrapper choosenSection={choosenSection} />
                 {tokens && tokens.length > 0 && (
-                  <div
-                    className={cn(styles.tokensGrid, {
-                      [styles.tokensGridSmall]: tokensGridScale === "small",
-                      [styles.tokensGridLarge]: tokensGridScale === "large",
-                    })}
-                  >
-                    {choosenSection !== "Activity" &&
-                      choosenSection !== "Offers" &&
-                      tokensGridScale === "large" &&
-                      tokens.map(({ name, category, status, price, collection, owner, fileName, id }) => (
-                        <SquareNFTCard
-                          key={id}
-                          name={name}
-                          category={category}
-                          status={status}
-                          price={price}
-                          owner={owner}
-                          fileName={fileName}
-                          collection={collection}
-                        />
-                      ))}
-                    {choosenSection !== "Activity" &&
-                      choosenSection !== "Offers" &&
-                      tokensGridScale === "small" &&
-                      tokens.map(({ name, category, status, price, collection, owner, fileName, id }) => (
-                        <SmallNFTCard
-                          key={id}
-                          name={name}
-                          category={category}
-                          status={status}
-                          price={price}
-                          owner={owner}
-                          fileName={fileName}
-                          collection={collection}
-                        />
-                      ))}
+                  <div>
+                    <InfiniteScroll
+                      className={cn(styles.tokensGrid, {
+                        [styles.tokensGridSmall]: tokensGridScale === "small",
+                        [styles.tokensGridLarge]: tokensGridScale === "large",
+                      })}
+                      dataLength={30}
+                      next={handleGetTokens}
+                      hasMore={true}
+                    >
+                      {choosenSection !== "Activity" &&
+                        choosenSection !== "Offers" &&
+                        tokensGridScale === "large" &&
+                        tokens.map(({ name, category, status, price, collection, owner, fileName, id }) => (
+                          <SquareNFTCard
+                            key={id}
+                            name={name}
+                            category={category}
+                            status={status}
+                            price={price}
+                            owner={owner}
+                            fileName={fileName}
+                            collection={collection}
+                          />
+                        ))}
+                      {choosenSection !== "Activity" &&
+                        choosenSection !== "Offers" &&
+                        tokensGridScale === "small" &&
+                        tokens.map(({ name, category, status, price, collection, owner, fileName, id }) => (
+                          <SmallNFTCard
+                            key={id}
+                            name={name}
+                            category={category}
+                            status={status}
+                            price={price}
+                            owner={owner}
+                            fileName={fileName}
+                            collection={collection}
+                          />
+                        ))}
+                    </InfiniteScroll>
                   </div>
                 )}
                 {!tokens ||

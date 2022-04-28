@@ -7,9 +7,16 @@ import {
   setData,
   deleteFromArray,
   deleteFromArrayOfObjects,
+  getTokens,
+  clearOffsetAndTokens,
 } from "../../../../redux/slices/profileFiltrationSlice";
 import { open as openError } from "../../../../redux/slices/errorSnackbarSlice";
-import { clearError, getAllChains, getAllCollections } from "../../../../redux/slices/generalDataSlice";
+import {
+  getAllCurrencies,
+  getAllCollections,
+  getAllChains,
+  clearError,
+} from "../../../../redux/slices/generalDataSlice";
 //mui
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
@@ -30,15 +37,14 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   const muiClasses = useStyles();
 
   //useSelectors
-  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections } = useSelector(
-    (state) => state.profileFiltration
-  );
-  const { chains, collections, error } = useSelector((state) => state.generalData);
-
+  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections, selectedPrice } =
+    useSelector((state) => state.profileFiltration);
+  const { chains, collections, error, currencies } = useSelector((state) => state.generalData);
   //useStates
   // this state will contain such data as { status: false, price: false, collections: false ...etc}
   const [openedSections, setOpenedSections] = useState(getSectionsForUseState(choosenTopSection));
-  const [onSalesInRows, setOnSalesInRows] = useState(fakeOnSaleIn);
+  //here it was fakeOnSaleIn
+  const [onSalesInRows, setOnSalesInRows] = useState([]);
   const [onSalesInSearch, setOnSalesInSearch] = useState(selectedOnSaleIn.filter);
   const [collectionsRows, setCollectionsRows] = useState(collections);
   const [collectionsSearch, setCollectionsSearch] = useState(selectedCollections.filter);
@@ -49,6 +55,12 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   const iconLoader = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`;
 
   //handlers
+  console.log("---currencies", currencies);
+
+  const handleGetNewTokens = () => {
+    dispatch(clearOffsetAndTokens());
+    dispatch(getTokens());
+  };
 
   const handleToggleSection = (section) =>
     setOpenedSections({ ...openedSections, [section]: !openedSections[section] });
@@ -57,8 +69,10 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     const statusesStringsArray = selectedStatuses.map((elem) => elem.name);
     if (statusesStringsArray.includes(status)) {
       dispatch(deleteFromArrayOfObjects({ field: "selectedStatuses", objectField: "name", data: status }));
+      handleGetNewTokens();
     } else {
       dispatch(setData({ field: "selectedStatuses", data: [...selectedStatuses, { name: status, text }] }));
+      handleGetNewTokens();
     }
   };
 
@@ -67,14 +81,17 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
     if (chainsStringsArray.includes(chain)) {
       dispatch(deleteFromArrayOfObjects({ field: "selectedChains", objectField: "name", data: chain }));
+      handleGetNewTokens();
     } else {
       dispatch(setData({ field: "selectedChains", data: [...selectedChains, { name: chain, icon }] }));
+      handleGetNewTokens();
     }
   };
 
   const handleToggleOnSaleIn = (onSaleIn) => {
     if (selectedOnSaleIn.rows.includes(onSaleIn)) {
       dispatch(deleteFromArray({ field: "selectedOnSaleIn", data: { ...selectedOnSaleIn, rows: onSaleIn } }));
+      handleGetNewTokens();
     } else {
       dispatch(
         setData({
@@ -82,10 +99,11 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
           data: { ...selectedOnSaleIn, rows: [...selectedOnSaleIn.rows, onSaleIn] },
         })
       );
+      handleGetNewTokens();
     }
   };
 
-  const handleToggleCollections = (collection, icon) => {
+  const handleToggleCollections = (collection, id, icon) => {
     const collectionsStringsArray = selectedCollections.rows.map((elem) => elem.name);
 
     if (collectionsStringsArray.includes(collection)) {
@@ -96,13 +114,18 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
           data: { rows: collection },
         })
       );
+      handleGetNewTokens();
     } else {
       dispatch(
         setData({
           field: "selectedCollections",
-          data: { ...selectedCollections, rows: [...selectedCollections.rows, { name: collection, icon }] },
+          data: {
+            ...selectedCollections,
+            rows: [...selectedCollections.rows, { name: collection, icon, id }],
+          },
         })
       );
+      handleGetNewTokens();
     }
   };
   
@@ -122,9 +145,10 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   }, [error, dispatch]);
 
   useEffect(() => {
-    dispatch(getAllChains());
     dispatch(getAllCollections());
-  }, [dispatch]);
+    chains.length === 0 && dispatch(getAllChains());
+    currencies.length === 0 && dispatch(getAllCurrencies());
+  }, [dispatch, currencies, chains]);
 
   useEffect(() => {
     dispatch(
@@ -138,7 +162,8 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     );
 
     setOnSalesInRows(
-      fakeOnSaleIn.filter(({ name }) => name.toLowerCase().includes(debouncedOnSalesInSearch.toLowerCase()))
+      // it was fakeOnSaleIn
+      [].filter(({ name }) => name.toLowerCase().includes(debouncedOnSalesInSearch.toLowerCase()))
     );
   }, [debouncedOnSalesInSearch]);
 
@@ -212,7 +237,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
                 [styles.sectionClosed]: !openedSections.price,
               })}
             >
-              <Price />
+              <Price currencies={currencies} />
             </div>
           )}
           {section === "collections" && (
@@ -233,8 +258,12 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
                 InputProps={{ style: { color: "white" } }}
               />
               <div className={styles.scrollable}>
-                {collectionsRows.map(({ name }) => (
-                  <div key={name} className={styles.collection} onClick={() => handleToggleCollections(name)}>
+                {collectionsRows.map(({ name, id }) => (
+                  <div
+                    key={name}
+                    className={styles.collection}
+                    onClick={() => handleToggleCollections(name, id)}
+                  >
                     <div className={styles.collectionIcon}>
                       {selectedCollections.rows.map((elem) => elem.name).includes(name) ? (
                         <Image src="/Icon_Check.svg" width={19} height={19} alt="icon-checked" />

@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
+//next
+import Image from "next/image";
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { setData } from "../../../../../../redux/slices/profileFiltrationSlice";
+import {
+  clearOffsetAndTokens,
+  getTokens,
+  setData,
+} from "../../../../../../redux/slices/profileFiltrationSlice";
 //mui
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -13,11 +19,11 @@ import { useStyles } from "../../../../../../hooks/useStyles";
 //styles
 import styles from "./Price.module.scss";
 
-export const Price = () => {
+export const Price = ({ currencies }) => {
   const dispatch = useDispatch();
   const { selectedPrice } = useSelector((state) => state.profileFiltration);
 
-  const [choosenCurrency, setChoosenCurrency] = useState(selectedPrice.currency);
+  const [choosenCurrency, setChoosenCurrency] = useState({ name: "none" });
   const [min, setMin] = useState(selectedPrice.min);
   const [max, setMax] = useState(selectedPrice.max);
   const [disablesButton, setDisabledButton] = useState(true);
@@ -26,13 +32,16 @@ export const Price = () => {
   useEffect(() => {
     if (Number(min) < 0) setMin("0");
     if (Number(min) > Number(max)) setMin(max);
-
-    if (min && max) setDisabledButton(false);
+    if (min && max && choosenCurrency.name !== "none") setDisabledButton(false);
     else setDisabledButton(true);
-  }, [min, max]);
+  }, [min, max, choosenCurrency]);
+
+  const handleChange = (value) => {
+    const result = currencies.find(({ name }) => name === value);
+    setChoosenCurrency(result);
+  };
 
   const handleClick = () => {
-    const text = choosenCurrency === "usd" && "USD";
     dispatch(
       setData({
         field: "selectedPrice",
@@ -40,10 +49,11 @@ export const Price = () => {
           min,
           max,
           currency: choosenCurrency,
-          text
         },
       })
     );
+    dispatch(clearOffsetAndTokens());
+    dispatch(getTokens());
   };
 
   return (
@@ -55,16 +65,29 @@ export const Price = () => {
         style={{
           color: "white",
         }}
-        onChange={({ target: { value } }) => setChoosenCurrency(value)}
-        value={choosenCurrency}
+        onChange={({ target: { value } }) => handleChange(value)}
+        value={choosenCurrency?.name}
         className={muiClasses.select}
       >
-        <MenuItem value="usd">
-          <span>United States Dollar (USD)</span>
+        <MenuItem disabled style={{ color: "var(--dark-grey)" }} value="none">
+          <span style={{ color: "var(--dark-grey)" }} className={styles.menuItem}>
+            <span>Select a currency</span>
+          </span>
         </MenuItem>
-        <MenuItem value="eth">
-          <span>Ethers (ETH)</span>
-        </MenuItem>
+        {currencies.map(({ name, icon, id }) => (
+          <MenuItem key={id} value={name}>
+            <span className={styles.menuItem}>
+              <Image
+                alt={`${name}-icon`}
+                height={19}
+                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`}
+                src={icon}
+                width={19}
+              />
+              <span>{name}</span>
+            </span>
+          </MenuItem>
+        ))}
       </Select>
       <div className={styles.textfields}>
         <TextField

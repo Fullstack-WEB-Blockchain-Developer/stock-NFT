@@ -4,6 +4,7 @@ import axios from "axios";
 const initialState = {
   chains: [],
   collections: [],
+  currencies: [],
   error: null,
 };
 
@@ -15,6 +16,18 @@ export const getAllChains = createAsyncThunk("chains/getAllChains", async (userD
     return rejectWithValue(e);
   }
 });
+
+export const getAllCurrencies = createAsyncThunk(
+  "chains/getAllCurrencies",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(`${process.env.BACKEND_URL}/offers/currencyTypes/all`);
+      return data;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
 
 export const getAllCollections = createAsyncThunk(
   "collections/getAllCollections",
@@ -56,6 +69,12 @@ export const generalData = createSlice({
       state.collections = action.payload;
     });
     builder.addCase(getAllCollections.rejected, (state, action) => {
+      state.error = action.payload;
+    });
+    builder.addCase(getAllCurrencies.fulfilled, (state, action) => {
+      state.currencies = action.payload;
+    });
+    builder.addCase(getAllCurrencies.rejected, (state, action) => {
       state.error = action.payload;
     });
   },

@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { setData } from "../../../../../../redux/slices/profileFiltrationSlice";
+import {
+  setData,
+  clearOffsetAndTokens,
+  getTokens,
+} from "../../../../../../redux/slices/profileFiltrationSlice";
 //classnames
 import cn from "classnames";
 //mui
@@ -27,6 +31,14 @@ export const NormalFilterSection = () => {
   const [searchText, setSearchText] = useState(initialFilterText);
 
   const debouncedSearchText = useDebounce(searchText, 200);
+
+  const handleChangeRightSelect = (selectValue) => {
+    const result = readyFilterOptions.find((elem) => elem.text === selectValue);
+    const { text, sortOrder, sortBy } = result;
+    dispatch(setData({ field: "readyFilterOption", data: { text, sortBy, sortOrder } }));
+    dispatch(clearOffsetAndTokens());
+    dispatch(getTokens());
+  };
 
   useEffect(() => {
     dispatch(setData({ field: "filterText", data: debouncedSearchText }));
@@ -80,9 +92,7 @@ export const NormalFilterSection = () => {
         style={{
           color: "white",
         }}
-        onChange={({ target: { value } }) =>
-          dispatch(setData({ field: "readyFilterOption", data: { text: value } }))
-        }
+        onChange={({ target: { value } }) => handleChangeRightSelect(value)}
         value={readyFilterOption.text}
         className={muiClasses.select}
       >
