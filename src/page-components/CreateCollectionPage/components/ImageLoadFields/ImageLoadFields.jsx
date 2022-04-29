@@ -1,60 +1,43 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 //classnames
 import cn from "classnames";
 //styles
 import styles from "./ImageLoadFields.module.scss";
-import { useCallback } from "react";
+import Image from "next/image";
 
-export const ImageLoadFields = ({ className }) => {
-  const [files, setFiles] = useState({
-    banner: { preview: undefined, file: undefined },
-    featured: { preview: undefined, file: undefined },
-    logo: { preview: undefined, file: undefined },
-  });
-
-  const bannerRef = useRef();
-  const featuredRef = useRef();
-  const logoRef = useRef();
-
+export const ImageLoadFields = ({ className, values, setValues }) => {
   const setPreview = (file, field) => {
-    if (!files[field].file) {
-      console.log("---9898", 9898);
-      setFiles({ ...files, [field]: { ...files[field], file: undefined } });
+    if (!values[field].file) {
+      setValues({ ...values, [field]: { ...values[field], file: undefined } });
       return;
     }
-    console.log("---1212", 1212);
     const objectUrl = URL.createObjectURL(file);
 
-    setFiles({ ...files, [field]: { ...files[field], preview: objectUrl } });
+    setValues({ ...values, [field]: { ...values[field], preview: objectUrl } });
 
     return objectUrl;
   };
 
-  const memoisedSetPreview = useCallback(setPreview, [files])
-
   const handleChange = (file, field) => {
-    setFiles({ ...files, [field]: { ...files[field], file } });
+    setValues({ ...values, [field]: { ...values[field], file } });
   };
 
-  //useEffects
-
   useEffect(() => {
-    const objectUrl = memoisedSetPreview(files.banner.file, "banner");
+    const objectUrl = setPreview(values.banner.file, "banner");
 
     return () => URL.revokeObjectURL(objectUrl);
-  }, [files.banner.file, memoisedSetPreview]);
+  }, [values.banner.file]);
 
   useEffect(() => {
-    const objectUrl = memoisedSetPreview(files.logo.file, "logo");
+    const objectUrl = setPreview(values.logo.file, "logo");
     return () => URL.revokeObjectURL(objectUrl);
-  }, [files.logo.file, memoisedSetPreview]);
+  }, [values.logo.file]);
 
   useEffect(() => {
-    const objectUrl = memoisedSetPreview(files.featured.file, "featured");
+    const objectUrl = setPreview(values.featured.file, "featured");
 
     return () => URL.revokeObjectURL(objectUrl);
-  }, [files.featured.file, memoisedSetPreview]);
-  console.log("---files", files);
+  }, [values.featured.file]);
 
   return (
     <div className={cn(className, styles.wrapper)}>
@@ -67,12 +50,61 @@ export const ImageLoadFields = ({ className }) => {
         <span>This image will also be used for navigation. 350 x 350 recommended.</span>
       </div>
       <div className={cn(styles.loadField, styles.loadLogoPlaceholder)}>
+        {values.logo.preview && <Image src={values.logo.preview} objectFit="cover" layout="fill" alt="logo" />}
+        {!values.logo.preview && (
+          <Image src="/create-nft/Icon-Image.svg" objectFit="contain" width={48} height={40} alt="logo" />
+        )}
         <input
           className={styles.fileInput}
           onChange={({ target: { files } }) => handleChange(files[0], "logo")}
-          ref={logoRef}
           type="file"
-          accept=".png, .jpg, .gif, .svg"
+          accept=".png, .jpg"
+        />
+      </div>
+      <div className={styles.title}>
+        <span>Featured image</span>
+      </div>
+      <div className={styles.description}>
+        <span>
+          This image will be used for featuring your collection on the homepage, category pages, or other
+          promotional areas of OpenSea. 600 x 400 recommended.
+        </span>
+      </div>
+      <div className={cn(styles.loadField, styles.loadFeaturedPlaceholder)}>
+        {values.featured.preview && (
+          <Image src={values.featured.preview} objectFit="cover" layout="fill" alt="logo" />
+        )}
+        {!values.featured.preview && (
+          <Image src="/create-nft/Icon-Image.svg" objectFit="contain" width={48} height={40} alt="logo" />
+        )}
+        <input
+          className={styles.fileInput}
+          onChange={({ target: { files } }) => handleChange(files[0], "featured")}
+          type="file"
+          accept=".png, .jpg"
+        />
+      </div>
+      <div className={styles.title}>
+        <span>Banner image</span>
+      </div>
+      <div className={styles.description}>
+        <span>
+          This image will appear at the top of your collection page. Avoid including too much text in this
+          banner image, as the dimensions change on different devices. 1400 x 400 recommended.
+        </span>
+      </div>
+      <div className={cn(styles.loadField, styles.loadBannerPlaceholder)}>
+        {values.banner.preview && (
+          <Image src={values.banner.preview} objectFit="cover" layout="fill" alt="logo" />
+        )}
+        {!values.banner.preview && (
+          <Image src="/create-nft/Icon-Image.svg" objectFit="contain" width={48} height={40} alt="logo" />
+        )}
+        <input
+          className={styles.fileInput}
+          onChange={({ target: { files } }) => handleChange(files[0], "banner")}
+          type="file"
+          accept=".png, .jpg"
         />
       </div>
     </div>

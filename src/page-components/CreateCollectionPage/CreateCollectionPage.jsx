@@ -3,15 +3,26 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
+//components
+import { ImageLoadFields } from "./components/ImageLoadFields/ImageLoadFields";
+import { NameUrlDescriptionCategory } from "./components/NameUrlDescriptionCategory/NameUrlDescriptionCategory";
 //utils
 import { getNavigationData } from "./CreateCollectionPage.utils";
 //styles
 import styles from "./CreateCollectionPage.module.scss";
-import { ImageLoadFields } from "./components/ImageLoadFields/ImageLoadFields";
 
 export const CreateCollectionPage = () => {
   const router = useRouter();
   const [navigationData, setNavigationData] = useState([]);
+  const [values, setValues] = useState({
+    logo: { preview: undefined, file: undefined },
+    featured: { preview: undefined, file: undefined },
+    banner: { preview: undefined, file: undefined },
+    category: "none",
+    description: "",
+    name: "",
+    url: "",
+  });
 
   useEffect(() => {
     setNavigationData(getNavigationData(router.pathname));
@@ -20,11 +31,13 @@ export const CreateCollectionPage = () => {
   return (
     <>
       <div className={styles.navigationBar}>
-        {navigationData.map(({text, href}) => (
+        {navigationData.map(({ text, href }) => (
           <div key={text} className={styles.navigationItem}>
-            <Link href={href} passHref><span>{text}</span></Link>
+            <Link href={href} passHref>
+              <span>{text}</span>
+            </Link>
             <div className={styles.navigationArrow}>
-              <Image src='/view-token/Icon-ArrowDown.svg' width={8} height={4} alt="arrow-icon" />
+              <Image src="/view-token/Icon-ArrowDown.svg" width={8} height={4} alt="arrow-icon" />
             </div>
           </div>
         ))}
@@ -34,7 +47,8 @@ export const CreateCollectionPage = () => {
           <div className={styles.pageTitle}>
             <span>Create Collection</span>
           </div>
-          <ImageLoadFields className={styles.imageLoadFields} />
+          <ImageLoadFields values={values} setValues={setValues} />
+          <NameUrlDescriptionCategory setValues={setValues} values={values} />
         </div>
       </div>
     </>

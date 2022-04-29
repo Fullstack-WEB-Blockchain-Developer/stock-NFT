@@ -397,9 +397,6 @@ export const CreateNFTPage = () => {
               className={muiClasses.textField}
               value={values[id]}
               onChange={(e) => handleChange(e, id, "string")}
-              InputLabelProps={{
-                style: { color: "var(--shadow)" },
-              }}
               InputProps={{ style: { color: "white" } }}
               multiline={multiline}
               inputProps={{
@@ -579,10 +576,7 @@ export const CreateNFTPage = () => {
           setData={setValues}
         />
       </div>
-      <ConnectWalletModal
-        isOpened={isConnectWalletOpened}
-        onClose={() => setIsConnectWalletOpened(false)}
-      />
+      <ConnectWalletModal isOpened={isConnectWalletOpened} onClose={() => setIsConnectWalletOpened(false)} />
     </div>
   );
 };
