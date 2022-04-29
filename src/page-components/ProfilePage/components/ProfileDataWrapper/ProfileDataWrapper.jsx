@@ -24,28 +24,10 @@ export const ProfileDataWrapper = () => {
 
   const router = useRouter();
 
-  const {
-    imageUrl,
-    banner,
-    username,
-    bio,
-    ownedNfts,
-    totalValue,
-    highestValue,
-    mostCompleteCollection,
-    volumeTraded,
-  } = useSelector((state) => state.userData);
-  console.log(
-    "---",
-    imageUrl,
-    banner,
-    username,
-    bio,
-    ownedNfts,
-    totalValue,
-    highestValue,
-    mostCompleteCollection,
-    volumeTraded
+  const { imageUrl, banner, username, bio } = useSelector((state) => state.userData);
+
+  const { ownedNfts, totalValue, highestValue, mostCompleteCollection, volumeTraded } = useSelector(
+    (state) => state.profileFiltration
   );
 
   const imageLoader = ({ src }) => src;
