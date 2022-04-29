@@ -19,10 +19,10 @@ export const AmountWithIcon = ({ amount, color, size, className }) => {
         [styles.yellow]: color === "yellow",
       })}
     >
-      <div className={styles.iconWrapper}>
+      <span className={styles.iconWrapper}>
         {color === "red" && <Image src="/profile/Icon-Price.svg" layout="fill" alt="amount-icon" />}
         {color === "primary" && <Image src="/profile/Icon-PricePrimary.svg" layout="fill" alt="amount-icon" />}
-      </div>
+      </span>
       <span> ${numberWithSymbol(amount, ",")}</span>
     </span>
   );
