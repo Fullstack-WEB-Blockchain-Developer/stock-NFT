@@ -6,10 +6,12 @@ import Link from "next/link";
 //components
 import { ImageLoadFields } from "./components/ImageLoadFields/ImageLoadFields";
 import { NameUrlDescriptionCategory } from "./components/NameUrlDescriptionCategory/NameUrlDescriptionCategory";
+import { Links } from "./components/Links/Links";
 //utils
 import { getNavigationData } from "./CreateCollectionPage.utils";
 //styles
 import styles from "./CreateCollectionPage.module.scss";
+import { CreatorFeeAndBlockChains } from "./components/CreatorFeeAndBlockChains/CreatorFeeAndBlockChains";
 
 export const CreateCollectionPage = () => {
   const router = useRouter();
@@ -22,6 +24,14 @@ export const CreateCollectionPage = () => {
     description: "",
     name: "",
     url: "",
+    discordLink: "",
+    instagramLink: "",
+    mediumlink: "",
+    telegramLink: "",
+    yourSiteLink: "",
+    creatorFee: undefined,
+    walletAddress: '',
+    blockchain: ''
   });
 
   useEffect(() => {
@@ -49,6 +59,8 @@ export const CreateCollectionPage = () => {
           </div>
           <ImageLoadFields values={values} setValues={setValues} />
           <NameUrlDescriptionCategory setValues={setValues} values={values} />
+          <Links setValues={setValues} values={values} />
+          <CreatorFeeAndBlockChains setValues={setValues} values={values} />
         </div>
       </div>
     </>

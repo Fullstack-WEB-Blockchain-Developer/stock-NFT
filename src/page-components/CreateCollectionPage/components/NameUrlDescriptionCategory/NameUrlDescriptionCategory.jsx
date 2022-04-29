@@ -9,8 +9,10 @@ import { useStyles } from "../../../../hooks/useStyles";
 import { categories } from "./NameUrlDescriptionCategory.utils";
 //styles
 import styles from "./NameUrlDescriptionCategory.module.scss";
+import Link from "next/link";
 
 export const NameUrlDescriptionCategory = ({ values, setValues }) => {
+  const [descriptionLettersUsed, setDescriptionLettersUsed] = useState(0);
   const [errors, setErrors] = useState({
     name: {
       isError: false,
@@ -40,6 +42,10 @@ export const NameUrlDescriptionCategory = ({ values, setValues }) => {
       setErrors({ ...errors, url: { isError: false, helperText: "" } });
     }
   }, [values]);
+
+  useEffect(() => {
+    setDescriptionLettersUsed(values.description.length)
+  }, [values.description])
 
   return (
     <div className={styles.wrapper}>
@@ -85,7 +91,12 @@ export const NameUrlDescriptionCategory = ({ values, setValues }) => {
         <span>Description</span>
       </div>
       <div className={styles.description}>
-        <span>Markdown syntax is supported. 0 of 1000 characters used.</span>
+        <span>
+          <Link href="https://www.markdownguide.org/cheat-sheet/" passHref>
+            <span className={styles.link}>Markdown</span>
+          </Link>{" "}
+          syntax is supported. {descriptionLettersUsed} of 1000 characters used.
+        </span>
       </div>
       <TextField
         fullWidth
@@ -115,7 +126,7 @@ export const NameUrlDescriptionCategory = ({ values, setValues }) => {
         style={{
           color: "white",
         }}
-        onChange={({target: {value}}) => setValues({...values, category: value})}
+        onChange={({ target: { value } }) => setValues({ ...values, category: value })}
         value={values.category}
         className={muiClasses.select}
       >
