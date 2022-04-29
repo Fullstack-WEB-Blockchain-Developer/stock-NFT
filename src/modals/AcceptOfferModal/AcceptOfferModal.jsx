@@ -23,11 +23,16 @@ import { ChooseWalletBox } from "../../components/ChooseWalletBox/ChooseWalletBo
 //hooks
 import useAuth from "../../hooks/useAuth";
 //utils
+// import {
+//   images,
+//   videos,
+//   audios,
+// } from "../../page-components/ViewIndividualTokenPage/ViewIndividualToken.utils";
 import {
   images,
   videos,
   audios,
-} from "../../page-components/ViewIndividualTokenPage/ViewIndividualToken.utils";
+} from '../../helpers/extentions'
 import { toHex, Offer, switchNetwork } from "../../utils";
 //styles
 import { styles as jsStyles } from "../modalStyles/modalJsStyles";

@@ -44,7 +44,6 @@ export const RightSideInfoWrapper = ({
   const [tokenOwner, setTokenOwner] = useState();
 
   const offersData = useSelector((state) => state.offers.offers);
-  console.log("---offersData", offersData);
   const router = useRouter();
 
   const [listingData, setListingData] = useState(undefined);

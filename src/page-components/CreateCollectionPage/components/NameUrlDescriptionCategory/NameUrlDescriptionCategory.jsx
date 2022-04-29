@@ -121,8 +121,8 @@ export const NameUrlDescriptionCategory = ({ values, setValues }) => {
       </div>
       <Select
         fullWidth
-        labelId="demo-simple-select-filled-label"
-        id="demo-simple-select-filled"
+        labelId="category"
+        id="category"
         style={{
           color: "white",
         }}

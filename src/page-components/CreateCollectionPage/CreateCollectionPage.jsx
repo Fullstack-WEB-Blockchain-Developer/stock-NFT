@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react";
 //next
-import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 //components
+import { CustButton } from "../../components/CustButton/CustButton";
+import { CreatorFeeAndBlockChains } from "./components/CreatorFeeAndBlockChains/CreatorFeeAndBlockChains";
+import { DisplayThemeExplicit } from "./components/DisplayThemeExplicit/DisplayThemeExplicit";
 import { ImageLoadFields } from "./components/ImageLoadFields/ImageLoadFields";
-import { NameUrlDescriptionCategory } from "./components/NameUrlDescriptionCategory/NameUrlDescriptionCategory";
 import { Links } from "./components/Links/Links";
+import { NameUrlDescriptionCategory } from "./components/NameUrlDescriptionCategory/NameUrlDescriptionCategory";
 //utils
 import { getNavigationData } from "./CreateCollectionPage.utils";
 //styles
 import styles from "./CreateCollectionPage.module.scss";
-import { CreatorFeeAndBlockChains } from "./components/CreatorFeeAndBlockChains/CreatorFeeAndBlockChains";
 
 export const CreateCollectionPage = () => {
   const router = useRouter();
   const [navigationData, setNavigationData] = useState([]);
+  const [disabledButon, setDisabledButton] = useState(false);
   const [values, setValues] = useState({
     logo: { preview: undefined, file: undefined },
     featured: { preview: undefined, file: undefined },
@@ -30,9 +33,31 @@ export const CreateCollectionPage = () => {
     telegramLink: "",
     yourSiteLink: "",
     creatorFee: undefined,
-    walletAddress: '',
-    blockchain: ''
+    walletAddress: "",
+    blockchain: "none",
+    paymentTokens: [],
+    paymentTokensEthAndWeth: [],
+    displayedTheme: "",
+    isExplicit: false,
   });
+
+  const [errors, setErrors] = useState({});
+
+  const handleSave = () => {};
+
+  useEffect(() => {
+    let flag = false;
+    if (
+      values.name &&
+      values.icon &&
+      values.displayedTheme &&
+      (!values.creatorFee ||
+        values.creatorFee === 0 ||
+        ((values.creatorFee || values.creatorFee !== 0) && values.walletAddress))
+    ) {
+      flag = true;
+    }
+  }, [values.name, values.icon.file, values.displayedTheme, values.creatorFee, values.walletAddress]);
 
   useEffect(() => {
     setNavigationData(getNavigationData(router.pathname));
@@ -61,6 +86,14 @@ export const CreateCollectionPage = () => {
           <NameUrlDescriptionCategory setValues={setValues} values={values} />
           <Links setValues={setValues} values={values} />
           <CreatorFeeAndBlockChains setValues={setValues} values={values} />
+          <DisplayThemeExplicit setValues={setValues} values={values} />
+          <CustButton
+            className={styles.button}
+            color="primary"
+            disabled={disabledButon}
+            onClick={handleSave}
+            text="Create"
+          />
         </div>
       </div>
     </>
