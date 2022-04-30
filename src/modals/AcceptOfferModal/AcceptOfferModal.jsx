@@ -27,7 +27,12 @@ import {
   images,
   videos,
   audios,
-} from "../../page-components/ViewIndividualTokenPage/ViewIndividualToken.utils";
+} from "../../helpers/extentions";
+// import {
+//   images,
+//   videos,
+//   audios,
+// } from "../../page-components/ViewIndividualTokenPage/ViewIndividualToken.utils";
 import { toHex, Offer, switchNetwork } from "../../utils";
 //styles
 import { styles as jsStyles } from "../modalStyles/modalJsStyles";
@@ -165,7 +170,8 @@ export const AcceptOfferModal = ({
   }, [account, library]);
 
   const handleAccept = async () => {
-    console.log(supportNetwork);
+    console.log("🚀 ~ file: AcceptOfferModal.jsx ~ line 174 ~ handleAccept ~ supportNetwork", supportNetwork)
+
     if (chainId !== supportNetwork) {
       await switchNetwork(supportNetwork, library);
       dispatch(
@@ -176,7 +182,7 @@ export const AcceptOfferModal = ({
     } else {
       const offer = offersData.find((offer) => offer.id == id);
       const sender = offer.buyer.publicAddress;
-      const wei = await tokenContract.balanceOf(sender);
+      const wei = await tokenContract?.balanceOf(sender);
       const balance = ethers.utils.formatUnits(wei);
       if (Number(balance) >= price) {
         const offerC = {
