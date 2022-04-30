@@ -61,6 +61,7 @@ let supportNetwork;
 
 export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
   const { account, activate, library, chainId } = useWeb3React();
+  console.log("🚀 ~ file: MakeOfferModal.jsx ~ line 64 ~ MakeOfferModal ~ account", account)
 
   const { isAuthorized } = useAuth();
   const dispatch = useDispatch();
@@ -82,6 +83,8 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
     agreed: false,
   });
   const muiClasses = useStyles();
+
+  console.log("🚀 ~ file: MakeOfferModal.jsx ~ line 73 ~ MakeOfferModal ~ modalData", modalData.balance)
 
   const loadIcon = ({ src }) => {
     return `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
@@ -241,7 +244,7 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
     modalData.offerExpirationTime,
   ]);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (library) {
       if (tokenNetwork === "ethereum") {
         tokenAddr = eth_tokenAddr;
@@ -253,7 +256,14 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
         supportNetwork = polygonChain;
       }
 
-      if (chainId === supportNetwork) {
+      if (chainId !== supportNetwork) {
+        await switchNetwork(supportNetwork, library);
+        dispatch(
+          openSuccess({
+            title: "The network has been changed successfully.",
+          })
+        );
+      } else {
         const IToken = new ethers.ContractFactory(
           tokenArtifacts.abi,
           tokenArtifacts.deployedBytecode,
@@ -262,7 +272,6 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
 
         tokenContract = IToken.attach(tokenAddr);
 
-        console.log("---account", account);
         account && getTokenBalance();
       }
     }
