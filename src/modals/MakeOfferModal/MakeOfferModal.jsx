@@ -61,7 +61,6 @@ let supportNetwork;
 
 export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
   const { account, activate, library, chainId } = useWeb3React();
-  console.log("🚀 ~ file: MakeOfferModal.jsx ~ line 64 ~ MakeOfferModal ~ account", account)
 
   const { isAuthorized } = useAuth();
   const dispatch = useDispatch();
@@ -188,11 +187,10 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
       const value = modalData.amount;
       const offerClass = new Offer({ contractAddress: tokenAddr, signer: library?.getSigner(), library });
       const nonce = await tokenContract.nonces(account);
-      console.log(modalData);
       const { offer, signature } = await offerClass.makeOffer(
         account,
         stokeMarketAddr,
-        value * 10 ** 18,
+        String(value * 10 ** 18),
         ethers.utils.formatUnits(nonce) * 10 ** 18,
         Date.now("2022-04-20")
       );
@@ -220,8 +218,21 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
           openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
         );
       }
-    }
+    } 
   };
+
+  useEffect(() => {
+      if (chainId !== supportNetwork) {
+        (async() => {
+          await switchNetwork(supportNetwork, library);
+          dispatch(
+            openSuccess({
+              title: "The network has been changed successfully.",
+            })
+          );
+        })()
+      }
+  }, [isOpened]);
 
   useEffect(() => {
     if (
@@ -244,7 +255,7 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
     modalData.offerExpirationTime,
   ]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (library) {
       if (tokenNetwork === "ethereum") {
         tokenAddr = eth_tokenAddr;
@@ -255,23 +266,13 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
         stokeMarketAddr = pol_stokeMarketAddr;
         supportNetwork = polygonChain;
       }
-
-      if (chainId !== supportNetwork) {
-        await switchNetwork(supportNetwork, library);
-        dispatch(
-          openSuccess({
-            title: "The network has been changed successfully.",
-          })
-        );
-      } else {
+      if (chainId === supportNetwork) {
         const IToken = new ethers.ContractFactory(
           tokenArtifacts.abi,
           tokenArtifacts.deployedBytecode,
           library?.getSigner()
         );
-
         tokenContract = IToken.attach(tokenAddr);
-
         account && getTokenBalance();
       }
     }

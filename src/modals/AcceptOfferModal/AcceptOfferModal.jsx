@@ -201,7 +201,8 @@ export const AcceptOfferModal = ({
 
         const res = await axios.post(
             `${process.env.BACKEND_URL}/offers/${id}/${tx.hash}`)
-        if(res.data.status === "pending") {
+        if(res.data) {
+        // if(res.data.status === "pending") {
           try {
             const accessToken = localStorage.getItem("accessToken");
   
