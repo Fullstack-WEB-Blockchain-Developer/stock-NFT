@@ -83,6 +83,8 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
   });
   const muiClasses = useStyles();
 
+  console.log("🚀 ~ file: MakeOfferModal.jsx ~ line 73 ~ MakeOfferModal ~ modalData", modalData.balance)
+
   const loadIcon = ({ src }) => {
     return `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
   };
@@ -185,11 +187,10 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
       const value = modalData.amount;
       const offerClass = new Offer({ contractAddress: tokenAddr, signer: library?.getSigner(), library });
       const nonce = await tokenContract.nonces(account);
-      console.log(modalData);
       const { offer, signature } = await offerClass.makeOffer(
         account,
         stokeMarketAddr,
-        value * 10 ** 18,
+        String(value * 10 ** 18),
         ethers.utils.formatUnits(nonce) * 10 ** 18,
         Date.now("2022-04-20")
       );
@@ -217,8 +218,21 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
           openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
         );
       }
-    }
+    } 
   };
+
+  useEffect(() => {
+      if (chainId !== supportNetwork) {
+        (async() => {
+          await switchNetwork(supportNetwork, library);
+          dispatch(
+            openSuccess({
+              title: "The network has been changed successfully.",
+            })
+          );
+        })()
+      }
+  }, [isOpened]);
 
   useEffect(() => {
     if (
@@ -252,17 +266,13 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
         stokeMarketAddr = pol_stokeMarketAddr;
         supportNetwork = polygonChain;
       }
-
       if (chainId === supportNetwork) {
         const IToken = new ethers.ContractFactory(
           tokenArtifacts.abi,
           tokenArtifacts.deployedBytecode,
           library?.getSigner()
         );
-
         tokenContract = IToken.attach(tokenAddr);
-
-        console.log("---account", account);
         account && getTokenBalance();
       }
     }

@@ -23,16 +23,11 @@ import { ChooseWalletBox } from "../../components/ChooseWalletBox/ChooseWalletBo
 //hooks
 import useAuth from "../../hooks/useAuth";
 //utils
-// import {
-//   images,
-//   videos,
-//   audios,
-// } from "../../page-components/ViewIndividualTokenPage/ViewIndividualToken.utils";
 import {
   images,
   videos,
   audios,
-} from '../../helpers/extentions'
+} from '../../helpers/extentions';
 import { toHex, Offer, switchNetwork } from "../../utils";
 //styles
 import { styles as jsStyles } from "../modalStyles/modalJsStyles";
@@ -170,7 +165,8 @@ export const AcceptOfferModal = ({
   }, [account, library]);
 
   const handleAccept = async () => {
-    console.log(supportNetwork);
+    console.log("🚀 ~ file: AcceptOfferModal.jsx ~ line 174 ~ handleAccept ~ supportNetwork", supportNetwork)
+
     if (chainId !== supportNetwork) {
       await switchNetwork(supportNetwork, library);
       dispatch(
@@ -181,7 +177,7 @@ export const AcceptOfferModal = ({
     } else {
       const offer = offersData.find((offer) => offer.id == id);
       const sender = offer.buyer.publicAddress;
-      const wei = await tokenContract.balanceOf(sender);
+      const wei = await tokenContract?.balanceOf(sender);
       const balance = ethers.utils.formatUnits(wei);
       if (Number(balance) >= price) {
         const offerC = {
@@ -200,7 +196,8 @@ export const AcceptOfferModal = ({
 
         const res = await axios.post(
             `${process.env.BACKEND_URL}/offers/${id}/${tx.hash}`)
-        if(res.data.status === "pending") {
+        if(res.data) {
+        // if(res.data.status === "pending") {
           try {
             const accessToken = localStorage.getItem("accessToken");
   
