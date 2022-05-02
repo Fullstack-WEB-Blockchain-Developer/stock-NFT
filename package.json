@@ -52,6 +52,7 @@
     "solidity-coverage": "^0.7.20",
     "uuid": "^8.3.2",
     "validator": "^13.7.0",
+    "wallet-address-validator": "^0.2.4",
     "walletlink": "^2.5.0",
     "web3": "1.2",
     "web3-eth-abi": "^1.7.3",

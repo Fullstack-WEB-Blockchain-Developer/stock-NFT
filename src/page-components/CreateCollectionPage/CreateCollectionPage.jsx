@@ -15,10 +15,10 @@ import { getNavigationData } from "./CreateCollectionPage.utils";
 //styles
 import styles from "./CreateCollectionPage.module.scss";
 
-export const CreateCollectionPage = () => {
+export const CreateCollectionPage = ({ categories, blockchains, paymentTokens }) => {
   const router = useRouter();
   const [navigationData, setNavigationData] = useState([]);
-  const [disabledButon, setDisabledButton] = useState(false);
+  const [disabledButton, setDisabledButton] = useState(false);
   const [values, setValues] = useState({
     logo: { preview: undefined, file: undefined },
     featured: { preview: undefined, file: undefined },
@@ -35,29 +35,52 @@ export const CreateCollectionPage = () => {
     creatorFee: undefined,
     walletAddress: "",
     blockchain: "none",
-    paymentTokens: [],
-    paymentTokensEthAndWeth: [],
+    paymentTokens: paymentTokens.filter(({ name }) => name !== "ETH" && name !== "WETH"),
+    paymentTokensEthAndWeth: paymentTokens.filter(({ name }) => name === "ETH" || name === "WETH"),
     displayedTheme: "",
     isExplicit: false,
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    creatorFee: { isError: false, helperText: "" },
+    name: { isError: false, helperText: "" },
+    url: { isError: false, helperText: "" },
+    walletAddress: { isError: false, helperText: "" },
+  });
 
   const handleSave = () => {};
 
   useEffect(() => {
-    let flag = false;
+    let flag = true;
+    console.log("---values", values);
     if (
       values.name &&
-      values.icon &&
+      values.logo.file &&
       values.displayedTheme &&
       (!values.creatorFee ||
         values.creatorFee === 0 ||
-        ((values.creatorFee || values.creatorFee !== 0) && values.walletAddress))
+        ((values.creatorFee || values.creatorFee !== 0) && values.walletAddress)) &&
+      !errors.name.isError &&
+      !errors.creatorFee.isError &&
+      !errors.url.isError &&
+      !errors.walletAddress.isError
     ) {
+      flag = false;
+    } else {
       flag = true;
     }
-  }, [values.name, values.icon.file, values.displayedTheme, values.creatorFee, values.walletAddress]);
+    setDisabledButton(flag);
+  }, [
+    errors.creatorFee.isError,
+    errors.name.isError,
+    errors.url.isError,
+    errors.walletAddress.isError,
+    values.creatorFee,
+    values.displayedTheme,
+    values.logo.file,
+    values.name,
+    values.walletAddress,
+  ]);
 
   useEffect(() => {
     setNavigationData(getNavigationData(router.pathname));
@@ -83,14 +106,27 @@ export const CreateCollectionPage = () => {
             <span>Create Collection</span>
           </div>
           <ImageLoadFields values={values} setValues={setValues} />
-          <NameUrlDescriptionCategory setValues={setValues} values={values} />
+          <NameUrlDescriptionCategory
+            categories={categories}
+            errors={errors}
+            setErrors={setErrors}
+            setValues={setValues}
+            values={values}
+          />
           <Links setValues={setValues} values={values} />
-          <CreatorFeeAndBlockChains setValues={setValues} values={values} />
+          <CreatorFeeAndBlockChains
+            values={values}
+            chains={blockchains}
+            paymentTokens={paymentTokens}
+            setValues={setValues}
+            setErrors={setErrors}
+            errors={errors}
+          />
           <DisplayThemeExplicit setValues={setValues} values={values} />
           <CustButton
             className={styles.button}
             color="primary"
-            disabled={disabledButon}
+            disabled={disabledButton}
             onClick={handleSave}
             text="Create"
           />

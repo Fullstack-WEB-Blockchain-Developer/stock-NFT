@@ -1,28 +1,17 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useState } from "react";
+//next
+import Link from "next/link";
 //mui
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 //hooks
 import { useStyles } from "../../../../hooks/useStyles";
-//utils
-import { categories } from "./NameUrlDescriptionCategory.utils";
 //styles
 import styles from "./NameUrlDescriptionCategory.module.scss";
-import Link from "next/link";
 
-export const NameUrlDescriptionCategory = ({ values, setValues }) => {
+export const NameUrlDescriptionCategory = ({ categories, values, setValues, errors, setErrors }) => {
   const [descriptionLettersUsed, setDescriptionLettersUsed] = useState(0);
-  const [errors, setErrors] = useState({
-    name: {
-      isError: false,
-      helperText: "",
-    },
-    url: {
-      isError: false,
-      helperText: "",
-    },
-  });
 
   const muiClasses = useStyles();
 
@@ -133,9 +122,9 @@ export const NameUrlDescriptionCategory = ({ values, setValues }) => {
         <MenuItem disabled value="none">
           <span style={{ color: "rgb(77, 77, 77)" }}>Select Category</span>
         </MenuItem>
-        {categories.map((text) => (
-          <MenuItem key={text} value={text}>
-            <span>{text}</span>
+        {categories.map(({name}) => (
+          <MenuItem key={name} value={name}>
+            <span>{name}</span>
           </MenuItem>
         ))}
       </Select>
