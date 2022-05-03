@@ -26,7 +26,7 @@ export const CollectionCard = ({
 
   const handleOpenEdit = (e) => {
     e.stopPropagation();
-    router.push(`/my-collections/${id}/edit`);
+    router.push(`/my-collections/edit-collection/${id}`);
   };
 
   return (
