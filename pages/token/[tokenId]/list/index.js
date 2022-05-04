@@ -1,10 +1,10 @@
-import { ListFixedPage} from '../../../../src/page-components/ListFixedPage/ListFixedPage'
+import { ListTokenPage } from "../../../../src/page-components/ListTokenPage/ListTokenPage";
 import { GetServerSideProps } from "next";
 import https from "https";
 import axios from "axios";
 import { withLayout } from "../../../../layout/Layout";
 
-const ListFixed = (props) => <ListFixedPage {...props} />;
+const ListToken = (props) => <ListTokenPage {...props} />;
 
 export default withLayout(ListFixed);
 
@@ -21,8 +21,7 @@ export const getServerSideProps = async ({ params }) => {
     httpsAgent,
   });
 
-
-  console.log('---data', data)
+  console.log("---data", data);
   return {
     props: {
       ...data,
