@@ -18,7 +18,7 @@ import { ImageLoadFields } from "./components/ImageLoadFields/ImageLoadFields";
 import { Links } from "./components/Links/Links";
 import { NameUrlDescriptionCategory } from "./components/NameUrlDescriptionCategory/NameUrlDescriptionCategory";
 //utils
-import { getNavigationData } from "./EditCollectionPage.utils";
+import { getNavigationData, sendImagesToServer } from "./EditCollectionPage.utils";
 //styles
 import styles from "./EditCollectionPage.module.scss";
 
@@ -33,10 +33,12 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
     logo: { preview: undefined, file: undefined, link: props.logoImage },
     featured: { preview: undefined, file: undefined, link: props.featuredImage },
     banner: { preview: undefined, file: undefined, link: props.bannerImage },
-    blockchain: props.blockchainTypeId ? blockchains.find(({ id }) => id === props.blockchainTypeId) : "none",
-    category: props.collectionCategoryId
-      ? categories.find(({ id }) => id === props.collectionCategoryId)
-      : "none",
+    blockchain: blockchains.find(({ id }) => id === 1).name,
+    //props.blockchainTypeId ? blockchains.find(({ id }) => id === props.blockchainTypeId) : "none",
+    category: categories.find(({ id }) => id === 1).name,
+    // props.collectionCategoryId
+    //   ? categories.find(({ id }) => id === props.collectionCategoryId)
+    //   : "none",
     creatorFee: props.creatorEarnings,
     description: props.description,
     discordLink: props.discordLink,
@@ -45,10 +47,10 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
     isExplicit: props.IsSensitiveContent,
     mediumlink: props.mediumlink,
     name: props.name,
-    choosenPaymentTokens:
-      props.paymentTokensIds.length > 0
-        ? props.paymentTokensIds.map((id) => paymentTokens.find((token) => token.id === id))
-        : [],
+    choosenPaymentTokens: [],
+      // props.paymentTokensIds.length > 0
+      //   ? props.paymentTokensIds.map((id) => paymentTokens.find((token) => token.id === id))
+      //   : [],
     telegramLink: props.telegramLink,
     url: props.url,
     walletAddress: "",
@@ -62,7 +64,67 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
     walletAddress: { isError: false, helperText: "" },
   });
 
-  const handleSave = () => {};
+  const handleSaveChanges = async () => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const { collectionId } = router.query;
+
+      const { logoImage, bannerImage, featuredImage } = await sendImagesToServer(
+        values.logo.file,
+        values.featured.file,
+        values.banner.file
+      );
+
+      const body = {
+        name: values.name,
+        url: values.url,
+        description: values.description,
+        websiteLink: values.yourSiteLink,
+        discordLink: values.discordLink,
+        instagramLink: values.instagramLink,
+        mediumLink: values.mediumLink,
+        telegramLink: values.telegramLink,
+        creatorEarnings: Number(values.creatorFee),
+        displayTheme: values.displayedTheme,
+        isSensitiveContent: values.isExplicit,
+        collaborators: [],
+        paymentTokens: [
+          paymentTokens.find(({ name }) => name === "ETH").id,
+          paymentTokens.find(({ name }) => name === "WETH").id,
+        ],
+      };
+
+      if (logoImage) body.logoImage = logoImage;
+      if (featuredImage) body.featuredImage = featuredImage;
+      if (bannerImage) body.bannerImage = bannerImage;
+      if (values.category !== "none") {
+        body.collectionCategoryId = categories.find(({ name }) => name === values.category).id;
+      }
+      if (values.blockchain !== "none") {
+        body.blockchainTypeId = blockchains.find(({ name }) => name === values.blockchain).id;
+      }
+      if (values.choosenPaymentTokens.length > 0) {
+        body.paymentTokensIds = [
+          ...body.paymentTokens,
+          ...values.choosenPaymentTokens.map(
+            (elem) => paymentTokens.find(({ name }) => name === elem.name).id
+          ),
+        ];
+      }
+
+      await axios.patch(`${process.env.BACKEND_URL}/collections/${collectionId}`, body, {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      });
+      router.push('/my-collections');
+      dispatch(openSuccess("Collection is successfully changed!"));
+    } catch(e) {
+      dispatch(
+        openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
+      );
+    }
+  };
 
   const handleDelete = async () => {
     try {
@@ -74,7 +136,7 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
           Authorization: "Bearer " + accessToken,
         },
       });
-      
+
       router.push("/my-collections");
       dispatch(openSuccess("Collection is successfully deleted!"));
     } catch (e) {
@@ -88,7 +150,7 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
     let flag = true;
     if (
       values.name &&
-      values.logo.file &&
+      (values.logo.file || values.logo.link)&&
       values.displayedTheme &&
       (!values.creatorFee ||
         values.creatorFee === 0 ||
@@ -142,6 +204,7 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
           <NameUrlDescriptionCategory
             categories={categories}
             errors={errors}
+            initialName={props.name}
             setErrors={setErrors}
             setValues={setValues}
             values={values}
@@ -161,7 +224,7 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
               className={styles.bottomLeftButton}
               color="primary"
               disabled={disabledButton}
-              onClick={handleSave}
+              onClick={handleSaveChanges}
               text="Save Changes"
             />
             <CustButton

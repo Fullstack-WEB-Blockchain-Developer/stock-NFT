@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 //next
 import Link from "next/link";
+//axios
+import axios from "axios";
 //mui
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 //hooks
 import { useStyles } from "../../../../hooks/useStyles";
+import { useDebounce } from "../../../../hooks/useDebounce";
 //styles
 import styles from "./NameUrlDescriptionCategory.module.scss";
 
@@ -14,6 +17,7 @@ export const NameUrlDescriptionCategory = ({ categories, values, setValues, erro
   const [descriptionLettersUsed, setDescriptionLettersUsed] = useState(0);
 
   const muiClasses = useStyles();
+  const debouncedName = useDebounce(values.name, 250);
 
   useEffect(() => {
     const { url } = values;
@@ -33,8 +37,25 @@ export const NameUrlDescriptionCategory = ({ categories, values, setValues, erro
   }, [values]);
 
   useEffect(() => {
-    setDescriptionLettersUsed(values.description.length)
-  }, [values.description])
+    const checkCollectionName = async () => {
+      if (debouncedName) {
+        const {
+          data: { exists },
+        } = await axios.get(`${process.env.BACKEND_URL}/collections/checkName/${debouncedName}`);
+
+        exists && setErrors({ ...errors, name: { isError: true, helperText: "This name is already taken" } });
+        !exists && setErrors({ ...errors, name: { isError: false, helperText: "" } });
+      } else {
+        setErrors({ ...errors, name: { isError: false, helperText: "" } });
+      }
+    };
+
+    checkCollectionName();
+  }, [debouncedName]);
+
+  useEffect(() => {
+    setDescriptionLettersUsed(values.description.length);
+  }, [values.description]);
 
   return (
     <div className={styles.wrapper}>
@@ -44,11 +65,13 @@ export const NameUrlDescriptionCategory = ({ categories, values, setValues, erro
         </span>
       </div>
       <TextField
+        error={errors.name.isError}
+        helperText={errors.name.isError && errors.name.helperText}
         fullWidth
         id="name"
         label="Name"
         variant="outlined"
-        className={muiClasses.textField}
+        className={errors.name.isError ? muiClasses.textFieldError : muiClasses.textField}
         value={values.name}
         onChange={({ target: { value } }) => setValues({ ...values, name: value })}
         InputProps={{ style: { color: "white" } }}
@@ -122,7 +145,7 @@ export const NameUrlDescriptionCategory = ({ categories, values, setValues, erro
         <MenuItem disabled value="none">
           <span style={{ color: "rgb(77, 77, 77)" }}>Select Category</span>
         </MenuItem>
-        {categories.map(({name}) => (
+        {categories.map(({ name }) => (
           <MenuItem key={name} value={name}>
             <span>{name}</span>
           </MenuItem>
