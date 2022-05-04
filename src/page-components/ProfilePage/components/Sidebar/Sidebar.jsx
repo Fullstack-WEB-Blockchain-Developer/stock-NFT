@@ -128,7 +128,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
       handleGetNewTokens();
     }
   };
-
+  
   //useEffects
 
   useEffect(() => {

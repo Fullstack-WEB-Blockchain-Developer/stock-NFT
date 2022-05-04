@@ -358,7 +358,7 @@
 .patmentsVerificationsWrapper {
 	margin-top: 40px;
 
-	border: 1px solid #FFFFFF4D;
+	border: 1px solid var(--shadow);
 	border-radius: 7px;;
 }
 
@@ -367,7 +367,7 @@
 }
 
 .paymentsVerification:first-child {
-	border-bottom: 1px solid #FFFFFF4D;
+	border-bottom: 1px solid var(--shadow);
 }
 
 .verificationTitle {

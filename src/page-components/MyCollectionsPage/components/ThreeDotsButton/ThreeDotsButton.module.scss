@@ -1,0 +1,29 @@
+.wrapper:hover {
+  background-color: var(--light-grey);
+}
+
+.wrapper {
+  border: 1px solid var(--light-grey);
+  border-radius: 9px;
+  background-color: rgba(128, 128, 128, 0.44);
+  cursor: pointer;
+  height: 31px;
+  width: 31px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: 2px;
+  }
+
+  li {
+    padding: 0;
+    list-style-type: none;
+    line-height: 2px;
+    padding-bottom: 4px;
+  }
+}

@@ -1,0 +1,41 @@
+.pageContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 40px 2%;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 840px;
+  font-family: "Poppins", sans-serif;
+  color: var(--white);
+}
+
+.pageTitle {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.pageDescription {
+  font-size: 18px;
+  letter-spacing: 0.02px;
+  color: var(--light-grey);
+  margin-bottom: 40px;
+}
+
+.buttonsWrapper {
+  display: flex;
+}
+
+.threeDots {
+  margin-left: 21px;
+}
+
+.collectionsWrapper {
+  margin: 40px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+}
