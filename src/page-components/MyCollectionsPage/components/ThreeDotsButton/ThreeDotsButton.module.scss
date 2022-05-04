@@ -1,10 +1,11 @@
 .wrapper:hover {
-  background-color: var(--shadow);
+  background-color: var(--light-grey);
 }
 
 .wrapper {
-  border: 1px solid var(--shadow);
+  border: 1px solid var(--light-grey);
   border-radius: 9px;
+  background-color: rgba(128, 128, 128, 0.44);
   cursor: pointer;
   height: 31px;
   width: 31px;

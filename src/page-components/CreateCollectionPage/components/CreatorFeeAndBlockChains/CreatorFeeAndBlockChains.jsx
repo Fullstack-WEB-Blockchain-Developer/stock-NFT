@@ -20,7 +20,7 @@ export const CreatorFeeAndBlockChains = ({ chains, values, setValues, errors, se
       .filter((elem) => values.choosenPaymentTokens.every((item) => item.name !== elem.name))
       .filter(({ name }) => name !== "ETH" && name !== "WETH")
   );
-
+  
   const handleChooseTokens = ({ target: { value } }) => {
     setValues({
       ...values,

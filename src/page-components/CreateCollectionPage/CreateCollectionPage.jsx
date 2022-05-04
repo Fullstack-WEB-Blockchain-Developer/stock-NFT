@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 //next
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+//redux
+import { useDispatch } from "react-redux";
+import { open as openSuccess } from "../../redux/slices/successSnackbarSlice";
+import { open as openError } from "../../redux/slices/errorSnackbarSlice";
+//axios
+import axios from "axios";
 //components
 import { CustButton } from "../../components/CustButton/CustButton";
 import { CreatorFeeAndBlockChains } from "./components/CreatorFeeAndBlockChains/CreatorFeeAndBlockChains";
@@ -11,12 +17,14 @@ import { ImageLoadFields } from "./components/ImageLoadFields/ImageLoadFields";
 import { Links } from "./components/Links/Links";
 import { NameUrlDescriptionCategory } from "./components/NameUrlDescriptionCategory/NameUrlDescriptionCategory";
 //utils
-import { getNavigationData } from "./CreateCollectionPage.utils";
+import { getNavigationData, sendImagesToServer } from "./CreateCollectionPage.utils";
 //styles
 import styles from "./CreateCollectionPage.module.scss";
 
 export const CreateCollectionPage = ({ categories, blockchains, paymentTokens }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const [navigationData, setNavigationData] = useState([]);
   const [disabledButton, setDisabledButton] = useState(false);
   const [values, setValues] = useState({
@@ -47,11 +55,68 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
     walletAddress: { isError: false, helperText: "" },
   });
 
-  const handleSave = () => {};
+  const handleSave = useCallback(async () => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+
+      const { logoImage, bannerImage, featuredImage } = await sendImagesToServer(
+        values.logo.file,
+        values.featured.file,
+        values.banner.file
+      );
+
+      const body = {
+        logoImage,
+        name: values.name,
+        url: values.url,
+        description: values.description,
+        websiteLink: values.yourSiteLink,
+        discordLink: values.discordLink,
+        instagramLink: values.instagramLink,
+        mediumLink: values.mediumLink,
+        telegramLink: values.telegramLink,
+        creatorEarnings: Number(values.creatorFee),
+        displayTheme: values.displayedTheme,
+        isSensitiveContent: values.isExplicit,
+        collaborators: [],
+        paymentTokens: [
+          paymentTokens.find(({ name }) => name === "ETH").id,
+          paymentTokens.find(({ name }) => name === "WETH").id,
+        ],
+      };
+
+      if (featuredImage) body.featuredImage = featuredImage;
+      if (bannerImage) body.bannerImage = bannerImage;
+      if (values.category !== "none") {
+        body.collectionCategoryId = categories.find(({ name }) => name === values.category).id;
+      }
+      if (values.blockchain !== "none") {
+        body.blockchainTypeId = blockchains.find(({ name }) => name === values.blockchain).id;
+      }
+      if (values.choosenPaymentTokens.length > 0) {
+        body.paymentTokensIds = [
+          ...body.paymentTokens,
+          ...values.choosenPaymentTokens.map(
+            (elem) => paymentTokens.find(({ name }) => name === elem.name).id
+          ),
+        ];
+      }
+
+      await axios.post(`${process.env.BACKEND_URL}/collections`, body, {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      });
+      dispatch(openSuccess("Collection is successfully created!"));
+    } catch (e) {
+      dispatch(
+        openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
+      );
+    }
+  }, [dispatch, values.logo.file, values.featured.file, values.banner.file]);
 
   useEffect(() => {
     let flag = true;
-    console.log("---values", values);
     if (
       values.name &&
       values.logo.file &&
