@@ -1,0 +1,20 @@
+.pageContainer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.wrapper {
+  width: 95%;
+  max-width: 1147px;
+  font-family: "Poppins", sans-serif;
+  color: var(--white);
+}
+
+.wrapper {
+    display: flex;
+}
+.leftSide {
+    width: 55.8%;
+    max-width: 640px;
+}

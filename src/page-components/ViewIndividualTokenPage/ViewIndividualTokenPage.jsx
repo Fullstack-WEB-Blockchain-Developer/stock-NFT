@@ -22,19 +22,19 @@ import { fakeLikes, fakeListing, fakePrice } from "./ViewIndividualToken.utils";
 import styles from "./ViewIndividualTokenPage.module.css";
 
 export const ViewIndividualTokenPage = ({
-  status,
-  name,
-  fileName,
-  externalLink,
-  description,
-  properties,
-  levels,
-  stats,
-  user,
+  about,
   blockchainName,
   collectionName,
+  description,
+  externalLink,
+  fileName,
+  levels,
+  name,
   offers,
-  about,
+  properties,
+  stats,
+  status,
+  user,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
