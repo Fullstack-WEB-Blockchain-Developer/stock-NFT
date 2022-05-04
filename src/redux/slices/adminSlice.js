@@ -1,26 +1,29 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    fees: {
-        stokeFee: 2.5,
-        creatorRoyalty: 10,
-    },
-    pagesForUnauthorized: [
-        '/', '/connect-wallet', '/token/[tokenId]', '/create-nft'
-    ]
+  fees: {
+    stokeFee: 2.5,
+    creatorRoyalty: 10,
+  },
+  pagesForUnauthorized: [
+    "/",
+    "/connect-wallet",
+    "/token/[tokenId]",
+    "/create-nft",
+  ],
 };
 
 export const administration = createSlice({
-    name: 'administration',
-    initialState,
-    reducers: {
-        setFees: (state, action) => {
-            state.fees = {...action.payload}
-        },
-        setPagesForUnauthorized: (state, action) => {
-            state.pagesForUnauthorized = [...action.payload]
-        }
-    }
+  name: "administration",
+  initialState,
+  reducers: {
+    setFees: (state, action) => {
+      state.fees = { ...action.payload };
+    },
+    setPagesForUnauthorized: (state, action) => {
+      state.pagesForUnauthorized = [...action.payload];
+    },
+  },
 });
 
 export const { setFees, setPagesForUnauthorized } = administration.actions;
