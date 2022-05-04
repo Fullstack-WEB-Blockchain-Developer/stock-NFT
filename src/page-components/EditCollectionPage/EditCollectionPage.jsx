@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 //components
 import { CustButton } from "../../components/CustButton/CustButton";
+import { ApproveModal } from "../../modals/ApproveModal/ApproveModal";
 import { CreatorFeeAndBlockChains } from "./components/CreatorFeeAndBlockChains/CreatorFeeAndBlockChains";
 import { DisplayThemeExplicit } from "./components/DisplayThemeExplicit/DisplayThemeExplicit";
 import { ImageLoadFields } from "./components/ImageLoadFields/ImageLoadFields";
@@ -14,7 +15,6 @@ import { NameUrlDescriptionCategory } from "./components/NameUrlDescriptionCateg
 import { getNavigationData } from "./EditCollectionPage.utils";
 //styles
 import styles from "./EditCollectionPage.module.scss";
-import { DeleteModal } from "./components/DeleteModal/DeleteModal";
 
 export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...props }) => {
   const router = useRouter();
@@ -27,16 +27,15 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
     banner: { preview: undefined, file: undefined, link: props.banner },
     blockchain: "none",
     category: "none",
-    creatorFee: props.creatorFee,
+    creatorFee: props.creatorEarnings,
     description: props.description,
     discordLink: props.discordLink,
-    displayedTheme: props.displayedTheme,
+    displayedTheme: props.displayTheme,
     instagramLink: props.instagramLink,
-    isExplicit: props.isExplicit,
+    isExplicit: props.IsSensitiveContent,
     mediumlink: props.mediumlink,
     name: props.name,
-    paymentTokens: paymentTokens.filter(({ name }) => name !== "ETH" && name !== "WETH"),
-    paymentTokensEthAndWeth: paymentTokens.filter(({ name }) => name === "ETH" || name === "WETH"),
+    choosenPaymentTokens: [],
     telegramLink: props.telegramLink,
     url: props.url,
     walletAddress: "",
@@ -141,10 +140,11 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
               text="Delete Collection"
             />
           </div>
-          <DeleteModal
+          <ApproveModal
             handleClose={() => setIsDeleteOpened(false)}
-            handleDelete={handleDelete}
             isOpened={isDeleteOpened}
+            onYes={handleDelete}
+            text="Do you really want to delete this collection?"
           />
         </div>
       </div>

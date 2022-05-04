@@ -36,10 +36,7 @@ export const getServerSideProps = async ({ params }) => {
 
   return {
     props: {
-      name: data.name,
-      logo: data.logoImage,
-      featured: data.featuredImage,
-      banner: data.bannerImage,
+      ...data,
       url: data.url || "",
       description: data.description || "",
       websiteLink: data.websiteLink || "",
@@ -47,9 +44,6 @@ export const getServerSideProps = async ({ params }) => {
       instagramLink: data.instagramLink || "",
       mediumLink: data.mediumLink || "",
       telegramLink: data.telegramLink || "",
-      creatorFee: data.creatorEarnings,
-      displayedTheme: data.displayTheme,
-      isExplicit: data.IsSensitiveContent,
       blockchains: blockchains.data,
       categories: categories.data,
       paymentTokens: paymentTokens.data,

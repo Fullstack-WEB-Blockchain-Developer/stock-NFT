@@ -35,8 +35,7 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
     creatorFee: undefined,
     walletAddress: "",
     blockchain: "none",
-    paymentTokens: paymentTokens.filter(({ name }) => name !== "ETH" && name !== "WETH"),
-    paymentTokensEthAndWeth: paymentTokens.filter(({ name }) => name === "ETH" || name === "WETH"),
+    choosenPaymentTokens: [],
     displayedTheme: "",
     isExplicit: false,
   });

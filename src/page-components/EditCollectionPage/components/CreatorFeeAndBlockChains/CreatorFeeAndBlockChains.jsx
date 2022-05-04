@@ -12,24 +12,31 @@ import { useStyles } from "../../../../hooks/useStyles";
 //styles
 import styles from "./CreatorFeeAndBlockChains.module.scss";
 
-export const CreatorFeeAndBlockChains = ({ chains, values, setValues, errors, setErrors }) => {
+export const CreatorFeeAndBlockChains = ({ chains, values, setValues, errors, setErrors, paymentTokens }) => {
   const muiClasses = useStyles();
 
-  const [availableTokens, setAvailableTokens] = useState(values.paymentTokens);
+  const [availableTokens, setAvailableTokens] = useState(
+    paymentTokens
+      .filter((elem) => values.choosenPaymentTokens.every((item) => item.name !== elem.name))
+      .filter(({ name }) => name !== "ETH" && name !== "WETH")
+  );
 
   const handleChooseTokens = ({ target: { value } }) => {
     setValues({
       ...values,
-      paymentTokens: [...values.paymentTokens, availableTokens.find((elem) => elem.name === value)],
+      choosenPaymentTokens: [
+        ...values.choosenPaymentTokens,
+        availableTokens.find((elem) => elem.name === value),
+      ],
     });
     setAvailableTokens([...availableTokens.filter((elem) => elem.name !== value)]);
   };
 
   const handleClickCross = (name) => {
-    setAvailableTokens([...availableTokens, values.paymentTokens.find((elem) => elem.name === name)]);
+    setAvailableTokens([...availableTokens, values.choosenPaymentTokens.find((elem) => elem.name === name)]);
     setValues({
       ...values,
-      paymentTokens: [...values.paymentTokens.filter((elem) => elem.name !== name)],
+      choosenPaymentTokens: [...values.choosenPaymentTokens.filter((elem) => elem.name !== name)],
     });
   };
 
@@ -182,13 +189,13 @@ export const CreatorFeeAndBlockChains = ({ chains, values, setValues, errors, se
             </div>
           </div>
         </div>
-        {values.paymentTokens.map(({ name, icon, id, blockchain }) => (
+        {values.choosenPaymentTokens.map(({ name, icon, id, blockchain }) => (
           <div key={id} className={styles.paymentTokenWrapper}>
             {icon ? (
               <Image
                 alt={`${name}-icon`}
                 height={31}
-                loader={({ src }) => `${process.env.BACKEND_URL}/icons/${src}`}
+                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`}
                 src={icon}
                 width={31}
               />
