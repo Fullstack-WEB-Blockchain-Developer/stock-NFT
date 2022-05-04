@@ -30,6 +30,7 @@ export const Price = ({ currencies }) => {
   const muiClasses = useStyles();
 
   useEffect(() => {
+    if (Number(max) < 0) setMax("0");
     if (Number(min) < 0) setMin("0");
     if (Number(min) > Number(max)) setMin(max);
     if (min && max && choosenCurrency.name !== "none") setDisabledButton(false);
