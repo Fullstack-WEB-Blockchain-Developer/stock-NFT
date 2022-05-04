@@ -3,6 +3,12 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+//redux
+import { useDispatch } from "react-redux";
+import { open as openSuccess } from "../../redux/slices/successSnackbarSlice";
+import { open as openError } from "../../redux/slices/errorSnackbarSlice";
+//axios
+import axios from "axios";
 //components
 import { CustButton } from "../../components/CustButton/CustButton";
 import { ApproveModal } from "../../modals/ApproveModal/ApproveModal";
@@ -18,15 +24,19 @@ import styles from "./EditCollectionPage.module.scss";
 
 export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...props }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const [navigationData, setNavigationData] = useState([]);
   const [disabledButton, setDisabledButton] = useState(false);
   const [isDeleteOpened, setIsDeleteOpened] = useState(false);
   const [values, setValues] = useState({
-    logo: { preview: undefined, file: undefined, link: props.logo },
-    featured: { preview: undefined, file: undefined, link: props.featured },
-    banner: { preview: undefined, file: undefined, link: props.banner },
-    blockchain: "none",
-    category: "none",
+    logo: { preview: undefined, file: undefined, link: props.logoImage },
+    featured: { preview: undefined, file: undefined, link: props.featuredImage },
+    banner: { preview: undefined, file: undefined, link: props.bannerImage },
+    blockchain: props.blockchainTypeId ? blockchains.find(({ id }) => id === props.blockchainTypeId) : "none",
+    category: props.collectionCategoryId
+      ? categories.find(({ id }) => id === props.collectionCategoryId)
+      : "none",
     creatorFee: props.creatorEarnings,
     description: props.description,
     discordLink: props.discordLink,
@@ -35,7 +45,10 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
     isExplicit: props.IsSensitiveContent,
     mediumlink: props.mediumlink,
     name: props.name,
-    choosenPaymentTokens: [],
+    choosenPaymentTokens:
+      props.paymentTokensIds.length > 0
+        ? props.paymentTokensIds.map((id) => paymentTokens.find((token) => token.id === id))
+        : [],
     telegramLink: props.telegramLink,
     url: props.url,
     walletAddress: "",
@@ -51,7 +64,25 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
 
   const handleSave = () => {};
 
-  const handleDelete = () => {};
+  const handleDelete = async () => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const { collectionId } = router.query;
+
+      await axios.delete(`${process.env.BACKEND_URL}/collections/${collectionId}`, {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      });
+      
+      router.push("/my-collections");
+      dispatch(openSuccess("Collection is successfully deleted!"));
+    } catch (e) {
+      dispatch(
+        openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
+      );
+    }
+  };
 
   useEffect(() => {
     let flag = true;
@@ -145,8 +176,8 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
             isOpened={isDeleteOpened}
             onYes={handleDelete}
             text="Do you really want to delete this collection?"
-            leftButton={{ text: 'yes', color: 'primary'}}
-            rightButton={{ text: 'no', color: 'primary'}}
+            leftButton={{ text: "yes", color: "primary" }}
+            rightButton={{ text: "no", color: "primary" }}
           />
         </div>
       </div>

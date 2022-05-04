@@ -55,7 +55,7 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
     walletAddress: { isError: false, helperText: "" },
   });
 
-  const handleSave = useCallback(async () => {
+  const handleSave = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
 
@@ -107,13 +107,14 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
           Authorization: "Bearer " + accessToken,
         },
       });
+      router.push('/my-collections');
       dispatch(openSuccess("Collection is successfully created!"));
     } catch (e) {
       dispatch(
         openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
       );
     }
-  }, [dispatch, values.logo.file, values.featured.file, values.banner.file]);
+  };
 
   useEffect(() => {
     let flag = true;

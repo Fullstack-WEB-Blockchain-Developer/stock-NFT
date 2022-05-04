@@ -59,7 +59,7 @@ export const sendImagesToServer = async (logo, featured, banner) => {
     const bannerForm = new FormData();
     bannerForm.append("file", banner);
 
-    bannerImage =await axios.post(
+    bannerImage = await axios.post(
       `${process.env.BACKEND_URL}/collections/upload/image`,
       bannerForm,
       {
@@ -71,8 +71,8 @@ export const sendImagesToServer = async (logo, featured, banner) => {
   }
 
   return {
-    bannerImage: bannerImage.data,
-    featuredImage: featuredImage.data,
+    bannerImage: bannerImage?.data,
+    featuredImage: featuredImage?.data,
     logoImage: logoImage.data,
   };
 };
