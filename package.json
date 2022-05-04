@@ -9,7 +9,12 @@
     "lint": "next lint",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "stylelint": "stylelint \"**/*.@(scss|css)\" --fix"
+    "stylelint": "stylelint \"**/*.@(scss|css)\" --fix",
+    "clean": "npx hardhat clean",
+    "chain": "npx hardhat node",
+    "deploy": "npx hardhat run --network localhost scripts/marketPlaceDeploy.js",
+    "deploy:rinkeby": "npx hardhat run --network rinkeby scripts/marketPlaceDeploy.js",
+    "test": "npx hardhat test"
   },
   "dependencies": {
     "@coinbase/wallet-sdk": "^3.0.4",

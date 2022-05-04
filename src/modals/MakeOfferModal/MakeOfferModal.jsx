@@ -187,6 +187,7 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
       const value = modalData.amount;
       const offerClass = new Offer({ contractAddress: tokenAddr, signer: library?.getSigner(), library });
       const nonce = await tokenContract.nonces(account);
+      console.log("modalData", modalData);
       const { offer, signature } = await offerClass.makeOffer(
         account,
         stokeMarketAddr,
