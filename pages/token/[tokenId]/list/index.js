@@ -6,7 +6,7 @@ import { withLayout } from "../../../../layout/Layout";
 
 const ListToken = (props) => <ListTokenPage {...props} />;
 
-export default withLayout(ListFixed);
+export default withLayout(ListToken);
 
 export const getServerSideProps = async ({ params }) => {
   if (!params) {

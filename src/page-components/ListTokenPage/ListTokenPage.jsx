@@ -2,9 +2,9 @@
 import { LeftSide } from "./components/LeftSide/LeftSide";
 import { RightSide } from "./components/RightSide/RightSide";
 //styles
-import styles from "./ListFixedPage.module.scss";
+import styles from "./ListTokenPage.module.scss";
 
-export const ListFixedPage = ({ id, name }) => {
+export const ListTokenPage = ({ id, name }) => {
   return (
     <div className={styles.pageContainer}>
       <div className={styles.wrapper}>
