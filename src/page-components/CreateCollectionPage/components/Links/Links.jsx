@@ -24,11 +24,11 @@ export const Links = ({ values, setValues }) => {
             borderBottom: "none",
           }}
         >
-          <Image src="/profile-settings/Icon-Twitter.svg" alt="insta" width={19} height={19} />
+          <Image src="/create-collection/Icon-Discord.svg" alt="insta" width={19} height={19} />
         </div>
         <TextField
           fullWidth
-          id="twitterLink"
+          id="discordLink"
           placeholder="example"
           variant="outlined"
           className={muiClasses.tripleTextFieldTop}
@@ -84,7 +84,7 @@ export const Links = ({ values, setValues }) => {
             height: "56px",
           }}
         >
-          <Image src="/profile-settings/Icon-Insta.svg" alt="insta" width={19} height={19} />
+          <Image src="/create-collection/Icon-Telegram.svg" alt="telega" width={19} height={19} />
         </div>
         <TextField
           fullWidth
@@ -136,11 +136,11 @@ export const Links = ({ values, setValues }) => {
             height: "56px",
           }}
         >
-          <Image src="/profile-settings/Icon-Site.svg" alt="insta" width={19} height={19} />
+          <Image src="/create-collection/Icon-Medium.svg" alt="insta" width={19} height={19} />
         </div>
         <TextField
           fullWidth
-          id="websiteLink"
+          id="medium"
           placeholder="yourmediumhandle"
           variant="outlined"
           className={muiClasses.tripleTextFieldBottom}
