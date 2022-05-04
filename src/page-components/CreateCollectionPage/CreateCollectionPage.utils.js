@@ -28,15 +28,15 @@ export const sendImagesToServer = async (logo, featured, banner) => {
   const logoForm = new FormData();
   logoForm.append("file", logo);
 
-  const logoImage = ({ data } = await axios.post(
-    `${process.env.BACKEND_URL}/collections/uploag/image`,
+  const logoImage = await axios.post(
+    `${process.env.BACKEND_URL}/collections/upload/image`,
     logoForm,
     {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
     }
-  ));
+  );
 
   let featuredImage, bannerImage;
 
@@ -44,8 +44,8 @@ export const sendImagesToServer = async (logo, featured, banner) => {
     const featuredForm = new FormData();
     featuredForm.append("file", featured);
 
-    featuredImage = { data } = await axios.post(
-      `${process.env.BACKEND_URL}/collections/uploag/image`,
+    featuredImage = await axios.post(
+      `${process.env.BACKEND_URL}/collections/upload/image`,
       featuredForm,
       {
         headers: {
@@ -59,8 +59,8 @@ export const sendImagesToServer = async (logo, featured, banner) => {
     const bannerForm = new FormData();
     bannerForm.append("file", banner);
 
-    bannerImage = { data } = await axios.post(
-      `${process.env.BACKEND_URL}/collections/uploag/image`,
+    bannerImage =await axios.post(
+      `${process.env.BACKEND_URL}/collections/upload/image`,
       bannerForm,
       {
         headers: {
@@ -71,8 +71,8 @@ export const sendImagesToServer = async (logo, featured, banner) => {
   }
 
   return {
-    bannerImage,
-    featuredImage,
-    logoImage,
+    bannerImage: bannerImage.data,
+    featuredImage: featuredImage.data,
+    logoImage: logoImage.data,
   };
 };

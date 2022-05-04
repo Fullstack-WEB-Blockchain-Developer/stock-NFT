@@ -9,7 +9,6 @@ import { open as openError } from "../../redux/slices/errorSnackbarSlice";
 import useAuth from "../../hooks/useAuth";
 //components
 import { CustButton } from "./../../components/CustButton/CustButton";
-import { ThreeDotsButton } from "./components/ThreeDotsButton/ThreeDotsButton";
 //styles
 import styles from "./MyCollectionsPage.module.scss";
 import { CollectionCard } from "./components/CollectionCard/CollectionCard";
@@ -42,8 +41,6 @@ export const MyCollectionsPage = () => {
     }
   }, [error, dispatch]);
 
-  console.log("---userCollections", userCollections);
-
   return (
     <div className={styles.pageContainer}>
       <div className={styles.wrapper}>
@@ -63,7 +60,7 @@ export const MyCollectionsPage = () => {
         <div className={styles.collectionsWrapper}>
           {userCollections &&
             userCollections.map(
-              ({ id, logoImage, name, user: { username, publicAddress, profileImage } }) => (
+              ({ id, logoImage, name, owner: { username, publicAddress, profileImage } }) => (
                 <CollectionCard
                   id={id}
                   key={id}

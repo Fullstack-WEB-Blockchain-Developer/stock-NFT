@@ -17,14 +17,14 @@ import { ImageLoadFields } from "./components/ImageLoadFields/ImageLoadFields";
 import { Links } from "./components/Links/Links";
 import { NameUrlDescriptionCategory } from "./components/NameUrlDescriptionCategory/NameUrlDescriptionCategory";
 //utils
-import { getNavigationData } from "./CreateCollectionPage.utils";
+import { getNavigationData, sendImagesToServer } from "./CreateCollectionPage.utils";
 //styles
 import styles from "./CreateCollectionPage.module.scss";
 
 export const CreateCollectionPage = ({ categories, blockchains, paymentTokens }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  
+
   const [navigationData, setNavigationData] = useState([]);
   const [disabledButton, setDisabledButton] = useState(false);
   const [values, setValues] = useState({
@@ -43,8 +43,7 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
     creatorFee: undefined,
     walletAddress: "",
     blockchain: "none",
-    paymentTokens: paymentTokens.filter(({ name }) => name !== "ETH" && name !== "WETH"),
-    paymentTokensEthAndWeth: paymentTokens.filter(({ name }) => name === "ETH" || name === "WETH"),
+    choosenPaymentTokens: [],
     displayedTheme: "",
     isExplicit: false,
   });
@@ -66,7 +65,42 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
         values.banner.file
       );
 
-      const body = {};
+      const body = {
+        logoImage,
+        name: values.name,
+        url: values.url,
+        description: values.description,
+        websiteLink: values.yourSiteLink,
+        discordLink: values.discordLink,
+        instagramLink: values.instagramLink,
+        mediumLink: values.mediumLink,
+        telegramLink: values.telegramLink,
+        creatorEarnings: Number(values.creatorFee),
+        displayTheme: values.displayedTheme,
+        isSensitiveContent: values.isExplicit,
+        collaborators: [],
+        paymentTokens: [
+          paymentTokens.find(({ name }) => name === "ETH").id,
+          paymentTokens.find(({ name }) => name === "WETH").id,
+        ],
+      };
+
+      if (featuredImage) body.featuredImage = featuredImage;
+      if (bannerImage) body.bannerImage = bannerImage;
+      if (values.category !== "none") {
+        body.collectionCategoryId = categories.find(({ name }) => name === values.category).id;
+      }
+      if (values.blockchain !== "none") {
+        body.blockchainTypeId = blockchains.find(({ name }) => name === values.blockchain).id;
+      }
+      if (values.choosenPaymentTokens.length > 0) {
+        body.paymentTokensIds = [
+          ...body.paymentTokens,
+          ...values.choosenPaymentTokens.map(
+            (elem) => paymentTokens.find(({ name }) => name === elem.name).id
+          ),
+        ];
+      }
 
       await axios.post(`${process.env.BACKEND_URL}/collections`, body, {
         headers: {
