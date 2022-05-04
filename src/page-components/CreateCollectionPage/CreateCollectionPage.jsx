@@ -83,6 +83,7 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
           paymentTokens.find(({ name }) => name === "ETH").id,
           paymentTokens.find(({ name }) => name === "WETH").id,
         ],
+        payoutWalletAddress: values.walletAddress,
       };
 
       if (featuredImage) body.featuredImage = featuredImage;
@@ -107,7 +108,7 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
           Authorization: "Bearer " + accessToken,
         },
       });
-      router.push('/my-collections');
+      router.push("/my-collections");
       dispatch(openSuccess("Collection is successfully created!"));
     } catch (e) {
       dispatch(

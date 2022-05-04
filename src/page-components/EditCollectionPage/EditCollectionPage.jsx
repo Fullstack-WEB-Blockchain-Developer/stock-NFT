@@ -33,12 +33,8 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
     logo: { preview: undefined, file: undefined, link: props.logoImage },
     featured: { preview: undefined, file: undefined, link: props.featuredImage },
     banner: { preview: undefined, file: undefined, link: props.bannerImage },
-    blockchain: blockchains.find(({ id }) => id === 1).name,
-    //props.blockchainTypeId ? blockchains.find(({ id }) => id === props.blockchainTypeId) : "none",
-    category: categories.find(({ id }) => id === 1).name,
-    // props.collectionCategoryId
-    //   ? categories.find(({ id }) => id === props.collectionCategoryId)
-    //   : "none",
+    blockchain: props.blockchainType ? props.blockchainType.name : "none",
+    category: props.category ? props.category.name : "none",
     creatorFee: props.creatorEarnings,
     description: props.description,
     discordLink: props.discordLink,
@@ -47,13 +43,13 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
     isExplicit: props.IsSensitiveContent,
     mediumlink: props.mediumlink,
     name: props.name,
-    choosenPaymentTokens: [],
-      // props.paymentTokensIds.length > 0
-      //   ? props.paymentTokensIds.map((id) => paymentTokens.find((token) => token.id === id))
-      //   : [],
+    choosenPaymentTokens:
+      props.choosenPaymentTokens.length > 0
+        ? props.choosenPaymentTokens.map((id) => paymentTokens.find((token) => token.id === id))
+        : [],
     telegramLink: props.telegramLink,
     url: props.url,
-    walletAddress: "",
+    walletAddress: props.walletAddress,
     yourSiteLink: props.websiteLink,
   });
 
@@ -92,6 +88,7 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
           paymentTokens.find(({ name }) => name === "ETH").id,
           paymentTokens.find(({ name }) => name === "WETH").id,
         ],
+        payoutWalletAddress: values.walletAddress,
       };
 
       if (logoImage) body.logoImage = logoImage;
@@ -117,9 +114,9 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
           Authorization: "Bearer " + accessToken,
         },
       });
-      router.push('/my-collections');
+      router.push("/my-collections");
       dispatch(openSuccess("Collection is successfully changed!"));
-    } catch(e) {
+    } catch (e) {
       dispatch(
         openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
       );
@@ -150,7 +147,7 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
     let flag = true;
     if (
       values.name &&
-      (values.logo.file || values.logo.link)&&
+      (values.logo.file || values.logo.link) &&
       values.displayedTheme &&
       (!values.creatorFee ||
         values.creatorFee === 0 ||

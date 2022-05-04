@@ -37,6 +37,7 @@ export const getServerSideProps = async ({ params }) => {
   return {
     props: {
       ...data,
+      choosenPaymentTokens: data.paymentTokens,
       url: data.url || "",
       description: data.description || "",
       websiteLink: data.websiteLink || "",
@@ -44,6 +45,7 @@ export const getServerSideProps = async ({ params }) => {
       instagramLink: data.instagramLink || "",
       mediumLink: data.mediumLink || "",
       telegramLink: data.telegramLink || "",
+      walletAddress: data.payoutWalletAddress || "",
       blockchains: blockchains.data,
       categories: categories.data,
       paymentTokens: paymentTokens.data,
