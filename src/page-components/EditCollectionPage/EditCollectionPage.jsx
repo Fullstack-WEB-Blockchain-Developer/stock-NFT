@@ -145,6 +145,8 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
             isOpened={isDeleteOpened}
             onYes={handleDelete}
             text="Do you really want to delete this collection?"
+            leftButton={{ text: 'yes', color: 'primary'}}
+            rightButton={{ text: 'no', color: 'primary'}}
           />
         </div>
       </div>

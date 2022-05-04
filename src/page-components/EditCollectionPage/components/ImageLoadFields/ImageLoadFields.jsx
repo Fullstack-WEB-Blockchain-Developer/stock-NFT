@@ -78,7 +78,7 @@ export const ImageLoadFields = ({ className, values, setValues }) => {
       <div className={styles.description}>
         <span>
           This image will be used for featuring your collection on the homepage, category pages, or other
-          promotional areas of OpenSea. 600 x 400 recommended.
+          promotional areas of Stoke. 600 x 400 recommended.
         </span>
       </div>
       <div className={cn(styles.loadField, styles.loadFeaturedPlaceholder)}>
