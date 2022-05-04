@@ -1,5 +1,5 @@
 import styles from './ListFixedPage.module.scss';
 
 export const ListFixedPage = () => {
-    return <></>
+    return <div className={styles.wrapper}></div>
 }
