@@ -3,7 +3,12 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import { getTokens, setData, clearOffsetAndTokens } from "../../../../redux/slices/profileFiltrationSlice";
+import {
+  getTokens,
+  setData,
+  clearOffsetAndTokens,
+  clearError,
+} from "../../../../redux/slices/profileFiltrationSlice";
 import { open as openError } from "../../../../redux/slices/errorSnackbarSlice";
 //axios
 import axios from "axios";
@@ -38,15 +43,29 @@ export const ContentWrapper = () => {
     selectedStatuses,
     selectedCollections,
     selectedPrice,
+    error,
   } = useSelector((state) => state.profileFiltration);
   const filtrationOptions = useSelector((state) => state.profileFiltration);
+
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        openError(
+          error.response?.data
+            ? `${error.response.data.statusCode} ${error.response.data.message}`
+            : error.message
+        )
+      );
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
 
   const handleGetTokens = useCallback(() => {
     dispatch(getTokens(choosenSection));
   }, [choosenSection, dispatch]);
 
   useEffect(() => {
-    dispatch(clearOffsetAndTokens())
+    dispatch(clearOffsetAndTokens());
     handleGetTokens();
   }, [choosenSection]);
 

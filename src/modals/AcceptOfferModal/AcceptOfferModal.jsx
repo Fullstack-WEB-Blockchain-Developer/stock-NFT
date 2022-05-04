@@ -27,12 +27,7 @@ import {
   images,
   videos,
   audios,
-} from "../../helpers/extentions";
-// import {
-//   images,
-//   videos,
-//   audios,
-// } from "../../page-components/ViewIndividualTokenPage/ViewIndividualToken.utils";
+} from '../../helpers/extentions';
 import { toHex, Offer, switchNetwork } from "../../utils";
 //styles
 import { styles as jsStyles } from "../modalStyles/modalJsStyles";

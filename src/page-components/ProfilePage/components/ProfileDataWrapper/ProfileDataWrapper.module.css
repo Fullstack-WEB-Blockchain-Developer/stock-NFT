@@ -93,6 +93,11 @@
 	font-size: 14px;
 }
 
+.bio::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+}
+
 .midlleSectionBottom {
 	display: flex;
 	justify-content: space-between;

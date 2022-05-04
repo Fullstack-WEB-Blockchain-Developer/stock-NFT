@@ -13,10 +13,4 @@ export const profilePopupCategories = [
     id: "2",
   },
   { categoryName: "Watchlist", href: "#", src: "/eye-icon.svg", id: "3" },
-  {
-    categoryName: "My collections",
-    href: "#",
-    src: "/collections-icon.svg",
-    id: "4",
-  },
 ];
