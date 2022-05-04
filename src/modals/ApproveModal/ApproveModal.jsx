@@ -7,7 +7,7 @@ import { CustButton } from "../../components/CustButton/CustButton";
 //styles
 import { style } from "./ApproveModal.utils";
 
-export const ApproveModal = ({ isOpened, handleClose, text, onYes, leftButton, rightButton }) => {
+export const ApproveModal = ({ isOpened, text, handleClose, leftButton, rightButton }) => {
   return (
     <Modal
       open={isOpened}
@@ -25,8 +25,8 @@ export const ApproveModal = ({ isOpened, handleClose, text, onYes, leftButton, r
           {text}
         </Typography>
         <div style={{ display: "flex", justifyContent: "space-around", marginTop: "20px" }}>
-          <CustButton color={leftButton.color} onClick={onYes} text={leftButton.text} />
-          <CustButton color={rightButton.color} onClick={handleClose} text={rightButton.text} />
+          <CustButton color={leftButton.color} onClick={leftButton.onClick} text={leftButton.text} />
+          <CustButton color={rightButton.color} onClick={rightButton.onClick} text={rightButton.text} />
         </div>
       </Box>
     </Modal>

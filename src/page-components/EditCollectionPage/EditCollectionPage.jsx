@@ -235,10 +235,9 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
           <ApproveModal
             handleClose={() => setIsDeleteOpened(false)}
             isOpened={isDeleteOpened}
-            onYes={handleDelete}
             text="Do you really want to delete this collection?"
-            leftButton={{ text: "yes", color: "primary" }}
-            rightButton={{ text: "no", color: "primary" }}
+            leftButton={{ text: "yes", color: "primary", onClick: handleDelete }}
+            rightButton={{ text: "no", color: "primary", onClick: () => setIsDeleteOpened(false) }}
           />
         </div>
       </div>
