@@ -1,15 +1,11 @@
-import { useEffect } from "react";
 //next
 import Image from "next/image";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import {
   changeToken,
-  clearError,
-  getAllUserTokens,
   toggleOpenPreview,
 } from "../../../../redux/slices/ListTokenSlice";
-import { open as openError } from "../../../../redux/slices/errorSnackbarSlice";
 //classnames
 import cn from "classnames";
 //mui
@@ -24,30 +20,12 @@ import styles from "./RightSide.module.scss";
 export const RightSide = ({ className }) => {
   const muiClasses = useStyles();
   const dispatch = useDispatch();
-  const { tokens, openedPreviews, allUserTokens, error } = useSelector((state) => state.listToken);
+  const { tokens, openedPreviews, allUserTokens } = useSelector((state) => state.listToken);
 
   const handleSelectToken = (id) => {
     const token = tokens.find((token) => token.id === id);
     dispatch(changeToken({ id, field: "bundle", newValue: [...token.bundle] }));
   };
-  console.log("---allUserTokens", allUserTokens);
-
-  useEffect(() => {
-    dispatch(getAllUserTokens());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (error) {
-      dispatch(
-        openError(
-          error.response?.data
-            ? `${error.response.data.statusCode} ${error.response.data.message}`
-            : error.message
-        )
-      );
-      dispatch(clearError());
-    }
-  }, [error, dispatch]);
 
   return (
     <div className={className}>
@@ -102,7 +80,7 @@ export const RightSide = ({ className }) => {
                 style={{
                   color: "white",
                 }}
-                onChange={() => handleChooseToken(token.id)}
+                onChange={() => handleSelectToken(token.id)}
                 value="none"
                 className={muiClasses.select}
               >
