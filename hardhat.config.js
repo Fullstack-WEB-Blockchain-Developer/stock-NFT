@@ -135,8 +135,13 @@ module.exports = {
       accounts: ['95cd7ac56a15b471c1d479b6f109881606affab88d03c95cbc44076c7018f88a']
     },
     matic: {
+      url: "",
+      accounts: []
+    },
+    mumbai: {
       url: "https://rpc-mumbai.maticvigil.com",
-      accounts: ["95cd7ac56a15b471c1d479b6f109881606affab88d03c95cbc44076c7018f88a"]
+      accounts: ["95cd7ac56a15b471c1d479b6f109881606affab88d03c95cbc44076c7018f88a"],
+      timeout: 600000
     },
     rinkeby: {
       url: "https://rinkeby.infura.io/v3/a5b51678f5c248c5af6c10dc7c5501ea",
@@ -169,7 +174,8 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      rinkeby: 'WTSDCZYJP4JSCF8YYTGTRI1YK9BAIRZE92'
+      rinkeby: 'TMD4C21RIMA7TKZ79HN4E9RX3VPPNAH6EV',
+      polygonMumbai: "YOUR_POLYGONSCAN_API_KEY",
     }
   }
 };

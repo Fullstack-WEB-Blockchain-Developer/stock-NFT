@@ -72,8 +72,18 @@ describe("StokeMarketPlace contract", function () {
     await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
   })
 
+  it("start timing", async() => {
+    const time = await nftContract.connect(account1).timing(Token.tokenId);
+    // await nftContract.connect(account1).approve(marketContract.address, 1);
+    // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
+  })
   it("start auction", async() => {
     await nftContract.connect(account1).startAuction(Token.tokenId, 10, 30, 24, 60, nftContract.address);
+    // await nftContract.connect(account1).approve(marketContract.address, 1);
+    // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
+  })
+  it("buy auction", async() => {
+    await nftContract.connect(account2).buyAuction(Token.tokenId, 10, 30, 24, 60, nftContract.address);
     // await nftContract.connect(account1).approve(marketContract.address, 1);
     // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
   })
