@@ -8,7 +8,7 @@ import { RightSide } from "./components/RightSide/RightSide";
 //styles
 import styles from "./ListTokenPage.module.scss";
 
-export const ListTokenPage = ({ id, name }) => {
+export const ListTokenPage = ({ id, name, price, owner, fileName, category, collection, status }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,16 +17,23 @@ export const ListTokenPage = ({ id, name }) => {
         asBundle: false,
         bundleDescription: "",
         bundleName: "",
+        category,
+        collection,
         currency: "none",
+        fileName,
         id,
+        initialPrice: price,
         isReserved: false,
         listingType: "fixedPrice",
         name,
+        owner,
         price: undefined,
-        specificBuyerAddress: ''
+        specificBuyerAddress: "",
+        status,
+        bundle: []
       })
     );
-  }, [dispatch, id, name]);
+  }, [dispatch, id, name, owner, fileName, category, price, collection, status]);
 
   return (
     <div className={styles.pageContainer}>

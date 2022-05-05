@@ -19,8 +19,14 @@ export const ListFixedPriceInputs = ({ id }) => {
   const dispatch = useDispatch();
   const muiClasses = useStyles();
   const { currencies, error } = useSelector((state) => state.generalData);
+  const token = useSelector((state) => state.listToken.tokens).find((token) => token.id === id);
   const { currency, price, asBundle, bundleName, bundleDescription, isReserved, specificBuyerAddress } =
-    useSelector((state) => state.listToken.tokens).find((token) => token.id === id);
+    token;
+
+  const handleAsBundle = () => {
+    dispatch(changeToken({ id, field: "asBundle", newValue: !asBundle }));
+    dispatch(changeToken({ id, field: "bundle", newValue: !asBundle ? [token] : [] }));
+  };
 
   useEffect(() => {
     currencies.length === 0 && dispatch(getAllCurrencies());
@@ -118,10 +124,7 @@ export const ListFixedPriceInputs = ({ id }) => {
       </div>
       <div className={styles.sellAsBundle}>
         <span>Sell as bundle</span>
-        <CustSwitch
-          checken={asBundle}
-          onChange={() => dispatch(changeToken({ id, field: "asBundle", newValue: !asBundle }))}
-        />
+        <CustSwitch checken={asBundle} onChange={handleAsBundle} />
       </div>
       {asBundle && (
         <>
