@@ -1,3 +1,7 @@
+.tokenListedWrapper {
+  border-bottom: 1px solid var(--dark-grey);
+}
+
 .tokenListedHead {
   display: flex;
   justify-content: space-between;
@@ -28,7 +32,7 @@
   overflow: hidden;
 }
 
-.isOpened {
+.isClosed {
   max-height: 0px;
   transition: max-height 0.2s;
 }

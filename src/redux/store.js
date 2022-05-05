@@ -19,8 +19,8 @@ export const store = configureStore({
     administration: administrationReducer,
     carousel: carouselReducer,
     errorSnackbar: errorSnackbarReducer,
-    generalData: generalDataReducer
-    listToken: listTokenReducer
+    generalData: generalDataReducer,
+    listToken: listTokenReducer,
     logoutModal: logoutModalReducer,
     myWalletOptionsPopup: myWalletOptionsPopupReducer,
     offers: offersReducer,
