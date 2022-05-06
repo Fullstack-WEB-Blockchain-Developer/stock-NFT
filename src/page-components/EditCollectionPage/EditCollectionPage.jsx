@@ -163,6 +163,7 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
       flag = true;
     }
     setDisabledButton(flag);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     errors.creatorFee.isError,
     errors.name.isError,

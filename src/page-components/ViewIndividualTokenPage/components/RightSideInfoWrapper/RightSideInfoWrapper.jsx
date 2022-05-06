@@ -37,7 +37,7 @@ export const RightSideInfoWrapper = ({
   usdPrice,
 }) => {
   const dispatch = useDispatch();
-  const { account, library } = useWeb3React();
+  // const { account, activate, library, chainId } = useWeb3React();
   const [userAccount, setUserAccount] = useState("");
   const [saleEnds, setSaleEnds] = useState(undefined);
   const [saleEndsStringified, setSaleEndsStringified] = useState("");
@@ -90,9 +90,7 @@ export const RightSideInfoWrapper = ({
 
   useEffect(() => {
     if (listing && listing.length > 0) {
-      const array = listing.map((elem) => {
-        return { ...elem, expirationDate: getExpirationString(elem.expirationDate) };
-      });
+      const array = listing.map((elem) => ({ ...elem, expirationDate: getExpirationString(elem.expirationDate) }));
       setListingData([...array]);
     }
   }, [listing]);
@@ -204,7 +202,7 @@ export const RightSideInfoWrapper = ({
               <div>
                 <span>From</span>
               </div>
-              <div className={styles.buttonWrapper}></div>
+              <div className={styles.buttonWrapper} />
             </div>
             <div
               className={cn(styles.opened, {
@@ -293,7 +291,7 @@ export const RightSideInfoWrapper = ({
               <div>
                 <span>From</span>
               </div>
-              {owner.publicAddress === userAccount && <div className={styles.buttonWrapper}></div>}
+              {owner.publicAddress === userAccount && <div className={styles.buttonWrapper} />}
             </div>
             <div
               className={cn(styles.opened, {

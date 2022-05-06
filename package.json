@@ -14,7 +14,11 @@
     "chain": "npx hardhat node",
     "deploy": "npx hardhat run --network localhost scripts/marketPlaceDeploy.js",
     "deploy:rinkeby": "npx hardhat run --network rinkeby scripts/marketPlaceDeploy.js",
-    "test": "npx hardhat test"
+    "deploy:ropsten": "npx hardhat run --network ropsten scripts/marketPlaceDeploy.js",
+    "deploy:polygonMumbai": "npx hardhat run --network polygonMumbai scripts/marketPlaceDeploy.js",
+    "test": "npx hardhat test",
+    "verify:rinkeby": "npx hardhat verify --network rinkeby 0x23a7af956ea04169A83046182F7A118Ab810f110",
+    "verify:polygonMumbai": "npx hardhat verify --network polygonMumbai 0x4054e158C0D7B11c79176535F2Be96e9255c73C0"
   },
   "dependencies": {
     "@coinbase/wallet-sdk": "^3.0.4",
@@ -80,11 +84,13 @@
     "@storybook/testing-library": "^0.0.9",
     "babel-loader": "^8.2.3",
     "eslint": "8.11.0",
-    "eslint-config-next": "12.1.0",
+    "eslint-config-next": "^12.1.5",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-storybook": "^0.5.7",
     "ethereum-waffle": "^3.2.0",
     "hardhat": "^2.9.2",
     "node-sass": "^7.0.1",
+    "prettier": "2.6.2",
     "storybook-css-modules-preset": "^1.1.1",
     "stylelint": "^13.13.1",
     "stylelint-config-standard-scss": "^3.0.0",
