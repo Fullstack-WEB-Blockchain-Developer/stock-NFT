@@ -166,7 +166,7 @@ export const AcceptOfferModal = ({
         marketPlaceArtifacts.deployedBytecode,
         library?.getSigner()
       );
-      marketContract = IMarket.attach(stokeMarketAddr);
+      marketContract = IMarket?.attach(stokeMarketAddr);
 
       const IStokeNFT = new ethers.ContractFactory(
         stokeNFTArtifacts.abi,
