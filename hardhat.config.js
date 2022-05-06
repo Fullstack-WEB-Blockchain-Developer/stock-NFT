@@ -132,15 +132,20 @@ module.exports = {
     },
     ropsten: {
       url: "https://eth-ropsten.alchemyapi.io/v2/0B51t_8NmdFD3MVHsdMddCGt0Zjwfo7y",
-      accounts: ['95cd7ac56a15b471c1d479b6f109881606affab88d03c95cbc44076c7018f88a']
-    },
-    matic: {
-      url: "https://rpc-mumbai.maticvigil.com",
-      accounts: ["95cd7ac56a15b471c1d479b6f109881606affab88d03c95cbc44076c7018f88a"]
+      accounts: process.env.TEST_PRIVATE_KEY !== undefined ? [process.env.TEST_PRIVATE_KEY] : [],
     },
     rinkeby: {
       url: "https://rinkeby.infura.io/v3/a5b51678f5c248c5af6c10dc7c5501ea",
-      accounts: ['95cd7ac56a15b471c1d479b6f109881606affab88d03c95cbc44076c7018f88a']
+      accounts: process.env.TEST_PRIVATE_KEY !== undefined ? [process.env.TEST_PRIVATE_KEY] : [],
+    },
+    polygon: {
+      url: "",
+      accounts: []
+    },
+    polygonMumbai: {
+      url: "https://rpc-mumbai.maticvigil.com",
+      accounts: process.env.TEST_PRIVATE_KEY !== undefined ? [process.env.TEST_PRIVATE_KEY] : [],
+      timeout: 600000
     },
     bsctest: {
       url: process.env.BSCTEST_URL || "",
@@ -169,7 +174,8 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      rinkeby: 'WTSDCZYJP4JSCF8YYTGTRI1YK9BAIRZE92'
+      rinkeby: 'TMD4C21RIMA7TKZ79HN4E9RX3VPPNAH6EV',
+      polygonMumbai: "3WEFFT87T4AQY6KWME4XINX5BQT7H51F9S",
     }
   }
 };

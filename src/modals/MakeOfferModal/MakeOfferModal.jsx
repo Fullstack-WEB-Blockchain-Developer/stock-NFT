@@ -85,9 +85,7 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
 
   console.log("🚀 ~ file: MakeOfferModal.jsx ~ line 73 ~ MakeOfferModal ~ modalData", modalData.balance)
 
-  const loadIcon = ({ src }) => {
-    return `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
-  };
+  const loadIcon = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
 
   const sendOfferToServer = async () => {
     const {
@@ -165,9 +163,7 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
     }
   };
 
-  const getPricePerItem = async () => {
-    return await getEtherPrice();
-  };
+  const getPricePerItem = async () => await getEtherPrice();
 
   const handleMakeOffer = async () => {
     if (modalData.currency.name === "ETH") {
