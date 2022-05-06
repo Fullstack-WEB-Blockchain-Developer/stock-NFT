@@ -1,6 +1,5 @@
 //redux
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { store } from "../store";
 //axios
 import axios from "axios";
 //utils

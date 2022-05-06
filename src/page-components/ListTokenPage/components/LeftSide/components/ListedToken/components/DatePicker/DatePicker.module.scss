@@ -1,0 +1,29 @@
+.wrapper {
+  padding: 16px;
+  position: absolute;
+  background-color: var(--dark-grey);
+  width: 640px;
+  z-index: 10;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.dateTextFieldsWrapper, .timePickersWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24px 0;
+}
+
+.timePickersWrapper {
+  margin: 0px;
+}
+
+.leftTextField, .rightTextField, .timePicker {
+  min-width: 48%;
+}

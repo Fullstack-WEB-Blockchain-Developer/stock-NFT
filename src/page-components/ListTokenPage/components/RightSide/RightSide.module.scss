@@ -1,0 +1,104 @@
+.rightSideTitle {
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 0.02px;
+  margin-top: 66px;
+}
+
+.tokenPreview {
+}
+
+.tokenListedHead {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0;
+  font-size: 18px;
+  font-weight: bold;
+
+  span:last-child {
+    cursor: pointer;
+  }
+}
+
+.closed {
+  display: none;
+}
+
+.asBundleSquareCard {
+  margin-top: 24px;
+  margin-bottom: 40px;
+}
+
+.itemQuantity {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+
+  span {
+    display: flex;
+    align-items: center;
+  }
+
+  span:first-child {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10%;
+    background-color: var(--light-grey);
+  }
+
+  span:last-child {
+    margin-left: 8px;
+  }
+}
+
+.selectedTokens {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--dark-grey);
+  border-top: 1px solid var(--dark-grey);
+}
+
+.bundleItemPreview {
+  display: flex;
+  padding: 16px;
+  border: 1px solid var(--shadow);
+  border-radius: 7px;
+  margin-bottom: 8px;
+}
+
+.bundleItemPreview:last-child {
+  margin-bottom: 0px;
+}
+
+.bundleItemPreviewvImage {
+  border-radius: 8px;
+  background-color: var(--dark-grey);
+  position: relative;
+  width: 63px;
+  height: 63px;
+}
+
+.bundleItemPreviewvDescription {
+  display: flex;
+  margin-left: 16px;
+  flex-direction: column;
+  justify-content: center;
+
+  span:first-child {
+    color: var(--light-grey);
+    font-size: 16px;
+  }
+
+  span:last-child {
+    margin-top: 4px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}

@@ -15,7 +15,17 @@ import { videos, audios, images } from "../../helpers/extentions";
 //styles
 import styles from "./SquareNFTCard.module.scss";
 
-export const SquareNFTCard = ({ id, name, category, status, price, owner, fileName, collection }) => {
+export const SquareNFTCard = ({
+  category,
+  className,
+  collection,
+  fileName,
+  id,
+  name,
+  owner,
+  price,
+  status,
+}) => {
   const [tokenFileError, setTokenFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
@@ -45,7 +55,7 @@ export const SquareNFTCard = ({ id, name, category, status, price, owner, fileNa
   const audioRef = useRef();
 
   return (
-    <div className={styles.wrapper} onClick={() => router.push(`/token/${id}`)}>
+    <div className={cn(className, styles.wrapper)} onClick={() => router.push(`/token/${id}`)}>
       <div className={styles.imageWrapperWrapper}>
         <div
           className={cn(styles.imageWrapper, {
@@ -112,10 +122,12 @@ export const SquareNFTCard = ({ id, name, category, status, price, owner, fileNa
         <div className={styles.name}>
           <span>{name}</span>
         </div>
-        {price && <div className={styles.price}>
-          <AmountWithIcon amount={price} color="red" />
-          <AmountDifference direction="down" percent="12" />
-        </div>}
+        {price && (
+          <div className={styles.price}>
+            <AmountWithIcon amount={price} color="primary" />
+            {/* <AmountDifference direction="down" percent="12" /> */}
+          </div>
+        )}
         <div className={styles.bottomSection}>
           <div className={styles.bottomLeft}>
             <div className={styles.collection}>
@@ -127,7 +139,7 @@ export const SquareNFTCard = ({ id, name, category, status, price, owner, fileNa
             </div>
           </div>
           <div className={styles.bottomRight}>
-            <Tag text={status === 'pending' ? status : category} />
+            <Tag text={status === "pending" ? status : category} />
           </div>
         </div>
       </div>

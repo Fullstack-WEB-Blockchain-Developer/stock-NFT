@@ -10,8 +10,6 @@ import {
   clearError,
 } from "../../../../redux/slices/profileFiltrationSlice";
 import { open as openError } from "../../../../redux/slices/errorSnackbarSlice";
-//axios
-import axios from "axios";
 //classnames
 import cn from "classnames";
 //infivite-scroll
@@ -24,16 +22,13 @@ import { TagsWrapper } from "./components/TagsWrapper/TagsWrapper";
 import { SquareNFTCard } from "../../../../components/SquareNFTCard/SquareNFTCard";
 import { SmallNFTCard } from "../../../../components/SmallNFTCard/SmallNFTCard";
 //utils
-import { chooseSections, constructUrl } from "./ContentWrapper.utils";
+import { chooseSections } from "./ContentWrapper.utils";
 //styles
 import styles from "./ContentWrapper.module.scss";
 
 export const ContentWrapper = () => {
   const dispatch = useDispatch();
   const [isSidebarOpened, setIsSidebarOpened] = useState(true);
-  const [offset, setOffset] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  //const [tokens, setTokens] = useState([]);
 
   const {
     choosenSection,
