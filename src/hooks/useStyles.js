@@ -2,10 +2,107 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles(
   {
+    datePicker: {
+      "&.MuiCustomized-datePicker": {
+        backgroundColor: "#212020",
+        color: "white",
+      },
+      "& .css-1w13o7u-MuiTypography-root": {
+        color: "white",
+      },
+      "& .css-qhrdzm-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day": {
+        color: "white",
+      },
+      "& .css-l5pdik-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day": {
+        color: "var(--primary)",
+      },
+      "& .css-18fxmqw-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day.Mui-selected": {
+        color: "var(--primary)",
+        backgroundColor: "#617BFF1A",
+        boxShadow: "inset 0px 0px 1px 1px var(--primary)",
+        borderRadius: "4px",
+        color: "var(--primary)",
+      },
+      "& .css-1f2kitb-MuiDateRangePickerDay-root": {
+        backgroundColor: "#617BFF1A",
+        boxShadow: "inset 0px 0px 1px 1px var(--primary)",
+        borderRadius: "4px",
+      },
+      "& .css-18fxmqw-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day": {
+        borderRadius: "0px",
+      },
+      "& .css-1h14vs8-MuiDateRangePickerDay-root, & .css-1m3meum-MuiDateRangePickerDay-root": {
+        borderRadius: "0px",
+        background: "none",
+      },
+      "& .css-pgdzhj-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day.Mui-selected": {
+        backgroundColor: "#617BFF1A",
+        boxShadow: "inset 0px 0px 1px 1px var(--primary)",
+        borderRadius: "0px",
+      },
+      "& .css-1f2kitb-MuiDateRangePickerDay-root:first-of-type, & .css-1f2kitb-MuiDateRangePickerDay-root:last-of-type":
+        {
+          borderRadius: "4px",
+        },
+      "& .css-pgdzhj-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day.Mui-selected": {
+        color: "var(--primary)",
+      },
+      "& .css-pgdzhj-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day.Mui-selected": {
+        backgroundColor: "#617BFF1A",
+        boxShadow: "inset 0px 0px 1px 1px var(--primary)",
+        color: "var(--primary)",
+      },
+      "& .css-pgdzhj-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day": {
+        borderRadius: "4px",
+      },
+      "& .css-1fzen3a-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day": {
+        border: "none",
+        color: "var(--primary)",
+      },
+      "& .css-1m3meum-MuiDateRangePickerDay-root, & .css-1h14vs8-MuiDateRangePickerDay-root": {
+        backgroundColor: "#617BFF1A",
+        boxShadow: "inset 0px 0px 1px 1px var(--primary)",
+        borderRadius: "4px",
+      },
+      "& .css-jwafdq-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day": {
+        borderRadius: "4px",
+      },
+      "& .css-jwafdq-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day": {
+        boxShadow: "inset 0px 0px 1px 1px var(--primary)",
+        backgroundColor: "#617BFF1A",
+        borderRadius: "4px",
+      },
+      "& .css-w38svh-MuiDateRangePickerDay-root": {
+        background: "none",
+      },
+      "& .css-jwafdq-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day.Mui-selected:hover, .css-qhrdzm-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day:hover":
+        {
+          backgroundColor: "#617BFF1A",
+          borderRadius: "4px",
+          border: "1px solid var(--primary)",
+        },
+      "& .css-1rhx85y-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day:not(.Mui-selected)": {
+        color: "var(--light-grey)",
+        border: "1px solid var(--light-grey)",
+      },
+      "& .css-jgke5a-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day.Mui-selected": {
+        backgroundColor: "#617BFF1A",
+      },
+      "& .css-jwafdq-MuiButtonBase-root-MuiPickersDay-root-MuiDateRangePickerDay-day:focus.Mui-selected": {
+        backgroundColor: "#617BFF1A",
+        color: "var(--primary)",
+      },
+    },
     textField: {
       borderRadius: "7px",
       "& label": {
-        color: 'var(--shadow)'
+        color: "var(--shadow)",
+      },
+      "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+        color: "white",
+      },
+      "& .css-i4bv87-MuiSvgIcon-root": {
+        fill: "white",
       },
       "& label.Mui-focused": {
         color: "var(--primary)",

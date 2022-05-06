@@ -17,11 +17,13 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
     dispatch(
       addToken({
         asBundle: false,
+        bundle: [],
         bundleDescription: "",
         bundleName: "",
         category,
         collection,
         currency: "none",
+        duration: [new Date(), Date.parse(new Date()) + 1000 * 60 * 60 * 24 * 7],
         fileName,
         id,
         initialPrice: price,
@@ -32,7 +34,6 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
         price: undefined,
         specificBuyerAddress: "",
         status,
-        bundle: [],
       })
     );
   }, [dispatch, id, name, owner, fileName, category, price, collection, status]);

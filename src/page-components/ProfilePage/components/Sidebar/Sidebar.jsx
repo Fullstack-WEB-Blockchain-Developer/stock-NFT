@@ -54,9 +54,6 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
   const iconLoader = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`;
 
-  //handlers
-  console.log("---currencies", currencies);
-
   const handleGetNewTokens = () => {
     dispatch(clearOffsetAndTokens());
     dispatch(getTokens());

@@ -4,6 +4,7 @@ import Image from "next/image";
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import { addToken } from "../../../../../../redux/slices/ListTokenSlice";
+import { open as openError } from "../../../../../../redux/slices/errorSnackbarSlice";
 //mui
 import { Container, Select, MenuItem } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -13,7 +14,7 @@ import { useStyles } from "../../../../../../hooks/useStyles";
 //styles
 import { styles as jsStyles } from "../../../../../../modals/modalStyles/modalJsStyles";
 import { CustButton } from "../../../../../../components/CustButton/CustButton";
-//import cssStyles from "./AddTokenModal.module.scss";
+import cssStyles from "./AddTokenModal.module.scss";
 
 export const AddTokenModal = ({ isOpened, handleClose, tokens }) => {
   const dispatch = useDispatch();
@@ -29,8 +30,24 @@ export const AddTokenModal = ({ isOpened, handleClose, tokens }) => {
   }, [choosenToken]);
 
   const handleAccept = () => {
-    const token = availableTokens.find(({ name }) => name === choosenToken);
-    dispatch(addToken(token));
+    const token = availableTokens.find(({ id }) => id === choosenToken);
+
+    dispatch(
+      addToken({
+        ...token,
+        asBundle: false,
+        bundle: [],
+        bundleDescription: "",
+        bundleName: "",
+        currency: "none",
+        duration: [new Date(), Date.parse(new Date()) + 1000 * 60 * 60 * 24 * 7],
+        initialPrice: price,
+        isReserved: false,
+        listingType: "fixedPrice",
+        price: undefined,
+        specificBuyerAddress: "",
+      })
+    );
     handleClose();
   };
 
@@ -74,7 +91,7 @@ export const AddTokenModal = ({ isOpened, handleClose, tokens }) => {
               style={{
                 color: "white",
               }}
-              onChange={({ target: value }) => setChoosenToken(value)}
+              onChange={({ target: { value } }) => setChoosenToken(value)}
               value={choosenToken}
               className={muiClasses.select}
             >
@@ -82,19 +99,20 @@ export const AddTokenModal = ({ isOpened, handleClose, tokens }) => {
                 <span style={{ color: "rgb(77, 77, 77)" }}>Select Items</span>
               </MenuItem>
               {availableTokens.map(({ name, fileName, id }) => (
-                <MenuItem key={id} value={name}>
-                  <span>
+                <MenuItem key={id} value={id}>
+                  <div className={cssStyles.menuItem}>
                     {fileName && (
-                      <Image
-                        alt={`${name}-icon`}
-                        height={63}
-                        loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
-                        src={fileName}
-                        width={63}
-                      />
+                      <div className={cssStyles.imageWrapper}>
+                        <Image
+                          alt={`${name}-icon`}
+                          loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
+                          src={fileName}
+                          layout="fill"
+                        />
+                      </div>
                     )}
                     <span>{name}</span>
-                  </span>
+                  </div>
                 </MenuItem>
               ))}
             </Select>
@@ -104,7 +122,7 @@ export const AddTokenModal = ({ isOpened, handleClose, tokens }) => {
           style={{
             display: "flex",
             padding: "24px",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             borderBottom: "1px solid var(--dark-grey)",
           }}
         >

@@ -1,18 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 //classnames
 import cn from "classnames";
 //components
+import { AddTokenModal } from "./components/AddTokenModal/AddTokenModal";
+import { CompleteListingModal } from "./components/CompleteListingModal/CompleteListingModal";
 import { CustButton } from "../../../../components/CustButton/CustButton";
 import { ListedToken } from "./components/ListedToken/ListedToken";
-import { AddTokenModal } from "./components/AddTokenModal/AddTokenModal";
 //styles
 import styles from "./LeftSide.module.scss";
 
 export const LeftSide = ({ className }) => {
   const [isAddModalOpened, setIsAddModalOpened] = useState(false);
+  const [isCompleteModalOpened, setIsCompleteModalOpened] = useState(false);
+  const [disabledAdd, setDisabledAdd] = useState(false);
+  const [disabledComplete, setDisabledComplete] = useState(true);
   const { tokens } = useSelector((state) => state.listToken);
+  const { currencies } = useSelector((state) => state.generalData);
+
+  useEffect(() => {
+    tokens.length === 10 && setDisabledAdd(true);
+  }, [tokens]);
+
+  useEffect(() => {
+    const flag = tokens.every((token) => {
+      if (!token.price || !token.duration[0] || !token.duration[1]) return false;
+      else return true;
+    });
+    setDisabledComplete(!flag);
+  }, [tokens]);
 
   return (
     <div className={cn(className, styles.wrapper)}>
@@ -23,15 +40,30 @@ export const LeftSide = ({ className }) => {
         <ListedToken key={id} id={id} />
       ))}
       <div className={styles.addToken}>
-        <CustButton text="+ Add Token" color="primary" onClick={() => setIsAddModalOpened(true)} />
+        <CustButton
+          color="primary"
+          disabled={disabledAdd}
+          onClick={() => setIsAddModalOpened(true)}
+          text="+ Add Token"
+        />
       </div>
       <div className={styles.completeListing}>
-        <CustButton text="Complete Listing" color="primary" disabled={true} onClick={() => {}} />
+        <CustButton
+          text="Complete Listing"
+          color="primary"
+          disabled={disabledComplete}
+          onClick={() => setIsCompleteModalOpened(true)}
+        />
       </div>
       <AddTokenModal
-        isOpened={isAddModalOpened}
         handleClose={() => setIsAddModalOpened(false)}
+        isOpened={isAddModalOpened}
         tokens={tokens}
+      />
+      <CompleteListingModal
+        handleClose={() => setIsCompleteModalOpened(false)}
+        isOpened={isCompleteModalOpened}
+        currencies={currencies}
       />
     </div>
   );
