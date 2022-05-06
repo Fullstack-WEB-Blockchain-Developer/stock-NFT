@@ -3,13 +3,11 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 //redux
 import { useSelector } from "react-redux";
+import { open as openSuccess } from "../../../../../../redux/slices/successSnackbarSlice";
 //mui
 import { Container } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-//styles
-import { styles as jsStyles } from "../../../../../../modals/modalStyles/modalJsStyles";
-import { Collection } from "immutable";
 
 export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
   const [activeStep, setActiveStep] = useState("initialization");
@@ -39,7 +37,15 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
             <Image src="/create-nft/Icon-Close.svg" alt="close-icon" width={15} height={15} />
           </div>
         </div>
-        <Container sx={{ display: "flex", flexDirection: "column", maxHeight: "50wh", overflowY: "scroll" }}>
+        <Container
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            maxHeight: "50wh",
+            overflowY: "scroll",
+            marginBottom: "16px",
+          }}
+        >
           <div>
             {tokens.map(({ fileName, id, name, collection, price, currency, usdPrice }) => (
               <div
