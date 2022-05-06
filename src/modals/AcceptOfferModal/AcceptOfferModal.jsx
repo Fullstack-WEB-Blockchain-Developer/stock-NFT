@@ -159,23 +159,25 @@ export const AcceptOfferModal = ({
       );
 
       console.log("---tokenAddr", tokenAddr);
-      tokenContract = IToken?.attach(tokenAddr);
+      if (tokenAddr) {
+        tokenContract = IToken?.attach(tokenAddr);
 
-      const IMarket = new ethers.ContractFactory(
-        marketPlaceArtifacts.abi,
-        marketPlaceArtifacts.deployedBytecode,
-        library?.getSigner()
-      );
-      marketContract = IMarket?.attach(stokeMarketAddr);
+        const IMarket = new ethers.ContractFactory(
+          marketPlaceArtifacts.abi,
+          marketPlaceArtifacts.deployedBytecode,
+          library?.getSigner()
+        );
+        marketContract = IMarket?.attach(stokeMarketAddr);
 
-      const IStokeNFT = new ethers.ContractFactory(
-        stokeNFTArtifacts.abi,
-        stokeNFTArtifacts.deployedBytecode,
-        library?.getSigner()
-      );
-      nftContract = IStokeNFT.attach(nftAddr);
+        const IStokeNFT = new ethers.ContractFactory(
+          stokeNFTArtifacts.abi,
+          stokeNFTArtifacts.deployedBytecode,
+          library?.getSigner()
+        );
+        nftContract = IStokeNFT.attach(nftAddr);
+      }
     }
-  }, [account, library]);
+  }, [account, library, tokenNetwork]);
 
   const handleAccept = async () => {
     if (chainId !== supportNetwork) {
