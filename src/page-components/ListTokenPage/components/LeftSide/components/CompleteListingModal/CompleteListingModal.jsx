@@ -8,6 +8,8 @@ import { open as openSuccess } from "../../../../../../redux/slices/successSnack
 import { Container } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+//styles
+import { styles as jsStyles } from "../../../../../../modals/modalStyles/modalJsStyles";
 
 export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
   const [activeStep, setActiveStep] = useState("initialization");
