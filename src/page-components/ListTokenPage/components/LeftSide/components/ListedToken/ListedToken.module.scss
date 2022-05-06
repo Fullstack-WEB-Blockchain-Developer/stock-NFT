@@ -1,0 +1,68 @@
+.tokenListedWrapper {
+  border-bottom: 1px solid var(--dark-grey);
+}
+
+.tokenListedHead {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.deleteArrowWrapper {
+  display: flex;
+  align-items: center;
+
+  span {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    height: fit-content;
+  }
+
+  span:last-child {
+    margin-left: 16px;
+  }
+}
+
+.tokenInfoWrapper {
+  max-height: 2000px;
+  transition: max-height 0.2s;
+  overflow: hidden;
+}
+
+.isClosed {
+  max-height: 0px;
+  transition: max-height 0.2s;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.listTypesWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  margin-bottom: 24px;
+}
+
+.listType {
+  width: 48.75%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 113px;
+  padding: 16px 0;
+  border: 1px solid var(--shadow);
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.activeType {
+  background: #617bff1a 0% 0% no-repeat padding-box;
+  border: 1px solid var(--primary);
+}

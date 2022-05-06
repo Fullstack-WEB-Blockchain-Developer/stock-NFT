@@ -25,8 +25,8 @@ export const MyCollectionsPage = () => {
   const { userCollections, error } = useSelector((state) => state.userData);
 
   useEffect(() => {
-    dispatch(getUserCollections());
-  }, [dispatch]);
+    userCollections.length === 0 && dispatch(getUserCollections());
+  }, [dispatch, userCollections.length]);
 
   useEffect(() => {
     if (error) {

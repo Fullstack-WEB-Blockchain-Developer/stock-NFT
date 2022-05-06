@@ -143,6 +143,7 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
     }
   };
 
+
   useEffect(() => {
     let flag = true;
     if (
