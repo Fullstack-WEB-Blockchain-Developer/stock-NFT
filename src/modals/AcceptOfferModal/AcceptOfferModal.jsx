@@ -153,7 +153,7 @@ export const AcceptOfferModal = ({
         marketPlaceArtifacts.deployedBytecode,
         library?.getSigner()
       );
-      marketContract = IMarket.attach(stokeMarketAddr);
+      marketContract = IMarket?.attach(stokeMarketAddr);
 
       const IStokeNFT = new ethers.ContractFactory(
         stokeNFTArtifacts.abi,
@@ -165,8 +165,6 @@ export const AcceptOfferModal = ({
   }, [account, library]);
 
   const handleAccept = async () => {
-    console.log("🚀 ~ file: AcceptOfferModal.jsx ~ line 174 ~ handleAccept ~ supportNetwork", supportNetwork)
-
     if (chainId !== supportNetwork) {
       await switchNetwork(supportNetwork, library);
       dispatch(
