@@ -16,6 +16,17 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
   useEffect(() => {
     dispatch(
       addToken({
+        auctionMethod: "Sell to the highest bidder",
+        auctionStartingPrice: undefined,
+        auctionStartingUsdPrice: undefined,
+        auctionStartingCurrency: 'none',
+        auctionReservePrice: undefined,
+        auctionReserveUsdPrice: undefined,
+        auctionReserveCurrency: 'none',
+        auctionEndPrice: undefined,
+        auctionEndUsdPrice: undefined,
+        auctionEndCurrency: 'none',
+        includeReservePrice: false,
         asBundle: false,
         bundle: [],
         bundleDescription: "",

@@ -133,13 +133,12 @@ export const ListFixedPriceInputs = ({ id }) => {
           value={price}
           InputProps={{ style: { color: "white" } }}
         />
-        {usdPrice && (
+        {price && usdPrice && (
           <div className={styles.usdPrice}>
             <span>${usdPrice}</span>
           </div>
         )}
       </div>
-
       <div className={styles.title}>
         <span>
           Duration <span className={styles.star}>*</span>

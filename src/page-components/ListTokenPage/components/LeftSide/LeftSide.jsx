@@ -25,9 +25,18 @@ export const LeftSide = ({ className }) => {
 
   useEffect(() => {
     const flag = tokens.every((token) => {
-      if (!token.price || !token.duration[0] || !token.duration[1]) return false;
+      if (
+        (token.listingType === "fixedPrice" && (!token.price || !token.duration[0] || !token.duration[1])) ||
+        (token.listingType === "timeAuction" &&
+          (!token.auctionStartingPrice ||
+            !token.duration[0] ||
+            !token.duration[1] ||
+            (token.auctionMethod === "Sell with declining price" && !token.auctionEndPrice)))
+      )
+        return false;
       else return true;
     });
+
     setDisabledComplete(!flag);
   }, [tokens]);
 

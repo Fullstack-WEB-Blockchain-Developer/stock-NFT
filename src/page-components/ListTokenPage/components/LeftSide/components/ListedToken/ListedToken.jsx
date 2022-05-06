@@ -1,16 +1,13 @@
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import {
-  changeToken,
-  deleteToken,
-  toggleOpenToken,
-} from "../../../../../../redux/slices/ListTokenSlice";
+import { changeToken, deleteToken, toggleOpenToken } from "../../../../../../redux/slices/ListTokenSlice";
 //next
 import Image from "next/image";
 //classnames
 import cn from "classnames";
 //components
 import { ListFixedPriceInputs } from "./components/ListFixedPriceInputs/ListFixedPriceInputs";
+import { ListAuctionInputs } from "./components/ListAuctionInputs/ListAuctionInputs";
 //styles
 import styles from "./ListedToken.module.scss";
 
@@ -63,7 +60,7 @@ export const ListedToken = ({ id }) => {
             </div>
           ))}
         </div>
-        {listingType === "fixedPrice" ? <ListFixedPriceInputs id={id} /> : <></>}
+        {listingType === "fixedPrice" ? <ListFixedPriceInputs id={id} /> : <ListAuctionInputs id={id} />}
       </div>
     </div>
   );
