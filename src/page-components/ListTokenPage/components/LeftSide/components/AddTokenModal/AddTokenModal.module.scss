@@ -1,0 +1,16 @@
+.imageWrapper {
+    position: relative;
+    height: 41px;
+    width: 41px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--dark-grey);
+}
+
+.menuItem {
+    display: flex;
+    align-items: center;
+    > span {
+        margin-left: 16px;
+    }
+}

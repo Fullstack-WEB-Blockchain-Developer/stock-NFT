@@ -124,8 +124,8 @@ export const SquareNFTCard = ({
         </div>
         {price && (
           <div className={styles.price}>
-            <AmountWithIcon amount={price} color="red" />
-            <AmountDifference direction="down" percent="12" />
+            <AmountWithIcon amount={price} color="primary" />
+            {/* <AmountDifference direction="down" percent="12" /> */}
           </div>
         )}
         <div className={styles.bottomSection}>

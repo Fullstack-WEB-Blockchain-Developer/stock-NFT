@@ -6,7 +6,7 @@ const initialState = {
   openedPreviews: [],
   openedTokens: [],
   tokens: [],
-  error: [],
+  error: null,
 };
 
 export const getAllUserTokens = createAsyncThunk(
@@ -70,7 +70,7 @@ export const listToken = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getAllUserTokens.fulfilled, (state, { payload }) => {
-      if (data) {
+      if (payload) {
         state.allUserTokens = payload;
       }
     });

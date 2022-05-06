@@ -159,7 +159,7 @@ export const AcceptOfferModal = ({
       );
 
       console.log("---tokenAddr", tokenAddr);
-      tokenContract = IToken.attach(tokenAddr);
+      tokenContract = IToken?.attach(tokenAddr);
 
       const IMarket = new ethers.ContractFactory(
         marketPlaceArtifacts.abi,

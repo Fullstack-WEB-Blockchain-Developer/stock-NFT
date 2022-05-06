@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   changeToken,
   deleteToken,
-  getAllUserTokens,
   toggleOpenToken,
 } from "../../../../../../redux/slices/ListTokenSlice";
 //next
@@ -28,7 +27,7 @@ export const ListedToken = ({ id }) => {
         <span>{name}</span>
         <div className={styles.deleteArrowWrapper}>
           <span onClick={() => dispatch(deleteToken(id))}>
-            <Image alt="trash-icon" height={19} src="/!!!!fakeImage.png" width={19} />
+            <Image alt="trash-icon" height={19} src="/view-token/Icon-Delete.svg" width={19} />
           </span>
           <span onClick={() => dispatch(toggleOpenToken(id))}>
             {isOpened ? (
