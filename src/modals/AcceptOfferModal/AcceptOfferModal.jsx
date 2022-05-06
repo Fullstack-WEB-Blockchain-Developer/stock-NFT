@@ -82,6 +82,19 @@ export const AcceptOfferModal = ({
   const router = useRouter();
 
   useEffect(() => {
+    if (chainId !== supportNetwork) {
+      (async () => {
+        await switchNetwork(supportNetwork, library);
+        dispatch(
+          openSuccess({
+            title: "The network has been changed successfully.",
+          })
+        );
+      })()
+    }
+  }, [isOpened]);
+
+  useEffect(() => {
     if (tokenFileName) {
       const end = tokenFileName.substring(tokenFileName.indexOf(".") + 1).toLowerCase();
       if (images?.includes(end)) {
@@ -165,8 +178,6 @@ export const AcceptOfferModal = ({
   }, [account, library]);
 
   const handleAccept = async () => {
-    console.log("🚀 ~ file: AcceptOfferModal.jsx ~ line 174 ~ handleAccept ~ supportNetwork", supportNetwork)
-
     if (chainId !== supportNetwork) {
       await switchNetwork(supportNetwork, library);
       dispatch(
