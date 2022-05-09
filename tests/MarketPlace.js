@@ -6,6 +6,7 @@ const { ethers } = require("hardhat");
 
 const provider = waffle.provider;
 
+let auctionFee;
 let WETH, weth;
 let nftArtifact, nftContract;
 let marketContract;
@@ -72,6 +73,13 @@ describe("StokeMarketPlace contract", function () {
     await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
   })
 
+  it("set auctionFee", async() => {
+    const AuctionFee = await nftContract.connect(account1).timing(Token.tokenId);
+    console.log("🚀 ~ file: MarketPlace.js ~ line 77 ~ it ~ AuctionFee", AuctionFee)
+    // await nftContract.connect(account1).approve(marketContract.address, 1);
+    // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
+  })
+
   it("start timing", async() => {
     const time = await nftContract.connect(account1).timing(Token.tokenId);
     // await nftContract.connect(account1).approve(marketContract.address, 1);
@@ -79,7 +87,7 @@ describe("StokeMarketPlace contract", function () {
   })
   it("start auction", async () => {
     await nftContract.connect(account1).createToken(1, account1.address, 'ipfs://lion');
-    await nftContract.connect(account1).approve(marketContract.address, 1);
+    // await nftContract.connect(account1).approve(marketContract.address, 1);
     await nftContract.connect(account1).startAuction(Token.tokenId, 10, 30, 24, 60, nftContract.address);
     // await nftContract.connect(account1).approve(marketContract.address, 1);
     // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
