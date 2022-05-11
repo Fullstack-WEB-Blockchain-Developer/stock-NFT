@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 //next
 import Image from "next/image";
 //redux
@@ -18,8 +18,6 @@ import { getExpirationString } from "../../../../helpers/getExpirationString";
 //styles
 import styles from "./RightSideInfoWrapper.module.css";
 import { AcceptOfferModal } from "../../../../modals/AcceptOfferModal/AcceptOfferModal";
-import { useWeb3React } from "@web3-react/core";
-import axios from "axios";
 //next
 import { useRouter } from "next/router";
 
@@ -35,6 +33,7 @@ export const RightSideInfoWrapper = ({
   owner,
   tokenFileName,
   usdPrice,
+  tokenNetwork,
 }) => {
   const dispatch = useDispatch();
   // const { account, activate, library, chainId } = useWeb3React();
@@ -56,7 +55,8 @@ export const RightSideInfoWrapper = ({
   const [isMakeOfferModalOpened, setIsMakeOfferModalOpened] = useState(false);
   const [isAcceptOfferModalOpened, setIsAcceptOfferModalOpened] = useState(false);
   //network ether or polygon
-  const [tokenNetwork, setTokenNetwork] = useState("");
+
+  // const tokenNetwork = createContext();
 
   const profileName = useSelector((state) => state.userData.username);
 
@@ -98,16 +98,6 @@ export const RightSideInfoWrapper = ({
   useEffect(() => {
     dispatch(setOffers(offers));
   }, [offers]);
-
-  useEffect(() => {
-    const { tokenId } = router.query;
-    async function getNftInfo() {
-      const response = await axios.get(`${process.env.BACKEND_URL}/nfts/${tokenId}`);
-      const { blockchainType } = response.data;
-      setTokenNetwork(String(blockchainType.name).toLowerCase());
-    }
-    getNftInfo();
-  }, []);
 
   return (
     <div className={styles.wrapper}>

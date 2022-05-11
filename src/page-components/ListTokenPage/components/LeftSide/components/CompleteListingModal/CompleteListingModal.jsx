@@ -1,19 +1,230 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 //next
+import { useRouter } from "next/router";
 import Image from "next/image";
 //redux
-import { useSelector } from "react-redux";
-import { open as openSuccess } from "../../../../../../redux/slices/successSnackbarSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { open as openError } from "src/redux/slices/errorSnackbarSlice";
+import { open as openSuccess } from "src/redux/slices/successfulOrderSlice";
 //mui
 import { Container } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 //styles
 import { styles as jsStyles } from "../../../../../../modals/modalStyles/modalJsStyles";
+//ethers
+import { ethers } from "ethers";
+//web3
+import { useWeb3React } from "@web3-react/core";
+//contract
+import stokeNFTArtifacts from "../../../../../../../artifacts/contracts/StokeNFT.sol/StokeNFT.json";
+import marketPlaceArtifacts from "../../../../../../../artifacts/contracts/StokeMarketPlace.sol/StokeMarketplace.json";
+import tokenArtifacts from "../../../../../../../artifacts/contracts/WETH.sol/WETH9.json";
+// import { toHex, Offer, switchNetwork } from "src/utils";
+
+import { UserContext } from "../../../../ListTokenPage";
+
+const etherChain = process.env.ETHER_CHAIN;
+const polygonChain = process.env.POLYGON_CHAIN;
+const eth_tokenAddr = process.env.ETH_TOKEN;
+const eth_stokeMarketAddr = process.env.ETH_MARKET;
+const eth_nftAddr = process.env.ETH_NFT;
+const pol_tokenAddr = process.env.POL_TOKEN;
+const pol_stokeMarketAddr = process.env.POL_MARKET;
+const pol_nftAddr = process.env.POL_NFT;
+
+let tokenContract;
+let nftContract;
+let marketContract;
+let tokenAddr;
+let stokeMarketAddr;
+let nftAddr;
 
 export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [activeStep, setActiveStep] = useState("initialization");
   const { tokens } = useSelector((state) => state.listToken);
+  const { account, library, chainId } = useWeb3React();
+  const tokenNetwork = useContext(UserContext);
+  const { stokeFee, creatorRoyalty } = useSelector((state) => state.administration.fees);
+
+  //get contract
+  useEffect(() => {
+    if (library) {
+      console.log(tokenNetwork);
+      let supportNetwork;
+      if (tokenNetwork === "ethereum") {
+        tokenAddr = eth_tokenAddr;
+        stokeMarketAddr = eth_stokeMarketAddr;
+        nftAddr = eth_nftAddr;
+        supportNetwork = etherChain;
+      } else if (tokenNetwork === "polygon") {
+        tokenAddr = pol_tokenAddr;
+        stokeMarketAddr = pol_stokeMarketAddr;
+        nftAddr = pol_nftAddr;
+        supportNetwork = polygonChain;
+      }
+
+      // if (chainId !== supportNetwork) {
+      //   // TODO: add switch network modal
+      //   (async () => {
+      //     await switchNetwork(supportNetwork, library);
+      //     dispatch(
+      //       openSuccess({
+      //         title: "The network has been changed successfully.",
+      //       })
+      //     );
+      //   })()
+      // }
+      const IToken = new ethers.ContractFactory(
+        tokenArtifacts.abi,
+        tokenArtifacts.deployedBytecode,
+        library?.getSigner()
+      );
+
+      console.log("---tokenAddr", tokenAddr);
+      if (tokenAddr) {
+        tokenContract = IToken?.attach(tokenAddr);
+
+        const IMarket = new ethers.ContractFactory(
+          marketPlaceArtifacts.abi,
+          marketPlaceArtifacts.deployedBytecode,
+          library?.getSigner()
+        );
+        marketContract = IMarket?.attach(stokeMarketAddr);
+
+        const IStokeNFT = new ethers.ContractFactory(
+          stokeNFTArtifacts.abi,
+          stokeNFTArtifacts.deployedBytecode,
+          library?.getSigner()
+        );
+        nftContract = IStokeNFT.attach(nftAddr);
+      }
+    }
+  }, [account, library, tokenNetwork]);
+
+  useEffect(() => {
+    (async () => {
+      const fixedSaleData = { tokenIds: [], prices: [], startTimes: [], endTimes: [], nftAddrs: [] };
+      const auctionSaleData = { tokenIds: [], prices: [], startTimes: [], endTimes: [], nftAddrs: [] };
+      if (isOpened) {
+        setActiveStep("confirm");
+          // propunits filtering param
+          tokens.forEach((token) => {
+            const startTime = Math.floor(token.duration[0].getTime() / 1000);
+            const endTime = Math.floor(token.duration[1].getTime() / 1000);
+            if (token.listingType === "timeAuction") {
+              auctionSaleData.tokenIds.push(token.id);
+              if (token.auctionMethod === "Sell to the highest bidder") {
+                auctionSaleData.methods.push(true);
+              } else {
+                auctionSaleData.methods.push(false);
+              }
+              auctionSaleData.prices.push(String(token.price * 10 ** 18));
+              auctionSaleData.startTimes.push(startTime);
+              auctionSaleData.endTimes.push(endTime);
+              auctionSaleData.nftAddrs.push(nftAddr);
+            } else {
+              fixedSaleData.tokenIds.push(token.id);
+              fixedSaleData.prices.push(String(token.price * 10 ** 18));
+              fixedSaleData.startTimes.push(startTime);
+              fixedSaleData.endTimes.push(endTime);
+              fixedSaleData.nftAddrs.push(nftAddr);
+            }});
+            console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 132 ~ auctionSaleData", auctionSaleData)
+              console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 136 ~ fixedSaleData", fixedSaleData)
+            if (auctionSaleData.tokenIds.length > 0) {
+              await auctionSale(auctionSaleData);
+            }
+            if (fixedSaleData.tokenIds.length > 0) {
+              await fixedSale(fixedSaleData);
+            }
+        // const tokenIds = tokens.map((token) => token.id);
+        // const prices = tokens.map((token) => token.price);
+        // const startTimes = tokens.map((token) => token.duration[0].getTime() / 1000);
+        // const endTimes = tokens.map((token) => token.duration[1].getTime() / 1000);
+        // const nftAddrs = tokens.map((token, i) => {
+        //   console.log("---fileName", token.fileName);
+        //   const startTime = token.duration[0].getTime() / 1000;
+        //   const endTime = token.duration[1].getTime() / 1000;
+        //   return { tokenIds, prices, startTimes, endTimes, nftAddrs };
+        // });
+      }
+    })()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpened, tokens]);
+
+  const fixedSale = async ({tokenIds, prices, startTimes, endTimes, nftAddrs}) => {
+    if (library) {
+      await marketContract.fixedSales(tokenIds, prices, startTimes, endTimes, nftAddrs)
+        .then((result) => {
+          if (result.status === true) {
+            dispatch(
+              openSuccess({
+                title: "Fixed sale has been created successfully.",
+              })
+            );
+          } else {
+            dispatch(
+              openError({
+                title: "Fixed sale hasn't been created.",
+              })
+            );
+          }
+        })
+        .catch((err) => {
+          console.log("🚀 ~ file: LeftSide.jsx ~ line 151 ~ fixedSale ~ err", err)
+        })
+    }
+  }
+
+  const auctionSale = async ({tokenIds, prices, startTimes, endTimes, nftAddrs}) => {
+  console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 180 ~ auctionSale ~ {tokenIds, prices, startTimes, endTimes, nftAddrs}", {tokenIds, prices, startTimes, endTimes, nftAddrs})
+    if (library) {
+      await marketContract.startAuction(tokenIds, prices, startTimes, endTimes, nftAddrs)
+        .then((recipt) => {
+          if (recipt.status === true) {
+            // ffind?.set("auction", `${price}`)
+            // ffind?.set("days",   `${endday}`)
+            // ffind?.set("hr",   `${endhours}`)
+            // ffind?.set("min", "0")
+            // ffind?.save()
+            dispatch(
+              openSuccess({
+                title: "Fixed sale has been created successfully.",
+              })
+            );
+          } else {
+            dispatch(
+              openError({
+                title: "Fixed sale hasn't been created.",
+              })
+            );
+          }
+        })
+        .catch((err) => {
+          console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 153 ~ auctionSale ~ err", err);
+        })
+    }
+  }
+
+  // const getTokenBalance = async () => {
+  //   const tokenBalanceWei = await tokenContract.balanceOf(account);
+  //   const WETH = ethers.utils.formatEther(tokenBalanceWei);
+
+  //   async function getBalance() {
+  //     if (library) {
+  //       const signer = await library.getSigner();
+  //       const wei = await signer.getBalance();
+  //       const amount = ethers.utils.formatEther(wei);
+  //       return Number(amount).toFixed(1);
+  //     }
+  //   }
+  //   getBalance().then((result) =>
+  //     setBalance({ ETHBalance: result, WETHBalance: WETH })
+  //   );
+  // };
 
   return (
     <Modal
@@ -129,7 +340,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                 <div
                   style={{
                     border: `2px solid ${
-                      activeStep === "initialization" ? "var(--primary)" : "var(--light-grey)"
+                      (activeStep === "approve" || activeStep === "confirm" || activeStep === "initialization") ? "var(--primary)" : "var(--light-grey)"
                     }`,
                     alignItems: "center",
                     borderRadius: "50%",
@@ -145,7 +356,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                 </div>
                 <span style={{ fontSize: "16px", marginLeft: "16px" }}>Initialize your wallet</span>
               </div>
-              {activeStep === "initialization" && (
+              {(activeStep === "approve" || activeStep === "confirm" || activeStep === "initialization") && (
                 <span style={{ fontSize: "14px", color: "var(--primary)" }}>Waiting for initialization</span>
               )}
             </div>
@@ -172,7 +383,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
               >
                 <div
                   style={{
-                    border: `2px solid ${activeStep === "approve" ? "var(--primary)" : "var(--light-grey)"}`,
+                    border: `2px solid ${(activeStep === "approve" || activeStep === "confirm") ? "var(--primary)" : "var(--light-grey)"}`,
                     alignItems: "center",
                     borderRadius: "50%",
                     display: "flex",
@@ -187,7 +398,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                 </div>
                 <span style={{ fontSize: "16px", marginLeft: "16px" }}>Approve this item for sale</span>
               </div>
-              {activeStep === "approve" && (
+              {(activeStep === "approve" || activeStep === "confirm") && (
                 <span style={{ fontSize: "14px", color: "var(--primary)" }}>Waiting for approval</span>
               )}
             </div>
@@ -229,7 +440,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                 </div>
                 <span style={{ fontSize: "16px", marginLeft: "16px" }}>Confirm 0.1 ETH listing</span>
               </div>
-              {activeStep === "approve" && (
+              {activeStep === "confirm" && (
                 <span style={{ fontSize: "14px", color: "var(--primary)" }}>Waiting for confirmation</span>
               )}
             </div>

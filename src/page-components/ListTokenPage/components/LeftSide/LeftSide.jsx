@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 //classnames
 import cn from "classnames";
 //components
+import { CustButton } from "src/components/CustButton/CustButton.jsx";
 import { AddTokenModal } from "./components/AddTokenModal/AddTokenModal";
 import { CompleteListingModal } from "./components/CompleteListingModal/CompleteListingModal";
-import { CustButton } from "../../../../components/CustButton/CustButton";
 import { ListedToken } from "./components/ListedToken/ListedToken";
 //styles
 import styles from "./LeftSide.module.scss";

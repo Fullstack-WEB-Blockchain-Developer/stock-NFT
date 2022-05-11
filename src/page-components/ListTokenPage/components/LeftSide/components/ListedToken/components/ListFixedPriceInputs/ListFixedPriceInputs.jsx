@@ -3,18 +3,21 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import { getAllCurrencies } from "../../../../../../../../redux/slices/generalDataSlice";
-import { changeToken } from "../../../../../../../../redux/slices/ListTokenSlice";
+import { getAllCurrencies } from "src/redux/slices/generalDataSlice";
+import { changeToken } from "src/redux/slices/ListTokenSlice";
+import { addToken, getAllUserTokens, clearError } from "src/redux/slices/ListTokenSlice";
+import { open as openError } from "src/redux/slices/errorSnackbarSlice";
 //mui
 import TextField from "@mui/material/TextField";
 import { Select, MenuItem } from "@mui/material";
 //components
-import { CustSwitch } from "../../../../../../../../components/CustSwitch/CustSwitch";
+import { CustSwitch } from "src/components/CustSwitch/CustSwitch.jsx";
+// import { CustSwitch } from "src/components/CustSwitch/CustSwitch";
 import { DatePicker } from "../DatePicker/DatePicker";
 //hooks
-import { useStyles } from "../../../../../../../../hooks/useStyles";
+import { useStyles } from "src/hooks/useStyles";
 //utils
-import { getEtherPrice } from "../../../../../../../../utils/index";
+import { getEtherPrice } from "src/utils/index";
 //styles
 import styles from "./ListFixedPriceInputs.module.scss";
 
@@ -36,14 +39,17 @@ export const ListFixedPriceInputs = ({ id }) => {
   } = token;
   const [isDayPickerOpened, setIsDayPickerOpened] = useState(false);
 
+  //TODO: fix date input and price input logic
+
+  // const [currency, setCurrency] = useState();
+  // const [price, setPrice] = useState();
+
   const handleAsBundle = () => {
     dispatch(changeToken({ id, field: "asBundle", newValue: !asBundle }));
     dispatch(changeToken({ id, field: "bundle", newValue: !asBundle ? [token] : [] }));
   };
 
-  const handleEthPrice = async () => {
-    return await getEtherPrice();
-  };
+  const handleEthPrice = async () => await getEtherPrice();
 
   useEffect(() => {
     price < 0 && dispatch(changeToken({ id, field: "price", newValue: 0 }));
@@ -54,8 +60,7 @@ export const ListFixedPriceInputs = ({ id }) => {
       handleEthPrice().then((result) =>
         dispatch(changeToken({ id, field: "usdPrice", newValue: (Number(price) * result).toFixed(4) }))
       );
-  }),
-    [price];
+  }, [price]);
 
   useEffect(() => {
     currencies.length === 0 && dispatch(getAllCurrencies());
@@ -88,6 +93,7 @@ export const ListFixedPriceInputs = ({ id }) => {
           id=""
           type="number"
           variant="outlined"
+          // disabled
           IconComponent={() => (
             <div style={{ right: "16px", position: "absolute", pointerEvents: "none" }}>
               <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
@@ -131,6 +137,7 @@ export const ListFixedPriceInputs = ({ id }) => {
           onChange={({ target: { value } }) => dispatch(changeToken({ id, field: "price", newValue: value }))}
           className={muiClasses.textFieldRightHalf}
           value={price}
+          // TODO: please implement max price function
           InputProps={{ style: { color: "white" } }}
         />
         {price && usdPrice && (

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 //redux
 import { open as openError } from "../../redux/slices/errorSnackbarSlice";
+import { open as openSuccess } from "../../redux/slices/successfulOrderSlice";
 import { useDispatch } from "react-redux";
 //classnames
 import cn from "classnames";
@@ -20,6 +21,19 @@ import { videos, audios, images } from "../../helpers/extentions";
 import { fakeLikes, fakeListing, fakePrice } from "./ViewIndividualToken.utils";
 //styles
 import styles from "./ViewIndividualTokenPage.module.css";
+
+import { useWeb3React } from "@web3-react/core";
+import axios from "axios";
+import { toHex, Offer, switchNetwork } from "../../utils";
+
+const etherChain = process.env.ETHER_CHAIN;
+const polygonChain = process.env.POLYGON_CHAIN;
+const eth_tokenAddr = process.env.ETH_TOKEN;
+const eth_stokeMarketAddr = process.env.ETH_MARKET;
+const eth_nftAddr = process.env.ETH_NFT;
+const pol_tokenAddr = process.env.POL_TOKEN;
+const pol_stokeMarketAddr = process.env.POL_MARKET;
+const pol_nftAddr = process.env.POL_NFT;
 
 export const ViewIndividualTokenPage = ({
   about,
@@ -38,6 +52,7 @@ export const ViewIndividualTokenPage = ({
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { tokenId } = router.query;
 
   const [imageErrors, setImageErrors] = useState({
     tokenImage: false,
@@ -48,7 +63,10 @@ export const ViewIndividualTokenPage = ({
   const [tokenFileLink, setTokenFileLink] = useState("/");
   const [userAccount, setUserAccount] = useState("");
 
+  const [tokenNetwork, setTokenNetwork] = useState("");
   const [ratio, setRatio] = useState(16 / 9);
+
+  const { account, library, chainId } = useWeb3React();
 
   const videoRef = useRef();
   const audioRef = useRef();
@@ -64,9 +82,375 @@ export const ViewIndividualTokenPage = ({
     setIsLoading(false);
   };
 
-  const tokenImageLoader = () => {
-    return `${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`;
+  const tokenImageLoader = () => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`;
+
+  const sellHandle = async () => {
+    let supportNetwork;
+    if (tokenNetwork === "ethereum") {
+      supportNetwork = etherChain;
+    } else if (tokenNetwork === "polygon") {
+      supportNetwork = polygonChain;
+    }
+
+    if (chainId !== supportNetwork) {
+      // TODO: add switch network modal
+      await switchNetwork(supportNetwork, library);
+      dispatch(
+        openSuccess({
+          title: "The network has been changed successfully.",
+        })
+      );
+    } else {
+      router.push(`/token/${router.query.tokenId}/list`)
+    }
   };
+
+  // useEffect(() => {
+  //   if (dataa?.data?.length > 0 && tokenId) {
+  //     tokenIdone(tokenId)
+  //   }
+
+  // }, [dataa?.data, tokenId])
+  // useEffect(() => {
+  //   if (acc) {
+  //     timer1(tokenId)
+  //   }
+
+  // }, [acc, tokenId, ffind, web3main])
+
+  // useEffect(() => {
+  //   if (tokenId) {
+  //     window.scrollTo(0, 0)
+  //   }
+  // }, [tokenId])
+  // useEffect(() => {
+  //   if (library) {
+  //     if (tokenId) {
+  //       saleNft(tokenId)
+  //       auctionDetail(tokenId)
+  //       timer(tokenId)
+  //       nftInfo(tokenId)
+  //       aucstatm(tokenId)
+  //       owner(tokenId)
+  //     }
+  //   }
+  // }, [tokenId, acc, dataa?.data?.length, web3main])
+
+  // const saleNft = async (id) => {
+  //   if (library) {
+  //     marketContract.listofsaleNft(id).call({ from: account })
+  //       .then((length) => {
+  //         setbuyprice((Number(length[3])) / 1000000000000000000)
+  //         setaucbuyprice(((Number(length[2])) / 1000000000000000000))
+  //         ffind?.set('collectionId', fdata ? fdata[7] : null)
+  //         ffind?.set('nftPrice', `${((Number(length[3])) / 1000000000000000000)}`)
+  //         ffind?.set('auction', `${(((Number(length[2])) / 1000000000000000000))}`)
+  //         ffind?.set('csprice', "0")
+
+  //         ffind?.save()
+  //       })
+  //       .catch()
+  //   }
+  // }
+
+  // const buyfixednft = async (collectionid, tokenId, amount) => {
+
+  //   if (library) {
+  //     setShow(true)
+
+
+  //     let userwalletaddresss = account;
+  //     let swaping = new web3main.eth.Contract(nft, addrs)
+  //     let amountIn = web3main.utils.toBN(fromExponential((amount) * Math.pow(10, 18)));
+  //     let address = '0x0000000000000000000000000000000000000000'
+  //     marketContract.buynft(collectionid, tokenId, address).send({ from: userwalletaddresss, value: amountIn })
+  //       .then((recipt) => {
+  //         ffind?.set('nftPrice', "0")
+  //         ffind?.save()
+  //         setShow(false)
+
+  //         history.push('/mycollection')
+  //       })
+  //       .catch((err) => {
+  //         setShow(false)
+
+  //       })
+
+  //   }
+  // }
+  // const auctionDetail = async (id) => {
+  //   if (library) {
+
+  //     let userwalletaddresss = account;
+  //     let swaping = new web3main.eth.Contract(nft, addrs)
+
+  //     marketContract.auctionDetail(id).call({ from: userwalletaddresss })
+  //       .then((value) => {
+  //         var aucde = {
+  //           id: value[1],
+  //           val: (Number(value[0]))?.length > 21 ? Number(value[0]) / 1000000000000000000000000000000000000 : Number(value[0]) / 1000000000000000000,
+  //           userid: id
+  //         }
+  //         ffind?.set('highauch', `${((Number(value[0]))?.length > 21 ? Number(value[0]) / 1000000000000000000000000000000000000 : Number(value[0]) / 1000000000000000000)}`)
+  //         ffind?.save().then((v) => console.log(v))
+  //         setauch(aucde)
+  //         console.log('auction high bid', aucde)
+  //       }).catch()
+
+  //   }
+  // }
+  // const aucstatm = async (tokenId) => {
+  //   if (library) {
+  //     marketContract.nftauctionend(tokenId).call({ from: userwalletaddresss })
+  //       .then((length) => {
+  //         console.log("alll", length);
+  //         setaucstat(length)
+  //       })
+  //       .catch()
+  //   }
+  // }
+  // const removeauc = async (tokenId) => {
+  //   if (library) {
+  //     setShow(true)
+
+  //     let userwalletaddresss = account;
+  //     let swaping = new web3main.eth.Contract(nft, addrs)
+  //     marketContract.removesfromauction(tokenId).send({ from: userwalletaddresss })
+  //       .then((length) => {
+  //         console.log(length);
+  //         ffind?.set('auction', "0")
+  //         ffind?.save()
+  //         window.location.reload()
+  //       })
+  //       .catch()
+  //   }
+  // }
+  // const removesale = async (collectionid, tokenId) => {
+  //   if (library) {
+  //     setShow(true)
+
+  //     let userwalletaddresss = account;
+  //     let swaping = new web3main.eth.Contract(nft, addrs)
+  //     marketContract.cancelfixedsale(tokenId).send({ from: userwalletaddresss })
+  //       .then((length) => {
+  //         console.log(length);
+  //         ffind?.set('nftPrice', "0")
+  //         ffind?.save()
+  //         window.location.reload()
+  //       })
+  //       .catch()
+
+  //   }
+  // }
+  // const owner = async (tokenId) => {
+  //   if (library) {
+
+  //     let userwalletaddresss = account;
+  //     let swaping = new web3main.eth.Contract(nft, addrs)
+  //     marketContract.originalowner(tokenId).call({ from: userwalletaddresss })
+  //       .then((length) => {
+  //         console.log("aaaa", length);
+  //         setnowner(length)
+  //       })
+  //       .catch()
+  //   }
+  // }
+  // const upgradebtn = async (tokenId) => {
+  //   if (library) {
+
+  //     let userwalletaddresss = account;
+  //     setShow(true)
+  //     let swaping = new web3main.eth.Contract(nft, addrs)
+  //     if (checkval) {
+  //       let amountIn = web3main.utils.toBN(fromExponential((newbid) * Math.pow(10, 18)));
+  //       marketContract.upgradeauction(tokenId, checkval).send({ from: userwalletaddresss, value: amountIn })
+  //         .then((recipt) => {
+  //           console.log(recipt);
+  //           window.location.reload()
+  //         })
+  //         .catch()
+  //     } else {
+  //       marketContract.upgradeauction(tokenId, checkval).send({ from: userwalletaddresss, value: 0 })
+  //         .then((recipt) => {
+  //           console.log(recipt);
+  //           window.location.reload()
+  //         })
+  //         .catch()
+
+  //     }
+  //   }
+  // }
+  // const buyauctionnft = async (tokenId, amount) => {
+  //   if (library) {
+  //     setShow(true)
+
+
+  //     let userwalletaddresss = account;
+  //     let swaping = new web3main.eth.Contract(nft, addrs)
+  //     let amountIn = web3main.utils.toBN(fromExponential((amount) * Math.pow(10, 18)));
+  //     marketContract.buyauction(tokenId).send({ from: userwalletaddresss, value: amountIn })
+  //       .then((recipt) => {
+  //         ffind?.set('highauch', `${amount}`)
+  //         ffind?.save()
+  //         setShow(false)
+  //         window.location.reload()
+  //       })
+  //       .catch((err) => {
+  //         setShow(false)
+  //       })
+  //   }
+  // }
+
+  // const claimauctionnft = async (collectionid, tokenId) => {
+  //   if (library) {
+  //     setShow(true)
+
+  //     let userwalletaddresss = account;
+  //     let swaping = new web3main.eth.Contract(nft, addrs)
+  //     marketContract.claim(collectionid, tokenId).send({ from: userwalletaddresss })
+  //       .then((recipt) => {
+  //         ffind?.set("auction", "0")
+  //         ffind?.save()
+  //         setShow(false)
+  //         history.push('/mycollection')
+  //       })
+  //       .catch((err) => {
+  //         setShow(false)
+  //       })
+  //   }
+  // }
+  // // const fixedsale = async (collectionid, tokenId, price) => {
+  // //   setShow(true)
+  // //   if (library) {
+
+
+  // //     let userwalletaddresss = account;
+  // //     let swaping = new web3main.eth.Contract(nft, addrs)
+  // //     let amount = web3main.utils.toBN(fromExponential(((parseFloat(price)) * Math.pow(10, 18))));
+
+  // //     marketContract.fixedsales(tokenId, amount, false).send({ from: userwalletaddresss })
+  // //       .then((length) => {
+  // //         if (length.status === true) {
+  // //           ffind?.set("nftPrice", `${price}`)
+  // //           ffind?.save()
+  // //           setShow(false)
+  // //           history.push('/mycollection')
+  // //         } else {
+  // //           alert('failed')
+  // //         }
+  // //       })
+  // //       .catch((err) => {
+  // //         setShow(false)
+
+  // //       })
+  // //   }
+  // // }
+
+  // const nftInfo = async (id) => {
+  //   if (library) {
+
+  //     let userwalletaddresss = account;
+  //     let swaping = new web3main.eth.Contract(nft, addrs)
+
+  //     marketContract.nftInformation(id).call({ from: userwalletaddresss })
+  //       .then((fees) => {
+  //         console.log("pop22", fees)
+  //         ffind?.set("collectionId", `${fees[4]}`)
+  //         ffind?.save().then((v) => console.log(v))
+  //         setfdata(fees)
+  //       }).catch()
+
+  //   }
+  // }
+  // const tokenIdone = async (id) => {
+  //   if (library) {
+
+
+  //     let userwalletaddresss = account;
+  //     let swaping = new web3main.eth.Contract(nft, addrs)
+
+  //     marketContract.nftInformation(id).call({ from: userwalletaddresss })
+  //       .then(async (fees) => {
+  //         const findc = await dataa?.data?.find(p => p?.attributes?.tokenId === fees[0])
+  //         if (findc) {
+  //           console.log('vbvbyesss')
+
+  //         } else {
+  //           const GameScore = Moralis.Object.extend("CREATECSDOGENFT");
+  //           const gameScore = new GameScore();
+  //           gameScore?.set("nftName", fees[1]);
+  //           gameScore?.set("tokenId", fees[0]);
+  //           gameScore?.set("nftOwner", fees[3]);
+  //           gameScore?.set("nftDes", JSON.parse(fdata[5])[0]);
+  //           gameScore?.set("nftImg", fees[6]);
+  //           gameScore?.set('datatype', JSON.parse(fdata[5])[1])
+  //           gameScore?.save().then(v => console.log('vbvb1', v))
+  //         }
+
+  //       }).catch()
+  //   }
+  // }
+
+  // // const auction = async (tokenId, price, endday, endhours) => {
+  // //   if (library) {
+  // //     setShow(true)
+
+  // //     let userwalletaddresss = account;
+  // //     let swaping = new web3main.eth.Contract(nft, addrs)
+  // //     let amountIn = web3main.utils.toBN(fromExponential((price) * Math.pow(10, 18)));
+
+  // //     marketContract.startAuction(tokenId, amountIn, endday, endhours).send({ from: userwalletaddresss })
+  // //       .then((recipt) => {
+  // //         if (recipt.status === true) {
+  // //           ffind?.set("auction", `${price}`)
+  // //           ffind?.set("days", `${endday}`)
+  // //           ffind?.set("hr", `${endhours}`)
+  // //           ffind?.set("min", "0")
+  // //           ffind?.save()
+
+  // //           setShow(false)
+  // //           history.push('/mycollection')
+
+  // //         } else {
+  // //           alert('failed')
+  // //         }
+  // //       })
+  // //       .catch(err => {
+  // //         setShow(false)
+  // //       })
+  // //   }
+  // // }
+
+  // const timer = async (id) => {
+  //   if (library) {
+  //     marketContract.timing(id).call({ from: account })
+  //       .then((fees) => {
+  //         var day = Math.floor(fees / 86400)
+  //         var hr = Math.floor((fees - day * 86400) / 3600)
+  //         var minutesout = Math.floor((fees - day * 86400 - hr * 3600) / 60);
+  //         setTime({ id: id, d: day, h: hr, m: minutesout })
+  //       }).catch()
+  //   }
+  // }
+  // const timer1 = async (id) => {
+  //   if (library) {
+  //     marketContract.timing(id).call({ from: account })
+  //       .then((fees) => {
+  //         var day = Math.floor(fees / 86400)
+  //         var hr = Math.floor((fees - day * 86400) / 3600)
+  //         var minutesout = Math.floor((fees - day * 86400 - hr * 3600) / 60);
+  //         console.log("hr", hr)
+  //         console.log("day", day)
+  //         console.log("min", minutesout)
+
+  //         ffind?.set("days", `${day}`)
+  //         ffind?.set("hr", `${hr}`)
+  //         ffind?.set("min", `${minutesout}`)
+  //         ffind?.save().then((v) => console.log("vv", v))
+  //         settime({ id: id, d: day, h: hr, m: minutesout })
+  //       }).catch()
+  //   }
+  // }
 
   useEffect(() => {
     const end = fileName.substring(fileName.indexOf(".") + 1).toLowerCase();
@@ -92,6 +476,14 @@ export const ViewIndividualTokenPage = ({
     setUserAccount(account);
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      const response = await axios.get(`${process.env.BACKEND_URL}/nfts/${tokenId}`);
+      const { blockchainType } = response.data;
+      setTokenNetwork(String(blockchainType.name).toLowerCase());
+    })()
+  }, [tokenId]);
+
   return (
     <>
       {userAccount === user.publicAddress && (
@@ -99,7 +491,7 @@ export const ViewIndividualTokenPage = ({
           <CustButton text="Edit" color="ghost" />
           <CustButton
             color="primary"
-            onClick={() => router.push(`/token/${router.query.tokenId}/list`)}
+            onClick={sellHandle}
             text="Sell"
           />
         </div>
@@ -227,6 +619,7 @@ export const ViewIndividualTokenPage = ({
               usdPrice={fakePrice.usd}
               ethPrice={fakePrice.eth}
               listing={fakeListing}
+              tokenNetwork={tokenNetwork}
               ///
             />
           </div>

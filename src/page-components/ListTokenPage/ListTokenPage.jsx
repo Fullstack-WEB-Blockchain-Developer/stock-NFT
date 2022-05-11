@@ -1,4 +1,6 @@
-import { useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import { addToken, getAllUserTokens, clearError } from "../../redux/slices/ListTokenSlice";
@@ -9,9 +11,13 @@ import { RightSide } from "./components/RightSide/RightSide";
 //styles
 import styles from "./ListTokenPage.module.scss";
 
+export const UserContext = createContext()
 export const ListTokenPage = ({ id, name, price, owner, fileName, category, collection, status }) => {
+  const router = useRouter();
+  const { tokenId } = router.query;
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.listToken);
+  const [tokenNetwork, setTokenNetwork] = useState("");
 
   useEffect(() => {
     dispatch(
@@ -51,7 +57,12 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
 
   useEffect(() => {
     dispatch(getAllUserTokens());
-  }, [dispatch]);
+    (async () => {
+      const response = await axios.get(`${process.env.BACKEND_URL}/nfts/${tokenId}`);
+      const { blockchainType } = response.data;
+      setTokenNetwork(String(blockchainType.name).toLowerCase());
+    })()
+  }, [tokenId, dispatch]);
 
   useEffect(() => {
     if (error) {
@@ -67,11 +78,13 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
   }, [error, dispatch]);
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.wrapper}>
-        <LeftSide className={styles.leftSide} />
-        <RightSide className={styles.rightSide} />
+    <UserContext.Provider value={tokenNetwork}>
+      <div className={styles.pageContainer}>
+        <div className={styles.wrapper}>
+          <LeftSide className={styles.leftSide} />
+          <RightSide className={styles.rightSide} />
+        </div>
       </div>
-    </div>
+    </UserContext.Provider>
   );
 };
