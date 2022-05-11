@@ -121,11 +121,12 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
       values.displayedTheme &&
       (!values.creatorFee ||
         Number(values.creatorFee) === 0 ||
-        ((values.creatorFee || Number(values.creatorFee) !== 0) && values.walletAddress)) &&
+        ((values.creatorFee || Number(values.creatorFee) !== 0) &&
+          values.walletAddress &&
+          !errors.walletAddress.isError)) &&
       !errors.name.isError &&
       !errors.creatorFee.isError &&
-      !errors.url.isError &&
-      !errors.walletAddress.isError
+      !errors.url.isError
     ) {
       flag = false;
     } else {
