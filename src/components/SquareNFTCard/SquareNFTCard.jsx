@@ -132,7 +132,7 @@ export const SquareNFTCard = ({
                 width={19}
                 height={19}
               />
-              <span>{Number(price).toFixed(3)}</span>
+              <span>{Number(price)}</span>
             </div>
           </div>
         )}

@@ -1,26 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 //next
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 //redux
-import { useDispatch } from "react-redux";
-import { open as openSuccess } from "../../redux/slices/successSnackbarSlice";
-import { open as openError } from "../../redux/slices/errorSnackbarSlice";
+import { useDispatch } from 'react-redux';
+import { open as openSuccess } from '../../redux/slices/successSnackbarSlice';
+import { open as openError } from '../../redux/slices/errorSnackbarSlice';
 //axios
-import axios from "axios";
+import axios from 'axios';
 //components
-import { CustButton } from "../../components/CustButton/CustButton";
-import { ApproveModal } from "../../modals/ApproveModal/ApproveModal";
-import { CreatorFeeAndBlockChains } from "./components/CreatorFeeAndBlockChains/CreatorFeeAndBlockChains";
-import { DisplayThemeExplicit } from "./components/DisplayThemeExplicit/DisplayThemeExplicit";
-import { ImageLoadFields } from "./components/ImageLoadFields/ImageLoadFields";
-import { Links } from "./components/Links/Links";
-import { NameUrlDescriptionCategory } from "./components/NameUrlDescriptionCategory/NameUrlDescriptionCategory";
+import { CustButton } from '../../components/CustButton/CustButton';
+import { ApproveModal } from '../../modals/ApproveModal/ApproveModal';
+import { CreatorFeeAndBlockChains } from './components/CreatorFeeAndBlockChains/CreatorFeeAndBlockChains';
+import { DisplayThemeExplicit } from './components/DisplayThemeExplicit/DisplayThemeExplicit';
+import { ImageLoadFields } from './components/ImageLoadFields/ImageLoadFields';
+import { Links } from './components/Links/Links';
+import { NameUrlDescriptionCategory } from './components/NameUrlDescriptionCategory/NameUrlDescriptionCategory';
 //utils
-import { getNavigationData, sendImagesToServer } from "./EditCollectionPage.utils";
+import { getNavigationData, sendImagesToServer } from './EditCollectionPage.utils';
 //styles
-import styles from "./EditCollectionPage.module.scss";
+import styles from './EditCollectionPage.module.scss';
 
 export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...props }) => {
   const router = useRouter();
@@ -33,8 +33,8 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
     logo: { preview: undefined, file: undefined, link: props.logoImage },
     featured: { preview: undefined, file: undefined, link: props.featuredImage },
     banner: { preview: undefined, file: undefined, link: props.bannerImage },
-    blockchain: props.blockchainType ? props.blockchainType.name : "none",
-    category: props.category ? props.category.name : "none",
+    blockchain: props.blockchainType ? props.blockchainType.name : 'none',
+    category: props.category ? props.category.name : 'none',
     creatorFee: props.creatorEarnings,
     description: props.description,
     discordLink: props.discordLink,
@@ -54,15 +54,15 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
   });
 
   const [errors, setErrors] = useState({
-    creatorFee: { isError: false, helperText: "" },
-    name: { isError: false, helperText: "" },
-    url: { isError: false, helperText: "" },
-    walletAddress: { isError: false, helperText: "" },
+    creatorFee: { isError: false, helperText: '' },
+    name: { isError: false, helperText: '' },
+    url: { isError: false, helperText: '' },
+    walletAddress: { isError: false, helperText: '' },
   });
 
   const handleSaveChanges = async () => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = localStorage.getItem('accessToken');
       const { collectionId } = router.query;
 
       const { logoImage, bannerImage, featuredImage } = await sendImagesToServer(
@@ -85,8 +85,8 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
         isSensitiveContent: values.isExplicit,
         collaborators: [],
         paymentTokens: [
-          paymentTokens.find(({ name }) => name === "ETH").id,
-          paymentTokens.find(({ name }) => name === "WETH").id,
+          paymentTokens.find(({ name }) => name === 'ETH').id,
+          paymentTokens.find(({ name }) => name === 'WETH').id,
         ],
         payoutWalletAddress: values.walletAddress,
       };
@@ -94,55 +94,48 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
       if (logoImage) body.logoImage = logoImage;
       if (featuredImage) body.featuredImage = featuredImage;
       if (bannerImage) body.bannerImage = bannerImage;
-      if (values.category !== "none") {
+      if (values.category !== 'none') {
         body.collectionCategoryId = categories.find(({ name }) => name === values.category).id;
       }
-      if (values.blockchain !== "none") {
+      if (values.blockchain !== 'none') {
         body.blockchainTypeId = blockchains.find(({ name }) => name === values.blockchain).id;
       }
       if (values.choosenPaymentTokens.length > 0) {
         body.paymentTokensIds = [
           ...body.paymentTokens,
-          ...values.choosenPaymentTokens.map(
-            (elem) => paymentTokens.find(({ name }) => name === elem.name).id
-          ),
+          ...values.choosenPaymentTokens.map((elem) => paymentTokens.find(({ name }) => name === elem.name).id),
         ];
       }
 
       await axios.patch(`${process.env.BACKEND_URL}/collections/${collectionId}`, body, {
         headers: {
-          Authorization: "Bearer " + accessToken,
+          Authorization: 'Bearer ' + accessToken,
         },
       });
-      router.push("/my-collections");
-      dispatch(openSuccess("Collection is successfully changed!"));
+      router.push('/my-collections');
+      dispatch(openSuccess('Collection is successfully changed!'));
     } catch (e) {
-      dispatch(
-        openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
-      );
+      dispatch(openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message));
     }
   };
 
   const handleDelete = async () => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = localStorage.getItem('accessToken');
       const { collectionId } = router.query;
 
       await axios.delete(`${process.env.BACKEND_URL}/collections/${collectionId}`, {
         headers: {
-          Authorization: "Bearer " + accessToken,
+          Authorization: 'Bearer ' + accessToken,
         },
       });
 
-      router.push("/my-collections");
-      dispatch(openSuccess("Collection is successfully deleted!"));
+      router.push('/my-collections');
+      dispatch(openSuccess('Collection is successfully deleted!'));
     } catch (e) {
-      dispatch(
-        openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
-      );
+      dispatch(openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message));
     }
   };
-
 
   useEffect(() => {
     let flag = true;
@@ -152,18 +145,19 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
       values.displayedTheme &&
       (!values.creatorFee ||
         Number(values.creatorFee) === 0 ||
-        ((values.creatorFee || Number(values.creatorFee) !== 0) && values.walletAddress)) &&
+        ((values.creatorFee || Number(values.creatorFee) !== 0) &&
+          values.walletAddress &&
+          !errors.walletAddress.isError)) &&
       !errors.name.isError &&
       !errors.creatorFee.isError &&
-      !errors.url.isError &&
-      !errors.walletAddress.isError
+      !errors.url.isError
     ) {
       flag = false;
     } else {
       flag = true;
     }
     setDisabledButton(flag);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     errors.creatorFee.isError,
     errors.name.isError,
@@ -237,8 +231,8 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
             handleClose={() => setIsDeleteOpened(false)}
             isOpened={isDeleteOpened}
             text="Do you really want to delete this collection?"
-            leftButton={{ text: "yes", color: "primary", onClick: handleDelete }}
-            rightButton={{ text: "no", color: "primary", onClick: () => setIsDeleteOpened(false) }}
+            leftButton={{ text: 'yes', color: 'primary', onClick: handleDelete }}
+            rightButton={{ text: 'no', color: 'primary', onClick: () => setIsDeleteOpened(false) }}
           />
         </div>
       </div>

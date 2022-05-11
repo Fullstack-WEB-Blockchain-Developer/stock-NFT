@@ -298,6 +298,7 @@ export const ListAuctionInputs = ({ id }) => {
           <DatePicker
             handleClose={() => setIsDayPickerOpened(false)}
             id={id}
+            durationTextFieldValue={durationTextFieldValue}
             setDurationTextFieldValue={setDurationTextFieldValue}
           />
         )}
