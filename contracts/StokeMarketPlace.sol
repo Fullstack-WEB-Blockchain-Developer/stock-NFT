@@ -168,7 +168,7 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         uint256[] memory _endTimes,
         address[] memory _nftContracts
     ) public {
-        for(uint256 i=1; i<=_tokenIds.length; i++){
+        for(uint256 i=0; i<=_tokenIds.length; i++){
             uint256 _tokenId = _tokenIds[i];
             require(!timeForAuction[_tokenId].inList, "already in sale");
             require(!nftPrice[_tokenId].inList, "already in sale");
@@ -234,7 +234,7 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         uint256[] memory _endTimes,
         address[] memory _nftContracts
     ) external {
-        for(uint256 i=1; i<=_tokenIds.length; i++){
+        for(uint256 i=0; i<=_tokenIds.length; i++){
             uint256 _tokenId = _tokenIds[i];
             require(!nftStakeState[_tokenId], "nft is stake");
             require(!timeForAuction[_tokenId].inList, "already in sale");
