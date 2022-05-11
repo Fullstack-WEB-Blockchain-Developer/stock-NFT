@@ -43,7 +43,7 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
           listingType: 'fixedPrice',
           name,
           owner,
-          price: undefined,
+          price,
           specificBuyerAddress: '',
           status,
         })
@@ -54,7 +54,7 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
     tokens.length === 0 && dispatch(getAllUserTokens());
   }, [dispatch, tokens.length]);
   console.log('---tokens', tokens);
-  
+
   useEffect(() => {
     if (error) {
       dispatch(

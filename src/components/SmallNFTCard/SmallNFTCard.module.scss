@@ -7,7 +7,7 @@
   border-radius: 30px;
   background-color: var(--dark-grey);
 
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   aspect-ratio: 1 / 1.436;
   transition: transform 0.1s;
   cursor: pointer;
@@ -102,20 +102,19 @@
     margin-top: 2px;
 
     font-size: 14px;
-
-    div:first-child {
-      width: 16px;
-      height: 16px;
-    }
   }
 
   @media screen and (max-width: 1450px) {
     margin-top: 0;
+  }
+}
 
-    div:first-child {
-      width: 14px;
-      height: 14px;
-    }
+.priceAmount {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: 4px;
   }
 }
 
