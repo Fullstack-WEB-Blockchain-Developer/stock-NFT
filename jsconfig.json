@@ -8,10 +8,10 @@
   "include": [
       "src",
       "layout",
-      "pages"
+      "pages",
+      "artifacts"
   ],
   "exclude": [
-    "artifacts",
     "node_modules",
     "**/node_modules/*"
   ]

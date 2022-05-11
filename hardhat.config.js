@@ -175,6 +175,7 @@ module.exports = {
   etherscan: {
     apiKey: {
       rinkeby: process.env.ETHERSCAN_API_KEY,
+      ropsten: process.env.ETHERSCAN_API_KEY,
       polygonMumbai: process.env.POYGONSCAN_API_KEY,
     }
   }

@@ -11,7 +11,7 @@ const initialState = {
 
 export const getAllUserTokens = createAsyncThunk(
   "tokens/getAllUserTokens",
-  async ({}, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
 
