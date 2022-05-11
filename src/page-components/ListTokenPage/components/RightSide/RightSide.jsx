@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 //next
 import Image from 'next/image';
 //redux
@@ -24,9 +25,9 @@ export const RightSide = ({ className }) => {
   const handleSelectToken = (value, id) => {
     const newTokenToBundle = allUserTokens.find((token) => token.name === value);
     const token = tokens.find((elem) => elem.id === id);
+
     dispatch(changeToken({ id, field: 'bundle', newValue: [...token.bundle, newTokenToBundle] }));
   };
-  console.log('---tokens', tokens)
 
   return (
     <div className={className}>
@@ -107,24 +108,26 @@ export const RightSide = ({ className }) => {
                   <MenuItem disabled value="none">
                     <span style={{ color: 'rgb(77, 77, 77)' }}>Select Items</span>
                   </MenuItem>
-                  {allUserTokens.map(({ name, fileName, id }) => (
-                    <MenuItem key={id} value={name}>
-                      <span className={styles.menuItem}>
-                        {fileName && (
-                          <span>
-                            <Image
-                              alt={`${name}-image`}
-                              height={25}
-                              loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
-                              src={fileName}
-                              width={25}
-                            />
-                          </span>
-                        )}
-                        <span>{name}</span>
-                      </span>
-                    </MenuItem>
-                  ))}
+                  {allUserTokens
+                    .filter((elem) => token.bundle.every((bundToken) => bundToken.id !== elem.id))
+                    .map(({ name, fileName, id }) => (
+                      <MenuItem key={id} value={name}>
+                        <span className={styles.menuItem}>
+                          {fileName && (
+                            <span>
+                              <Image
+                                alt={`${name}-image`}
+                                height={25}
+                                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
+                                src={fileName}
+                                width={25}
+                              />
+                            </span>
+                          )}
+                          <span>{name}</span>
+                        </span>
+                      </MenuItem>
+                    ))}
                 </Select>
                 <div className={styles.selectedTokens}>
                   {token.bundle.map((elem) => (
