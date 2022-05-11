@@ -39,6 +39,7 @@ export const ListAuctionInputs = ({ id }) => {
     includeReservePrice,
   } = token;
   const [isDayPickerOpened, setIsDayPickerOpened] = useState(false);
+  const [durationTextFieldValue, setDurationTextFieldValue] = useState('7 days');
 
   const handleEthPrice = async () => await getEtherPrice();
 
@@ -289,10 +290,16 @@ export const ListAuctionInputs = ({ id }) => {
           variant="outlined"
           onClick={() => setIsDayPickerOpened(true)}
           className={muiClasses.textField}
-          value=""
+          value={durationTextFieldValue}
           InputProps={{ style: { color: 'white' }, readOnly: true }}
         />
-        {isDayPickerOpened && <DatePicker id={id} handleClose={() => setIsDayPickerOpened(false)} />}
+        {isDayPickerOpened && (
+          <DatePicker
+            handleClose={() => setIsDayPickerOpened(false)}
+            id={id}
+            setDurationTextFieldValue={setDurationTextFieldValue}
+          />
+        )}
       </div>
       <div className={styles.sellAsBundle}>
         <span>Include reserve price</span>

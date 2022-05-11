@@ -1,36 +1,36 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 //next
-import Image from "next/image";
+import Image from 'next/image';
 //redux
-import { useDispatch, useSelector } from "react-redux";
-import { changeToken } from "../../../../../../../../redux/slices/ListTokenSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { changeToken } from '../../../../../../../../redux/slices/ListTokenSlice';
 //mui
-import TextField from "@mui/material/TextField";
-import { Select, MenuItem, Box } from "@mui/material";
-import { DateRangePicker, DateRange } from "@mui/x-date-pickers-pro/DateRangePicker";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
+import TextField from '@mui/material/TextField';
+import { Select, MenuItem } from '@mui/material';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 //hooks
-import { useStyles } from "../../../../../../../../hooks/useStyles";
+import { useStyles } from '../../../../../../../../hooks/useStyles';
 //utils
-import { dateRanges } from "./DatePicker.utils";
+import { dateRanges, getDurationTextFieldValue } from './DatePicker.utils';
 //styles
-import styles from "./DatePicker.module.scss";
+import styles from './DatePicker.module.scss';
 
-export const DatePicker = ({ id, handleClose }) => {
+export const DatePicker = ({ id, handleClose, setDurationTextFieldValue }) => {
   const muiClasses = useStyles();
   const dispatch = useDispatch();
   const wrapperRef = useRef();
   const selectRef = useRef();
   const { duration } = useSelector((state) => state.listToken.tokens).find((token) => token.id === id);
 
-  const [selectedDateRange, setSelectedDateRange] = useState("7 days");
-  console.log("---duration", duration);
+  const [selectedDateRange, setSelectedDateRange] = useState('7 days');
   const [time, setTime] = useState({
     start: new Date(),
     end: new Date(),
   });
+
   const handleSelectDateRange = (e) => {
     const {
       target: { value },
@@ -38,11 +38,10 @@ export const DatePicker = ({ id, handleClose }) => {
 
     setSelectedDateRange(value);
     let [start, end] = duration;
-
     start = new Date();
     end = new Date();
     end = Date.parse(end) + dateRanges.find(({ text }) => text === value).range;
-    dispatch(changeToken({ id, field: "duration", newValue: [start, end] }));
+    dispatch(changeToken({ id, field: 'duration', newValue: [start, end] }));
   };
 
   useEffect(() => {
@@ -64,21 +63,19 @@ export const DatePicker = ({ id, handleClose }) => {
       endDate.setMinutes(endMinutes);
     }
 
-    dispatch(changeToken({ id, field: "duration", newValue: [startDate, endDate] }));
+    dispatch(changeToken({ id, field: 'duration', newValue: [startDate, endDate] }));
   }, [time.start, time.end]);
+
+  useEffect(() => {
+    setDurationTextFieldValue(selectedDateRange !== 'none' ? selectedDateRange : getDurationTextFieldValue(duration));
+  }, [duration]);
 
   return (
     <div className={styles.wrapper} ref={wrapperRef}>
       <div className={styles.title}>
         <span>Date range</span>
-        <span onClick={handleClose} style={{ cursor: "pointer" }}>
-          <Image
-            src="/create-nft/Icon-Close.svg"
-            alt="close-icon"
-            width={15}
-            height={15}
-            onClick={handleClose}
-          />
+        <span onClick={handleClose} style={{ cursor: 'pointer' }}>
+          <Image src="/create-nft/Icon-Close.svg" alt="close-icon" width={15} height={15} onClick={handleClose} />
         </span>
       </div>
       <Select
@@ -87,18 +84,18 @@ export const DatePicker = ({ id, handleClose }) => {
         type="text"
         variant="outlined"
         IconComponent={() => (
-          <div style={{ right: "16px", position: "absolute", pointerEvents: "none" }}>
+          <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
             <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
           </div>
         )}
-        sx={{ maxHeight: "56px", color: "white" }}
+        sx={{ maxHeight: '56px', color: 'white' }}
         className={muiClasses.select}
         value={selectedDateRange}
-        InputProps={{ style: { color: "white" }, inputRef: selectRef }}
-        onChange={(e) => handleSelectDateRange(e)}
+        InputProps={{ style: { color: 'white' }, inputRef: selectRef }}
+        onChange={handleSelectDateRange}
       >
         <MenuItem disabled value="none">
-          <span style={{ color: "rgb(77, 77, 77)" }}>Select range</span>
+          <span style={{ color: 'rgb(77, 77, 77)' }}>Select range</span>
         </MenuItem>
         {dateRanges.map(({ text }) => (
           <MenuItem value={text} key={text}>
@@ -113,8 +110,8 @@ export const DatePicker = ({ id, handleClose }) => {
           className={muiClasses.datePicker}
           value={duration}
           onChange={(newValue) => {
-            dispatch(changeToken({ id, field: "duration", newValue }));
-            setSelectedDateRange("none");
+            dispatch(changeToken({ id, field: 'duration', newValue }));
+            setSelectedDateRange('none');
           }}
           renderInput={(startProps, endProps) => (
             <div className={styles.dateTextFieldsWrapper}>
@@ -126,7 +123,7 @@ export const DatePicker = ({ id, handleClose }) => {
                   type="date"
                   variant="outlined"
                   className={muiClasses.textField}
-                  InputProps={{ style: { color: "white" }, readOnly: true }}
+                  InputProps={{ style: { color: 'white' }, readOnly: true }}
                 />
               </div>
               <div className={styles.dash}>-</div>
@@ -138,7 +135,7 @@ export const DatePicker = ({ id, handleClose }) => {
                   type="date"
                   variant="outlined"
                   className={muiClasses.textField}
-                  InputProps={{ style: { color: "white" }, readOnly: true }}
+                  InputProps={{ style: { color: 'white' }, readOnly: true }}
                 />
               </div>
             </div>
@@ -161,7 +158,7 @@ export const DatePicker = ({ id, handleClose }) => {
                   type="time"
                   className={muiClasses.textField}
                   sx={{
-                    color: "white",
+                    color: 'white',
                   }}
                 />
               )}
@@ -183,7 +180,7 @@ export const DatePicker = ({ id, handleClose }) => {
                   type="time"
                   className={muiClasses.textField}
                   sx={{
-                    color: "white",
+                    color: 'white',
                   }}
                 />
               )}
