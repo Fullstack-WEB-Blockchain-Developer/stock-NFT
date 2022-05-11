@@ -1,25 +1,25 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 //next
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 //redux
-import { useDispatch } from "react-redux";
-import { open as openSuccess } from "../../redux/slices/successSnackbarSlice";
-import { open as openError } from "../../redux/slices/errorSnackbarSlice";
+import { useDispatch } from 'react-redux';
+import { open as openSuccess } from '../../redux/slices/successSnackbarSlice';
+import { open as openError } from '../../redux/slices/errorSnackbarSlice';
 //axios
-import axios from "axios";
+import axios from 'axios';
 //components
-import { CustButton } from "../../components/CustButton/CustButton";
-import { CreatorFeeAndBlockChains } from "./components/CreatorFeeAndBlockChains/CreatorFeeAndBlockChains";
-import { DisplayThemeExplicit } from "./components/DisplayThemeExplicit/DisplayThemeExplicit";
-import { ImageLoadFields } from "./components/ImageLoadFields/ImageLoadFields";
-import { Links } from "./components/Links/Links";
-import { NameUrlDescriptionCategory } from "./components/NameUrlDescriptionCategory/NameUrlDescriptionCategory";
+import { CustButton } from '../../components/CustButton/CustButton';
+import { CreatorFeeAndBlockChains } from './components/CreatorFeeAndBlockChains/CreatorFeeAndBlockChains';
+import { DisplayThemeExplicit } from './components/DisplayThemeExplicit/DisplayThemeExplicit';
+import { ImageLoadFields } from './components/ImageLoadFields/ImageLoadFields';
+import { Links } from './components/Links/Links';
+import { NameUrlDescriptionCategory } from './components/NameUrlDescriptionCategory/NameUrlDescriptionCategory';
 //utils
-import { getNavigationData, sendImagesToServer } from "./CreateCollectionPage.utils";
+import { getNavigationData, sendImagesToServer } from './CreateCollectionPage.utils';
 //styles
-import styles from "./CreateCollectionPage.module.scss";
+import styles from './CreateCollectionPage.module.scss';
 
 export const CreateCollectionPage = ({ categories, blockchains, paymentTokens }) => {
   const router = useRouter();
@@ -31,33 +31,33 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
     logo: { preview: undefined, file: undefined },
     featured: { preview: undefined, file: undefined },
     banner: { preview: undefined, file: undefined },
-    category: "none",
-    description: "",
-    name: "",
-    url: "",
-    discordLink: "",
-    instagramLink: "",
-    mediumlink: "",
-    telegramLink: "",
-    yourSiteLink: "",
+    category: 'none',
+    description: '',
+    name: '',
+    url: '',
+    discordLink: '',
+    instagramLink: '',
+    mediumlink: '',
+    telegramLink: '',
+    yourSiteLink: '',
     creatorFee: undefined,
-    walletAddress: "",
-    blockchain: "none",
+    walletAddress: '',
+    blockchain: 'none',
     choosenPaymentTokens: [],
-    displayedTheme: "",
+    displayedTheme: '',
     isExplicit: false,
   });
 
   const [errors, setErrors] = useState({
-    creatorFee: { isError: false, helperText: "" },
-    name: { isError: false, helperText: "" },
-    url: { isError: false, helperText: "" },
-    walletAddress: { isError: false, helperText: "" },
+    creatorFee: { isError: false, helperText: '' },
+    name: { isError: false, helperText: '' },
+    url: { isError: false, helperText: '' },
+    walletAddress: { isError: false, helperText: '' },
   });
 
   const handleSave = async () => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = localStorage.getItem('accessToken');
 
       const { logoImage, bannerImage, featuredImage } = await sendImagesToServer(
         values.logo.file,
@@ -80,40 +80,36 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
         isSensitiveContent: values.isExplicit,
         collaborators: [],
         paymentTokens: [
-          paymentTokens.find(({ name }) => name === "ETH").id,
-          paymentTokens.find(({ name }) => name === "WETH").id,
+          paymentTokens.find(({ name }) => name === 'ETH').id,
+          paymentTokens.find(({ name }) => name === 'WETH').id,
         ],
         payoutWalletAddress: values.walletAddress,
       };
 
       if (featuredImage) body.featuredImage = featuredImage;
       if (bannerImage) body.bannerImage = bannerImage;
-      if (values.category !== "none") {
+      if (values.category !== 'none') {
         body.collectionCategoryId = categories.find(({ name }) => name === values.category).id;
       }
-      if (values.blockchain !== "none") {
+      if (values.blockchain !== 'none') {
         body.blockchainTypeId = blockchains.find(({ name }) => name === values.blockchain).id;
       }
       if (values.choosenPaymentTokens.length > 0) {
         body.paymentTokensIds = [
           ...body.paymentTokens,
-          ...values.choosenPaymentTokens.map(
-            (elem) => paymentTokens.find(({ name }) => name === elem.name).id
-          ),
+          ...values.choosenPaymentTokens.map((elem) => paymentTokens.find(({ name }) => name === elem.name).id),
         ];
       }
 
       await axios.post(`${process.env.BACKEND_URL}/collections`, body, {
         headers: {
-          Authorization: "Bearer " + accessToken,
+          Authorization: 'Bearer ' + accessToken,
         },
       });
-      router.push("/my-collections");
-      dispatch(openSuccess("Collection is successfully created!"));
+      router.push('/my-collections');
+      dispatch(openSuccess('Collection is successfully created!'));
     } catch (e) {
-      dispatch(
-        openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
-      );
+      dispatch(openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message));
     }
   };
 
@@ -124,8 +120,8 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
       values.logo.file &&
       values.displayedTheme &&
       (!values.creatorFee ||
-        values.creatorFee === 0 ||
-        ((values.creatorFee || values.creatorFee !== 0) && values.walletAddress)) &&
+        Number(values.creatorFee) === 0 ||
+        ((values.creatorFee || Number(values.creatorFee) !== 0) && values.walletAddress)) &&
       !errors.name.isError &&
       !errors.creatorFee.isError &&
       !errors.url.isError &&

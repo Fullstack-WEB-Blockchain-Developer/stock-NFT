@@ -151,8 +151,8 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
       (values.logo.file || values.logo.link) &&
       values.displayedTheme &&
       (!values.creatorFee ||
-        values.creatorFee === 0 ||
-        ((values.creatorFee || values.creatorFee !== 0) && values.walletAddress)) &&
+        Number(values.creatorFee) === 0 ||
+        ((values.creatorFee || Number(values.creatorFee) !== 0) && values.walletAddress)) &&
       !errors.name.isError &&
       !errors.creatorFee.isError &&
       !errors.url.isError &&
