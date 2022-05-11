@@ -41,6 +41,7 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         uint256 startTime;
         uint256 endTime;
         uint256 minPrice;
+        uint256 maxPrice;
         bool inList;
         uint256 bidAmount;
     }
@@ -168,7 +169,7 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         uint256[] memory _endTimes,
         address[] memory _nftContracts
     ) public {
-        for(uint256 i=0; i<=_tokenIds.length; i++){
+        for(uint i=0; i<=_tokenIds.length; i++){
             uint256 _tokenId = _tokenIds[i];
             require(!timeForAuction[_tokenId].inList, "already in sale");
             require(!nftPrice[_tokenId].inList, "already in sale");
@@ -229,12 +230,13 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
     function startAuction(
         uint256[] memory _tokenIds,
         bool[] memory _methods,
-        uint256[] memory _prices,
+        uint256[] memory _startPrices,
+        uint256[] memory _endPrices,
         uint256[] memory _startTimes,
         uint256[] memory _endTimes,
         address[] memory _nftContracts
     ) external {
-        for(uint256 i=0; i<=_tokenIds.length; i++){
+        for(uint i=0; i<=_tokenIds.length; i++){
             uint256 _tokenId = _tokenIds[i];
             require(!nftStakeState[_tokenId], "nft is stake");
             require(!timeForAuction[_tokenId].inList, "already in sale");
@@ -245,8 +247,9 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
             );
             timeForAuction[_tokenId].method = _methods[i];
             timeForAuction[_tokenId].startTime = _startTimes[i];
+            timeForAuction[_tokenId].endTime = _endPrices[i];
             timeForAuction[_tokenId].endTime = _endTimes[i];
-            timeForAuction[_tokenId].minPrice = _prices[i];
+            timeForAuction[_tokenId].minPrice = _startPrices[i];
             timeForAuction[_tokenId].inList = true;
             auctionNftList[_tokenId] = auctionNft.length;
             auctionNft.push(_tokenId);

@@ -107,39 +107,41 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
   useEffect(() => {
     (async () => {
       const fixedSaleData = { tokenIds: [], prices: [], startTimes: [], endTimes: [], nftAddrs: [] };
-      const auctionSaleData = { tokenIds: [], prices: [], startTimes: [], endTimes: [], nftAddrs: [] };
+      const auctionSaleData = { tokenIds: [], startPrices: [], endPrices: [], startTimes: [], endTimes: [], nftAddrs: [] };
       if (isOpened) {
         setActiveStep("confirm");
-          // propunits filtering param
-          tokens.forEach((token) => {
-            const startTime = Math.floor(token.duration[0].getTime() / 1000);
-            const endTime = Math.floor(token.duration[1].getTime() / 1000);
-            if (token.listingType === "timeAuction") {
-              auctionSaleData.tokenIds.push(token.id);
-              if (token.auctionMethod === "Sell to the highest bidder") {
-                auctionSaleData.methods.push(true);
-              } else {
-                auctionSaleData.methods.push(false);
-              }
-              auctionSaleData.prices.push(String(token.price * 10 ** 18));
-              auctionSaleData.startTimes.push(startTime);
-              auctionSaleData.endTimes.push(endTime);
-              auctionSaleData.nftAddrs.push(nftAddr);
+        // propunits filtering param
+        tokens.forEach((token) => {
+          const startTime = Math.floor(token.duration[0].getTime() / 1000);
+          const endTime = Math.floor(token.duration[1].getTime() / 1000);
+          if (token.listingType === "timeAuction") {
+            auctionSaleData.tokenIds.push(token.id);
+            auctionSaleData.startPrices.push(String(token.auctionStartingPrice * 10 ** 18));
+            if (token.auctionMethod === "Sell to the highest bidder") {
+              auctionSaleData.methods.push(true);
             } else {
-              fixedSaleData.tokenIds.push(token.id);
-              fixedSaleData.prices.push(String(token.price * 10 ** 18));
-              fixedSaleData.startTimes.push(startTime);
-              fixedSaleData.endTimes.push(endTime);
-              fixedSaleData.nftAddrs.push(nftAddr);
-            }});
-            console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 132 ~ auctionSaleData", auctionSaleData)
-              console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 136 ~ fixedSaleData", fixedSaleData)
-            if (auctionSaleData.tokenIds.length > 0) {
-              await auctionSale(auctionSaleData);
+              auctionSaleData.methods.push(false);
+              auctionSaleData.endPrices.push(String(token.auctionEndPrice * 10 ** 18));
             }
-            if (fixedSaleData.tokenIds.length > 0) {
-              await fixedSale(fixedSaleData);
-            }
+            auctionSaleData.startTimes.push(startTime);
+            auctionSaleData.endTimes.push(endTime);
+            auctionSaleData.nftAddrs.push(nftAddr);
+          } else {
+            fixedSaleData.tokenIds.push(token.id);
+            fixedSaleData.prices.push(String(token.price * 10 ** 18));
+            fixedSaleData.startTimes.push(startTime);
+            fixedSaleData.endTimes.push(endTime);
+            fixedSaleData.nftAddrs.push(nftAddr);
+          }
+        });
+        console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 132 ~ auctionSaleData", auctionSaleData)
+        console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 136 ~ fixedSaleData", fixedSaleData)
+        if (auctionSaleData.tokenIds.length > 0) {
+          await auctionSale(auctionSaleData);
+        }
+        if (fixedSaleData.tokenIds.length > 0) {
+          await fixedSale(fixedSaleData);
+        }
         // const tokenIds = tokens.map((token) => token.id);
         // const prices = tokens.map((token) => token.price);
         // const startTimes = tokens.map((token) => token.duration[0].getTime() / 1000);
@@ -152,10 +154,10 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
         // });
       }
     })()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpened, tokens]);
 
-  const fixedSale = async ({tokenIds, prices, startTimes, endTimes, nftAddrs}) => {
+  const fixedSale = async ({ tokenIds, prices, startTimes, endTimes, nftAddrs }) => {
     if (library) {
       await marketContract.fixedSales(tokenIds, prices, startTimes, endTimes, nftAddrs)
         .then((result) => {
@@ -179,10 +181,10 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
     }
   }
 
-  const auctionSale = async ({tokenIds, prices, startTimes, endTimes, nftAddrs}) => {
-  console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 180 ~ auctionSale ~ {tokenIds, prices, startTimes, endTimes, nftAddrs}", {tokenIds, prices, startTimes, endTimes, nftAddrs})
+  const auctionSale = async ({ tokenIds, startPrices, endPrices, startTimes, endTimes, nftAddrs }) => {
+    console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 180 ~ auctionSale ~ {tokenIds, prices, startTimes, endTimes, nftAddrs}", { tokenIds, startPrices, endPrices, startTimes, endTimes, nftAddrs })
     if (library) {
-      await marketContract.startAuction(tokenIds, prices, startTimes, endTimes, nftAddrs)
+      await marketContract.startAuction(tokenIds, startPrices, endPrices, startTimes, endTimes, nftAddrs)
         .then((recipt) => {
           if (recipt.status === true) {
             // ffind?.set("auction", `${price}`)
@@ -339,9 +341,8 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
               >
                 <div
                   style={{
-                    border: `2px solid ${
-                      (activeStep === "approve" || activeStep === "confirm" || activeStep === "initialization") ? "var(--primary)" : "var(--light-grey)"
-                    }`,
+                    border: `2px solid ${(activeStep === "approve" || activeStep === "confirm" || activeStep === "initialization") ? "var(--primary)" : "var(--light-grey)"
+                      }`,
                     alignItems: "center",
                     borderRadius: "50%",
                     display: "flex",
