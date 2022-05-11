@@ -35,7 +35,7 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
           category,
           collection,
           currency: 'none',
-          duration: [new Date(), Date.parse(new Date()) + 1000 * 60 * 60 * 24 * 7],
+          duration: [Date.parse(new Date()), Date.parse(new Date()) + 1000 * 60 * 60 * 24 * 7],
           fileName,
           id,
           initialPrice: price,
