@@ -47,11 +47,11 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
         status,
       })
     );
-  }, [dispatch, id, name, owner, fileName, category, price, collection, status]);
+  }, [dispatch, id, name, owner, fileName, category, price, collection, status, tokens.length]);
 
   useEffect(() => {
-    dispatch(getAllUserTokens());
-  }, [dispatch]);
+    tokens.length === 0 && dispatch(getAllUserTokens());
+  }, [dispatch, tokens.length]);
 
   useEffect(() => {
     if (error) {
