@@ -40,7 +40,7 @@ export const ListAuctionInputs = ({ id }) => {
   } = token;
   const [isDayPickerOpened, setIsDayPickerOpened] = useState(false);
 
-  const handleEthPrice = async () =>  await getEtherPrice();
+  const handleEthPrice = async () => await getEtherPrice();
 
   useEffect(() => {
     auctionReservePrice < 0 && dispatch(changeToken({ id, field: 'auctionReservePrice', newValue: 0 }));
@@ -59,8 +59,7 @@ export const ListAuctionInputs = ({ id }) => {
           })
         )
       );
-  }),
-    [auctionReservePrice];
+  }, [auctionReservePrice]);
 
   useEffect(() => {
     auctionStartingPrice &&
@@ -73,8 +72,7 @@ export const ListAuctionInputs = ({ id }) => {
           })
         )
       );
-  }),
-    [auctionStartingPrice];
+  }, [auctionStartingPrice]);
 
   useEffect(() => {
     auctionEndPrice &&
@@ -87,8 +85,7 @@ export const ListAuctionInputs = ({ id }) => {
           })
         )
       );
-  }),
-    [auctionEndPrice];
+  }, [auctionEndPrice]);
 
   useEffect(() => {
     auctionEndPrice < auctionStartingPrice &&

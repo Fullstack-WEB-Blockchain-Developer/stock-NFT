@@ -1,22 +1,23 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from 'react';
 //next
-import Image from "next/image";
+import Image from 'next/image';
 //redux
-import { useSelector, useDispatch } from "react-redux";
-import { getAllCurrencies } from "../../../../../../../../redux/slices/generalDataSlice";
-import { changeToken } from "../../../../../../../../redux/slices/ListTokenSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllCurrencies, clearError } from '../../../../../../../../redux/slices/generalDataSlice';
+import { open as openError } from '../../../../../../../../redux/slices/errorSnackbarSlice';
+import { changeToken } from '../../../../../../../../redux/slices/ListTokenSlice';
 //mui
-import TextField from "@mui/material/TextField";
-import { Select, MenuItem } from "@mui/material";
+import TextField from '@mui/material/TextField';
+import { Select, MenuItem } from '@mui/material';
 //components
-import { CustSwitch } from "../../../../../../../../components/CustSwitch/CustSwitch";
-import { DatePicker } from "../DatePicker/DatePicker";
+import { CustSwitch } from '../../../../../../../../components/CustSwitch/CustSwitch';
+import { DatePicker } from '../DatePicker/DatePicker';
 //hooks
-import { useStyles } from "../../../../../../../../hooks/useStyles";
+import { useStyles } from '../../../../../../../../hooks/useStyles';
 //utils
-import { getEtherPrice } from "../../../../../../../../utils/index";
+import { getEtherPrice } from '../../../../../../../../utils/index';
 //styles
-import styles from "./ListFixedPriceInputs.module.scss";
+import styles from './ListFixedPriceInputs.module.scss';
 
 export const ListFixedPriceInputs = ({ id }) => {
   const anchor = useRef();
@@ -24,51 +25,38 @@ export const ListFixedPriceInputs = ({ id }) => {
   const muiClasses = useStyles();
   const { currencies, error } = useSelector((state) => state.generalData);
   const token = useSelector((state) => state.listToken.tokens).find((token) => token.id === id);
-  const {
-    asBundle,
-    bundleDescription,
-    bundleName,
-    currency,
-    isReserved,
-    price,
-    specificBuyerAddress,
-    usdPrice,
-  } = token;
+  const { asBundle, bundleDescription, bundleName, currency, isReserved, price, specificBuyerAddress, usdPrice } =
+    token;
   const [isDayPickerOpened, setIsDayPickerOpened] = useState(false);
 
   const handleAsBundle = () => {
-    dispatch(changeToken({ id, field: "asBundle", newValue: !asBundle }));
-    dispatch(changeToken({ id, field: "bundle", newValue: !asBundle ? [token] : [] }));
+    dispatch(changeToken({ id, field: 'asBundle', newValue: !asBundle }));
+    dispatch(changeToken({ id, field: 'bundle', newValue: !asBundle ? [token] : [] }));
   };
 
-  const handleEthPrice = async () => {
-    return await getEtherPrice();
-  };
+  const handleEthPrice = async () => await getEtherPrice();
 
   useEffect(() => {
-    price < 0 && dispatch(changeToken({ id, field: "price", newValue: 0 }));
+    price < 0 && dispatch(changeToken({ id, field: 'price', newValue: 0 }));
   }, [dispatch, price]);
 
   useEffect(() => {
     price &&
-      handleEthPrice().then((result) =>
-        dispatch(changeToken({ id, field: "usdPrice", newValue: (Number(price) * result).toFixed(4) }))
-      );
-  }),
-    [price];
+      handleEthPrice().then((result) => {
+        dispatch(changeToken({ id, field: 'usdPrice', newValue: (Number(price) * result).toFixed(4) }));
+      });
+  }, [price]);
 
   useEffect(() => {
     currencies.length === 0 && dispatch(getAllCurrencies());
-    currencies.length > 0 && dispatch(changeToken({ id, field: "currency", newValue: currencies[0].name }));
+    currencies.length > 0 && dispatch(changeToken({ id, field: 'currency', newValue: currencies[0].name }));
   }, [dispatch, currencies, id]);
 
   useEffect(() => {
     if (error) {
       dispatch(
         openError(
-          error.response?.data
-            ? `${error.response.data.statusCode} ${error.response.data.message}`
-            : error.message
+          error.response?.data ? `${error.response.data.statusCode} ${error.response.data.message}` : error.message
         )
       );
       dispatch(clearError());
@@ -89,25 +77,23 @@ export const ListFixedPriceInputs = ({ id }) => {
           type="number"
           variant="outlined"
           IconComponent={() => (
-            <div style={{ right: "16px", position: "absolute", pointerEvents: "none" }}>
+            <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
               <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
             </div>
           )}
-          sx={{ width: "24%", maxHeight: "56px", color: "white" }}
+          sx={{ width: '24%', maxHeight: '56px', color: 'white' }}
           className={muiClasses.selectLeftHalf}
           value={currency}
-          InputProps={{ style: { color: "white" } }}
-          onChange={({ target: { value } }) =>
-            dispatch(changeToken({ id, field: "currency", newValue: value }))
-          }
+          InputProps={{ style: { color: 'white' } }}
+          onChange={({ target: { value } }) => dispatch(changeToken({ id, field: 'currency', newValue: value }))}
         >
           <MenuItem disabled value="none">
-            <span style={{ color: "rgb(77, 77, 77)" }}>Currency</span>
+            <span style={{ color: 'rgb(77, 77, 77)' }}>Currency</span>
           </MenuItem>
           {currencies.map(({ name, id, icon }) => (
             <MenuItem value={name} key={id}>
               <span>
-                <span style={{ position: "relative", top: "3px" }}>
+                <span style={{ position: 'relative', top: '3px' }}>
                   <Image
                     alt="currency-icon"
                     height={31}
@@ -116,7 +102,7 @@ export const ListFixedPriceInputs = ({ id }) => {
                     width={31}
                   />
                 </span>
-                <span style={{ marginLeft: "20px", position: "relative", bottom: "6px" }}>{name}</span>
+                <span style={{ marginLeft: '20px', position: 'relative', bottom: '6px' }}>{name}</span>
               </span>
             </MenuItem>
           ))}
@@ -127,11 +113,11 @@ export const ListFixedPriceInputs = ({ id }) => {
           type="number"
           placeholder="Amount"
           variant="outlined"
-          sx={{ width: "76%" }}
-          onChange={({ target: { value } }) => dispatch(changeToken({ id, field: "price", newValue: value }))}
+          sx={{ width: '76%' }}
+          onChange={({ target: { value } }) => dispatch(changeToken({ id, field: 'price', newValue: value }))}
           className={muiClasses.textFieldRightHalf}
           value={price}
-          InputProps={{ style: { color: "white" } }}
+          InputProps={{ style: { color: 'white' } }}
         />
         {price && usdPrice && (
           <div className={styles.usdPrice}>
@@ -155,7 +141,7 @@ export const ListFixedPriceInputs = ({ id }) => {
           className={muiClasses.textField}
           value=""
           ref={anchor}
-          InputProps={{ style: { color: "white" }, readOnly: true }}
+          InputProps={{ style: { color: 'white' }, readOnly: true }}
         />
         {isDayPickerOpened && <DatePicker id={id} handleClose={() => setIsDayPickerOpened(false)} />}
       </div>
@@ -175,12 +161,10 @@ export const ListFixedPriceInputs = ({ id }) => {
               label="Bundle name"
               type="text"
               variant="outlined"
-              onChange={({ target: { value } }) =>
-                dispatch(changeToken({ id, field: "bundleName", newValue: value }))
-              }
+              onChange={({ target: { value } }) => dispatch(changeToken({ id, field: 'bundleName', newValue: value }))}
               className={muiClasses.textField}
               value={bundleName}
-              InputProps={{ style: { color: "white" } }}
+              InputProps={{ style: { color: 'white' } }}
               inputProps={{ maxLength: 50 }}
             />
           </div>
@@ -195,11 +179,11 @@ export const ListFixedPriceInputs = ({ id }) => {
               type="text"
               variant="outlined"
               onChange={({ target: { value } }) =>
-                dispatch(changeToken({ id, field: "bundleDescription", newValue: value }))
+                dispatch(changeToken({ id, field: 'bundleDescription', newValue: value }))
               }
               className={muiClasses.textField}
               value={bundleDescription}
-              InputProps={{ style: { color: "white" } }}
+              InputProps={{ style: { color: 'white' } }}
               inputProps={{ maxLength: 500 }}
               multiline
               minRows={4}
@@ -218,7 +202,7 @@ export const ListFixedPriceInputs = ({ id }) => {
         </div>
         <CustSwitch
           checken={isReserved}
-          onChange={() => dispatch(changeToken({ id, field: "isReserved", newValue: !isReserved }))}
+          onChange={() => dispatch(changeToken({ id, field: 'isReserved', newValue: !isReserved }))}
         />
       </div>
       {isReserved && (
@@ -230,11 +214,11 @@ export const ListFixedPriceInputs = ({ id }) => {
             type="text"
             variant="outlined"
             onChange={({ target: { value } }) =>
-              dispatch(changeToken({ id, field: "specificBuyerAddress", newValue: value }))
+              dispatch(changeToken({ id, field: 'specificBuyerAddress', newValue: value }))
             }
             className={muiClasses.textField}
             value={specificBuyerAddress}
-            InputProps={{ style: { color: "white" } }}
+            InputProps={{ style: { color: 'white' } }}
             inputProps={{ maxLength: 50 }}
           />
         </div>
