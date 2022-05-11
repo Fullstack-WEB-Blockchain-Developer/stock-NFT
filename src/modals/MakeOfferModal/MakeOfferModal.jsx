@@ -123,7 +123,7 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
             openSuccess({
               title: "Your order was successfully placed",
               description:
-                "To trade this token, you must first complete a free (plus gas) transaction. <br/> Confirm it in your wallet and keep this tab open!",
+                "To trade this token, you must first complete a free (plus gas) transaction. Confirm it in your wallet and keep this tab open!",
             })
           );
         });
