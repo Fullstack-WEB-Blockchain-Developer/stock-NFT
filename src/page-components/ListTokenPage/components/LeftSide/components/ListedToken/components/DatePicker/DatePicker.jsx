@@ -18,14 +18,14 @@ import { dateRanges, getDurationTextFieldValue } from './DatePicker.utils';
 //styles
 import styles from './DatePicker.module.scss';
 
-export const DatePicker = ({ id, handleClose, setDurationTextFieldValue }) => {
+export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, durationTextFieldValue }) => {
   const muiClasses = useStyles();
   const dispatch = useDispatch();
   const wrapperRef = useRef();
   const selectRef = useRef();
   const { duration } = useSelector((state) => state.listToken.tokens).find((token) => token.id === id);
 
-  const [selectedDateRange, setSelectedDateRange] = useState('7 days');
+  const [selectedDateRange, setSelectedDateRange] = useState(durationTextFieldValue);
   const [time, setTime] = useState({
     start: new Date(),
     end: new Date(),
