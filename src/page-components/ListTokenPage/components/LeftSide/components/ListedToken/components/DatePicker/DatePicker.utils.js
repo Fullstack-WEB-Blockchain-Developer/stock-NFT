@@ -27,17 +27,16 @@ export const getDurationTextFieldValue = (duration) => {
 
   const startDate = new Date(start);
   const endDate = new Date(end);
-console.log('---endDate', endDate)
+
   const constructHalfString = (date) => {
     let result = '';
     result += months[date.getMonth()];
     result += ` ${date.getDate()}`;
     result += ` ${date.getFullYear()},`;
-    result += ` (${date.getHours() % 12}:`;
-    result += `${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()} `;
-    result += date.getHours() <= 12 ? 'am)' : 'pm)';
+    result += ` (${date.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric'})})`;
 
-    return result;
+    
+ return result;
   };
  return `${constructHalfString(startDate)} - ${constructHalfString(endDate)}`
 };
