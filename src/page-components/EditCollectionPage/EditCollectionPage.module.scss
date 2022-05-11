@@ -1,78 +1,94 @@
 .navigationBar {
-  padding: 29px 2%;
-  background-color: #212020;
-  display: flex;
-  font-family: "Poppins", sans-serif;
-  font-size: 16px;
-  letter-spacing: 0.01px;
+	display: flex;
+
+	padding: 29px 2%;
+
+	letter-spacing: 0.01px;
+
+	background-color: #212020;
+
+	font-family: "Poppins", sans-serif;
+	font-size: 16px;
 }
 
 .navigationArrow {
-  transform: rotate(-90deg);
-  width: fit-content;
-  height: fit-content;
-  margin-right: 8px;
+	width: fit-content;
+	height: fit-content;
+	margin-right: 8px;
+
+	transform: rotate(-90deg);
 }
 
 .navigationItem {
-  display: flex;
-  color: var(--light-grey);
+	display: flex;
 
-  span {
-    cursor: pointer;
-  }
+	color: var(--light-grey);
+
+	span {
+		cursor: pointer;
+	}
 }
 
 .navigationItem:last-child {
-  color: var(--white);
-  .navigationArrow {
-    display: none;
-  }
+	color: var(--white);
+	.navigationArrow {
+		display: none;
+	}
 }
 
 .pageContainer {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 2% 86px;
-  font-family: "Poppins", sans-serif;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+
+	width: 100%;
+	padding: 40px 2% 86px;
+
+	font-family: "Poppins", sans-serif;
 }
 
 .wrapper {
-  width: 100%;
-  max-width: 800px;
+	width: 100%;
+	max-width: 800px;
 }
 
 .pageTitle {
-  font-weight: bold;
-  font-size: 36px;
-  color: var(--white);
+	color: var(--white);
+
+	font-size: 36px;
+	font-weight: bold;
 }
 
 .title {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.01px;
-  color: var(--white);
-  margin-top: 24px;
-  margin-bottom: 8px;
+	margin-top: 24px;
+	margin-bottom: 8px;
+
+	letter-spacing: 0.01px;
+
+	color: var(--white);
+
+	font-size: 16px;
+	font-weight: 600;
 }
 
 .description {
-  margin-top: 4px;
-  font-size: 16px;
-  letter-spacing: 0.01px;
-  color: var(--light-grey);
-  margin-bottom: 8px;
+	margin-top: 4px;
+	margin-bottom: 8px;
+
+	letter-spacing: 0.01px;
+
+	color: var(--light-grey);
+
+	font-size: 16px;
 }
 
 .bottomButtons {
-  margin-top: 40px;
-  margin-bottom: 86px;
-  display: flex;
+	display: flex;
+
+	margin-top: 40px;
+	margin-bottom: 86px;
 }
 
 .bottomLeftButton {
-  margin-right: 16px;
+	margin-right: 16px;
 }

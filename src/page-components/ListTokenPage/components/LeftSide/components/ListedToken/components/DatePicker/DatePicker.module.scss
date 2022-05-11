@@ -1,29 +1,33 @@
 .wrapper {
-  padding: 16px;
-  position: absolute;
-  background-color: var(--dark-grey);
-  width: 640px;
-  z-index: 10;
+	position: absolute;
+	z-index: 10;
+
+	width: 640px;
+	padding: 16px;
+
+	background-color: var(--dark-grey);
 }
 
 .title {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 16px;
+	display: flex;
+	justify-content: space-between;
+
+	margin-bottom: 16px;
 }
 
 .dateTextFieldsWrapper, .timePickersWrapper {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 24px 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	width: 100%;
+	margin: 24px 0;
 }
 
 .timePickersWrapper {
-  margin: 0px;
+	margin: 0px;
 }
 
 .leftTextField, .rightTextField, .timePicker {
-  min-width: 48%;
+	min-width: 48%;
 }

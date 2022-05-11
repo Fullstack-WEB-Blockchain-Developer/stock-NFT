@@ -1,62 +1,72 @@
 .title {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.01px;
-  color: var(--white);
-  margin-top: 24px;
-  margin-bottom: 8px;
+	margin-top: 24px;
+	margin-bottom: 8px;
+
+	letter-spacing: 0.01px;
+
+	color: var(--white);
+
+	font-size: 16px;
+	font-weight: 600;
 }
 
 .description {
-  margin-top: 4px;
-  font-size: 14px;
-  letter-spacing: 0.01px;
-  color: var(--light-grey);
-  margin-bottom: 8px;
+	margin-top: 4px;
+	margin-bottom: 8px;
+
+	letter-spacing: 0.01px;
+
+	color: var(--light-grey);
+
+	font-size: 14px;
 }
 
 .boxesWrapper {
-  display: flex;
-  justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 
 .box {
-  width: 256px;
-  height: 157px;
-  box-shadow: 0 0 0 1px var(--shadow);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 7px;
-  padding: 16px;
-  text-align: center;
-  
-  .title {
-    margin-top: 10px;
-  }
+	display: flex;
+	align-items: center;
+	flex-direction: column;
 
-  .title,
-  .description {
-    margin-bottom: 0px;
-  }
+	width: 256px;
+	height: 157px;
+	padding: 16px;
+
+	text-align: center;
+
+	border-radius: 7px;
+	box-shadow: 0 0 0 1px var(--shadow);
+  
+	.title {
+		margin-top: 10px;
+	}
+
+	.title,
+	.description {
+		margin-bottom: 0px;
+	}
 }
 
 .active {
-  box-shadow: 0 0 0 2px var(--primary);
+	box-shadow: 0 0 0 2px var(--primary);
 }
 
 .explicitWrapper {
-  display: flex;
-  justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--dark-grey);
+	padding-bottom: 24px;
+
+	border-bottom: 1px solid var(--dark-grey);
 }
 
 .switch {
-  margin-top: 37px;
+	margin-top: 37px;
 }
 
 .star {
-  color: var(--red)
+	color: var(--red)
 }

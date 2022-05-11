@@ -1,5 +1,4 @@
 .span {
-
 	letter-spacing: 0.8px;
 
 	font-family: 'Poppins', sans-serif;
@@ -32,6 +31,7 @@
 .iconWrapper {
 	position: relative;
 	top: 3px;
+
 	display: inline-block;
 
 	width: 19px;

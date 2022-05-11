@@ -1,176 +1,177 @@
 .wrapper {
-  overflow: hidden;
+	overflow: hidden;
 
-  width: 100%;
+	width: 100%;
 
-  border: 1px solid var(--white);
-  border-radius: 30px;
-  background-color: var(--dark-grey);
+	cursor: pointer;
+	transition: transform 0.1s;
 
-  font-family: 'Poppins', sans-serif;
-  aspect-ratio: 1 / 0.9112;
-  transition: transform 0.1s;
-  cursor: pointer;
+	border: 1px solid var(--white);
+	border-radius: 30px;
+	background-color: var(--dark-grey);
+
+	font-family: 'Poppins', sans-serif;
+	aspect-ratio: 1 / 0.9112;
 }
 
 .wrapper:hover {
-  transform: scale(1.015);
-  transition: transform 0.1s;
+	transition: transform 0.1s;
+	transform: scale(1.015);
 }
 
 .imageWrapperWrapper {
-  overflow: hidden;
+	overflow: hidden;
 
-  width: 100%;
-  height: 61%;
+	width: 100%;
+	height: 61%;
 
-  border-radius: 30px 30px 0 0;
+	border-radius: 30px 30px 0 0;
 }
 
 .imageWrapper {
-  position: relative;
+	position: relative;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-  height: 100%;
+	height: 100%;
 
-  background-color: var(--black);
+	background-color: var(--black);
 }
 
 .video {
-  position: absolute;
+	position: absolute;
 
-  width: 100%;
+	width: 100%;
 }
 
 .audio {
-  position: absolute;
+	position: absolute;
 
-  width: 90%;
-  max-width: 350px;
+	width: 90%;
+	max-width: 350px;
 }
 
 .blur {
-  filter: blur(16px);
+	filter: blur(16px);
 
-  overflow: hidden;
+	overflow: hidden;
 }
 
 .name {
-  letter-spacing: 0.02px;
+	letter-spacing: 0.02px;
 
-  color: var(--white);
+	color: var(--white);
 
-  font-size: 18px;
-  font-weight: 600;
+	font-size: 18px;
+	font-weight: 600;
 
-  @media screen and (max-width: 1700px) {
-    font-size: 16px;
-  }
+	@media screen and (max-width: 1700px) {
+		font-size: 16px;
+	}
 }
 
 .infoWrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
 
-  height: 39%;
-  padding: 6.15% 5.63%;
+	height: 39%;
+	padding: 6.15% 5.63%;
 
-  @media screen and (max-width: 1800px) {
-    padding: 4.5% 5.63%;
-  }
+	@media screen and (max-width: 1800px) {
+		padding: 4.5% 5.63%;
+	}
 
-  @media screen and (max-width: 1700px) {
-    padding: 3.5% 5.63%;
-  }
+	@media screen and (max-width: 1700px) {
+		padding: 3.5% 5.63%;
+	}
 }
 
 .price {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 
-  margin-top: 8px;
+	margin-top: 8px;
 
-  @media screen and (max-width: 1700px) {
-    margin-top: 6px;
-  }
+	@media screen and (max-width: 1700px) {
+		margin-top: 6px;
+	}
 
-  @media screen and (max-width: 1550px) {
-    margin-top: 2px;
+	@media screen and (max-width: 1550px) {
+		margin-top: 2px;
 
-    font-size: 14px;
-  }
+		font-size: 14px;
+	}
 
-  @media screen and (max-width: 1450px) {
-    margin-top: 0;
-  }
+	@media screen and (max-width: 1450px) {
+		margin-top: 0;
+	}
 }
 
 .priceAmount {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 
-  span{
-	  margin-left: 4px;
-  }
+	span{
+		margin-left: 4px;
+	}
 }
 
 .bottomSection {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .bottomLeft {
-  overflow: hidden;
+	overflow: hidden;
 
-  max-width: 75%;
+	max-width: 75%;
 }
 
 .collection {
-  margin-top: 9px;
+	margin-top: 9px;
 
-  letter-spacing: 0.01px;
+	letter-spacing: 0.01px;
 
-  color: var(--azur);
+	color: var(--azur);
 
-  font-size: 12px;
+	font-size: 12px;
 
-  @media screen and (max-width: 1700px) {
-    margin-top: 6px;
-  }
+	@media screen and (max-width: 1700px) {
+		margin-top: 6px;
+	}
 
-  @media screen and (max-width: 1550px) {
-    margin-top: 2px;
-  }
+	@media screen and (max-width: 1550px) {
+		margin-top: 2px;
+	}
 
-  @media screen and (max-width: 1450px) {
-    margin-top: 0;
+	@media screen and (max-width: 1450px) {
+		margin-top: 0;
 
-    font-size: 10px;
-  }
+		font-size: 10px;
+	}
 }
 
 .address {
-  margin-top: 4px;
+	margin-top: 4px;
 
-  letter-spacing: 0.01px;
+	letter-spacing: 0.01px;
 
-  color: var(--light-grey);
+	color: var(--light-grey);
 
-  font-size: 12px;
-  font-style: italic;
+	font-size: 12px;
+	font-style: italic;
 
-  @media screen and (max-width: 1550px) {
-    margin-top: 2px;
-  }
-  @media screen and (max-width: 1450px) {
-    margin-top: 0;
+	@media screen and (max-width: 1550px) {
+		margin-top: 2px;
+	}
+	@media screen and (max-width: 1450px) {
+		margin-top: 0;
 
-    font-size: 10px;
-  }
+		font-size: 10px;
+	}
 }
