@@ -26,6 +26,7 @@ export const RightSide = ({ className }) => {
     const token = tokens.find((elem) => elem.id === id);
     dispatch(changeToken({ id, field: 'bundle', newValue: [...token.bundle, newTokenToBundle] }));
   };
+  console.log('---tokens', tokens)
 
   return (
     <div className={className}>
@@ -63,6 +64,10 @@ export const RightSide = ({ className }) => {
             <div className={styles.tokenPreview} key={token.id}>
               <SquareNFTCard
                 {...token}
+                currency={currencies.find(
+                  ({ name }) =>
+                    name === (token.listingType === 'fixedPrice' ? token.currency : token.auctionStartingCurrency)
+                )}
                 className={cn(styles.asBundleSquareCard, {
                   [styles.closed]: !openedPreviews.includes(token.id),
                 })}

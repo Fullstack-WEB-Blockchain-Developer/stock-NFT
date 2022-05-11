@@ -122,7 +122,7 @@ export const SquareNFTCard = ({
         <div className={styles.name}>
           <span>{name}</span>
         </div>
-        {price && (
+        {price && currency && (
           <div className={styles.price}>
             <div className={styles.priceAmount}>
               <Image
