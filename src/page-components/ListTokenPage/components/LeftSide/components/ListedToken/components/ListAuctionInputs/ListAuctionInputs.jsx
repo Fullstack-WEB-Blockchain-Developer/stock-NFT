@@ -1,23 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 //next
-import Image from "next/image";
+import Image from 'next/image';
 //redux
-import { useSelector, useDispatch } from "react-redux";
-import { getAllCurrencies } from "../../../../../../../../redux/slices/generalDataSlice";
-import { changeToken } from "../../../../../../../../redux/slices/ListTokenSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllCurrencies, clearError } from '../../../../../../../../redux/slices/generalDataSlice';
+import { changeToken } from '../../../../../../../../redux/slices/ListTokenSlice';
+import { open as openError } from '../../../../../../../../redux/slices/errorSnackbarSlice';
 //mui
-import TextField from "@mui/material/TextField";
-import { Select, MenuItem } from "@mui/material";
+import TextField from '@mui/material/TextField';
+import { Select, MenuItem } from '@mui/material';
 //components
-import { CustSwitch } from "../../../../../../../../components/CustSwitch/CustSwitch";
-import { DatePicker } from "../DatePicker/DatePicker";
+import { CustSwitch } from '../../../../../../../../components/CustSwitch/CustSwitch';
+import { DatePicker } from '../DatePicker/DatePicker';
 //hooks
-import { useStyles } from "../../../../../../../../hooks/useStyles";
+import { useStyles } from '../../../../../../../../hooks/useStyles';
 //utils
-import { getEtherPrice } from "../../../../../../../../utils/index";
-import { methods } from "./ListAuctionInputs.utils";
+import { getEtherPrice } from '../../../../../../../../utils/index';
+import { methods } from './ListAuctionInputs.utils';
 //styles
-import styles from "./ListAuctionInputs.module.scss";
+import styles from './ListAuctionInputs.module.scss';
 
 export const ListAuctionInputs = ({ id }) => {
   const dispatch = useDispatch();
@@ -39,14 +40,12 @@ export const ListAuctionInputs = ({ id }) => {
   } = token;
   const [isDayPickerOpened, setIsDayPickerOpened] = useState(false);
 
-  const handleEthPrice = async () => {
-    return await getEtherPrice();
-  };
+  const handleEthPrice = async () =>  await getEtherPrice();
 
   useEffect(() => {
-    auctionReservePrice < 0 && dispatch(changeToken({ id, field: "auctionReservePrice", newValue: 0 }));
-    auctionStartingPrice < 0 && dispatch(changeToken({ id, field: "auctionStartingPrice", newValue: 0 }));
-    auctionEndPrice < 0 && dispatch(changeToken({ id, field: "auctionEndPrice", newValue: 0 }));
+    auctionReservePrice < 0 && dispatch(changeToken({ id, field: 'auctionReservePrice', newValue: 0 }));
+    auctionStartingPrice < 0 && dispatch(changeToken({ id, field: 'auctionStartingPrice', newValue: 0 }));
+    auctionEndPrice < 0 && dispatch(changeToken({ id, field: 'auctionEndPrice', newValue: 0 }));
   }, [dispatch, auctionReservePrice, auctionStartingPrice, auctionEndPrice]);
 
   useEffect(() => {
@@ -55,7 +54,7 @@ export const ListAuctionInputs = ({ id }) => {
         dispatch(
           changeToken({
             id,
-            field: "auctionReserveUsdPrice",
+            field: 'auctionReserveUsdPrice',
             newValue: (Number(auctionReservePrice) * result).toFixed(4),
           })
         )
@@ -69,7 +68,7 @@ export const ListAuctionInputs = ({ id }) => {
         dispatch(
           changeToken({
             id,
-            field: "auctionStartingUsdPrice",
+            field: 'auctionStartingUsdPrice',
             newValue: (Number(auctionStartingPrice) * result).toFixed(4),
           })
         )
@@ -83,7 +82,7 @@ export const ListAuctionInputs = ({ id }) => {
         dispatch(
           changeToken({
             id,
-            field: "auctionEndUsdPrice",
+            field: 'auctionEndUsdPrice',
             newValue: (Number(auctionEndPrice) * result).toFixed(4),
           })
         )
@@ -93,28 +92,25 @@ export const ListAuctionInputs = ({ id }) => {
 
   useEffect(() => {
     auctionEndPrice < auctionStartingPrice &&
-      dispatch(changeToken({ id, field: "auctionEndPrice", newValue: auctionStartingPrice }));
+      dispatch(changeToken({ id, field: 'auctionEndPrice', newValue: auctionStartingPrice }));
     auctionReservePrice < auctionStartingPrice &&
-      dispatch(changeToken({ id, field: "auctionReservePrice", newValue: auctionStartingPrice }));
+      dispatch(changeToken({ id, field: 'auctionReservePrice', newValue: auctionStartingPrice }));
   }, [auctionEndPrice, auctionStartingPrice, auctionReservePrice, dispatch]);
 
   useEffect(() => {
     currencies.length === 0 && dispatch(getAllCurrencies());
     currencies.length > 0 &&
-      dispatch(changeToken({ id, field: "auctionStartingCurrency", newValue: currencies[0].name }));
+      dispatch(changeToken({ id, field: 'auctionStartingCurrency', newValue: currencies[0].name }));
     currencies.length > 0 &&
-      dispatch(changeToken({ id, field: "auctionReserveCurrency", newValue: currencies[0].name }));
-    currencies.length > 0 &&
-      dispatch(changeToken({ id, field: "auctionEndCurrency", newValue: currencies[0].name }));
+      dispatch(changeToken({ id, field: 'auctionReserveCurrency', newValue: currencies[0].name }));
+    currencies.length > 0 && dispatch(changeToken({ id, field: 'auctionEndCurrency', newValue: currencies[0].name }));
   }, [dispatch, currencies, id]);
 
   useEffect(() => {
     if (error) {
       dispatch(
         openError(
-          error.response?.data
-            ? `${error.response.data.statusCode} ${error.response.data.message}`
-            : error.message
+          error.response?.data ? `${error.response.data.statusCode} ${error.response.data.message}` : error.message
         )
       );
       dispatch(clearError());
@@ -122,7 +118,7 @@ export const ListAuctionInputs = ({ id }) => {
   }, [error, dispatch]);
 
   const handleReservePrice = () => {
-    dispatch(changeToken({ id, field: "includeReservePrice", newValue: !includeReservePrice }));
+    dispatch(changeToken({ id, field: 'includeReservePrice', newValue: !includeReservePrice }));
   };
 
   return (
@@ -137,17 +133,15 @@ export const ListAuctionInputs = ({ id }) => {
           type="number"
           variant="outlined"
           IconComponent={() => (
-            <div style={{ right: "16px", position: "absolute", pointerEvents: "none" }}>
+            <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
               <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
             </div>
           )}
-          sx={{ color: "white" }}
+          sx={{ color: 'white' }}
           className={muiClasses.select}
           value={auctionMethod}
-          InputProps={{ style: { color: "white" } }}
-          onChange={({ target: { value } }) =>
-            dispatch(changeToken({ id, field: "auctionMethod", newValue: value }))
-          }
+          InputProps={{ style: { color: 'white' } }}
+          onChange={({ target: { value } }) => dispatch(changeToken({ id, field: 'auctionMethod', newValue: value }))}
         >
           {methods.map(({ text }) => (
             <MenuItem value={text} key={text}>
@@ -156,7 +150,7 @@ export const ListAuctionInputs = ({ id }) => {
           ))}
         </Select>
       </div>
-      <div className={styles.title} style={{ marginTop: "16px" }}>
+      <div className={styles.title} style={{ marginTop: '16px' }}>
         <span>
           Starting Price <span className={styles.star}>*</span>
         </span>
@@ -168,24 +162,24 @@ export const ListAuctionInputs = ({ id }) => {
           type="number"
           variant="outlined"
           IconComponent={() => (
-            <div style={{ right: "16px", position: "absolute", pointerEvents: "none" }}>
+            <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
               <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
             </div>
           )}
-          sx={{ width: "24%", maxHeight: "56px", color: "white" }}
+          sx={{ width: '24%', maxHeight: '56px', color: 'white' }}
           className={muiClasses.selectLeftHalf}
           value={auctionStartingCurrency}
-          InputProps={{ style: { color: "white" } }}
+          InputProps={{ style: { color: 'white' } }}
           onChange={({ target: { value } }) =>
-            dispatch(changeToken({ id, field: "auctionStartingCurrency", newValue: value }))
+            dispatch(changeToken({ id, field: 'auctionStartingCurrency', newValue: value }))
           }
         >
           <MenuItem disabled value="none">
-            <span style={{ color: "rgb(77, 77, 77)" }}>Currency</span>
+            <span style={{ color: 'rgb(77, 77, 77)' }}>Currency</span>
           </MenuItem>
           <MenuItem value={currencies[0].name} key={currencies[0].id}>
             <span>
-              <span style={{ position: "relative", top: "3px" }}>
+              <span style={{ position: 'relative', top: '3px' }}>
                 <Image
                   alt="currency-icon"
                   height={31}
@@ -194,9 +188,7 @@ export const ListAuctionInputs = ({ id }) => {
                   width={31}
                 />
               </span>
-              <span style={{ marginLeft: "20px", position: "relative", bottom: "6px" }}>
-                {currencies[0].name}
-              </span>
+              <span style={{ marginLeft: '20px', position: 'relative', bottom: '6px' }}>{currencies[0].name}</span>
             </span>
           </MenuItem>
         </Select>
@@ -206,13 +198,13 @@ export const ListAuctionInputs = ({ id }) => {
           type="number"
           placeholder="Amount"
           variant="outlined"
-          sx={{ width: "76%" }}
+          sx={{ width: '76%' }}
           onChange={({ target: { value } }) =>
-            dispatch(changeToken({ id, field: "auctionStartingPrice", newValue: value }))
+            dispatch(changeToken({ id, field: 'auctionStartingPrice', newValue: value }))
           }
           className={muiClasses.textFieldRightHalf}
           value={auctionStartingPrice}
-          InputProps={{ style: { color: "white" } }}
+          InputProps={{ style: { color: 'white' } }}
         />
         {auctionStartingPrice && auctionStartingUsdPrice && (
           <div className={styles.usdPrice}>
@@ -220,9 +212,9 @@ export const ListAuctionInputs = ({ id }) => {
           </div>
         )}
       </div>
-      {auctionMethod === "Sell with declining price" && (
+      {auctionMethod === 'Sell with declining price' && (
         <>
-          <div className={styles.title} style={{ marginTop: "16px" }}>
+          <div className={styles.title} style={{ marginTop: '16px' }}>
             <span>
               Ending Price <span className={styles.star}>*</span>
             </span>
@@ -234,24 +226,24 @@ export const ListAuctionInputs = ({ id }) => {
               type="number"
               variant="outlined"
               IconComponent={() => (
-                <div style={{ right: "16px", position: "absolute", pointerEvents: "none" }}>
+                <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
                   <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
                 </div>
               )}
-              sx={{ width: "24%", maxHeight: "56px", color: "white" }}
+              sx={{ width: '24%', maxHeight: '56px', color: 'white' }}
               className={muiClasses.selectLeftHalf}
               value={auctionEndCurrency}
-              InputProps={{ style: { color: "white" } }}
+              InputProps={{ style: { color: 'white' } }}
               onChange={({ target: { value } }) =>
-                dispatch(changeToken({ id, field: "auctionEndCurrency", newValue: value }))
+                dispatch(changeToken({ id, field: 'auctionEndCurrency', newValue: value }))
               }
             >
               <MenuItem disabled value="none">
-                <span style={{ color: "rgb(77, 77, 77)" }}>Currency</span>
+                <span style={{ color: 'rgb(77, 77, 77)' }}>Currency</span>
               </MenuItem>
               <MenuItem value={currencies[0].name} key={currencies[0].id}>
                 <span>
-                  <span style={{ position: "relative", top: "3px" }}>
+                  <span style={{ position: 'relative', top: '3px' }}>
                     <Image
                       alt="currency-icon"
                       height={31}
@@ -260,9 +252,7 @@ export const ListAuctionInputs = ({ id }) => {
                       width={31}
                     />
                   </span>
-                  <span style={{ marginLeft: "20px", position: "relative", bottom: "6px" }}>
-                    {currencies[0].name}
-                  </span>
+                  <span style={{ marginLeft: '20px', position: 'relative', bottom: '6px' }}>{currencies[0].name}</span>
                 </span>
               </MenuItem>
             </Select>
@@ -272,13 +262,13 @@ export const ListAuctionInputs = ({ id }) => {
               type="number"
               placeholder="Amount"
               variant="outlined"
-              sx={{ width: "76%" }}
+              sx={{ width: '76%' }}
               onChange={({ target: { value } }) =>
-                dispatch(changeToken({ id, field: "auctionEndPrice", newValue: value }))
+                dispatch(changeToken({ id, field: 'auctionEndPrice', newValue: value }))
               }
               className={muiClasses.textFieldRightHalf}
               value={auctionEndPrice}
-              InputProps={{ style: { color: "white" } }}
+              InputProps={{ style: { color: 'white' } }}
             />
             {auctionEndPrice && auctionEndUsdPrice && (
               <div className={styles.usdPrice}>
@@ -303,7 +293,7 @@ export const ListAuctionInputs = ({ id }) => {
           onClick={() => setIsDayPickerOpened(true)}
           className={muiClasses.textField}
           value=""
-          InputProps={{ style: { color: "white" }, readOnly: true }}
+          InputProps={{ style: { color: 'white' }, readOnly: true }}
         />
         {isDayPickerOpened && <DatePicker id={id} handleClose={() => setIsDayPickerOpened(false)} />}
       </div>
@@ -320,24 +310,24 @@ export const ListAuctionInputs = ({ id }) => {
               type="number"
               variant="outlined"
               IconComponent={() => (
-                <div style={{ right: "16px", position: "absolute", pointerEvents: "none" }}>
+                <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
                   <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
                 </div>
               )}
-              sx={{ width: "24%", maxHeight: "56px", color: "white" }}
+              sx={{ width: '24%', maxHeight: '56px', color: 'white' }}
               className={muiClasses.selectLeftHalf}
               value={auctionReserveCurrency}
-              InputProps={{ style: { color: "white" } }}
+              InputProps={{ style: { color: 'white' } }}
               onChange={({ target: { value } }) =>
-                dispatch(changeToken({ id, field: "auctionReserveCurrency", newValue: value }))
+                dispatch(changeToken({ id, field: 'auctionReserveCurrency', newValue: value }))
               }
             >
               <MenuItem disabled value="none">
-                <span style={{ color: "rgb(77, 77, 77)" }}>Currency</span>
+                <span style={{ color: 'rgb(77, 77, 77)' }}>Currency</span>
               </MenuItem>
               <MenuItem value={currencies[0].name} key={currencies[0].id}>
                 <span>
-                  <span style={{ position: "relative", top: "3px" }}>
+                  <span style={{ position: 'relative', top: '3px' }}>
                     <Image
                       alt="currency-icon"
                       height={31}
@@ -346,9 +336,7 @@ export const ListAuctionInputs = ({ id }) => {
                       width={31}
                     />
                   </span>
-                  <span style={{ marginLeft: "20px", position: "relative", bottom: "6px" }}>
-                    {currencies[0].name}
-                  </span>
+                  <span style={{ marginLeft: '20px', position: 'relative', bottom: '6px' }}>{currencies[0].name}</span>
                 </span>
               </MenuItem>
             </Select>
@@ -358,13 +346,13 @@ export const ListAuctionInputs = ({ id }) => {
               type="number"
               placeholder="Amount"
               variant="outlined"
-              sx={{ width: "76%" }}
+              sx={{ width: '76%' }}
               onChange={({ target: { value } }) =>
-                dispatch(changeToken({ id, field: "auctionReservePrice", newValue: value }))
+                dispatch(changeToken({ id, field: 'auctionReservePrice', newValue: value }))
               }
               className={muiClasses.textFieldRightHalf}
               value={auctionReservePrice}
-              InputProps={{ style: { color: "white" } }}
+              InputProps={{ style: { color: 'white' } }}
             />
             {auctionReservePrice && auctionReserveUsdPrice && (
               <div className={styles.usdPrice}>

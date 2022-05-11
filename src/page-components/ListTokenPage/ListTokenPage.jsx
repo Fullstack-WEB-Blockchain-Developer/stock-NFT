@@ -11,10 +11,10 @@ import styles from "./ListTokenPage.module.scss";
 
 export const ListTokenPage = ({ id, name, price, owner, fileName, category, collection, status }) => {
   const dispatch = useDispatch();
-  const { error } = useSelector((state) => state.listToken);
+  const { error, tokens } = useSelector((state) => state.listToken);
 
   useEffect(() => {
-    dispatch(
+    tokens.length === 0 && dispatch(
       addToken({
         auctionMethod: "Sell to the highest bidder",
         auctionStartingPrice: undefined,
