@@ -28,6 +28,7 @@ export const ListFixedPriceInputs = ({ id }) => {
   const { asBundle, bundleDescription, bundleName, currency, isReserved, price, specificBuyerAddress, usdPrice } =
     token;
   const [isDayPickerOpened, setIsDayPickerOpened] = useState(false);
+  const [durationTextFieldValue, setDurationTextFieldValue] = useState('7 days');
 
   const handleAsBundle = () => {
     dispatch(changeToken({ id, field: 'asBundle', newValue: !asBundle }));
@@ -139,11 +140,17 @@ export const ListFixedPriceInputs = ({ id }) => {
           variant="outlined"
           onClick={() => setIsDayPickerOpened(true)}
           className={muiClasses.textField}
-          value=""
+          value={durationTextFieldValue}
           ref={anchor}
           InputProps={{ style: { color: 'white' }, readOnly: true }}
         />
-        {isDayPickerOpened && <DatePicker id={id} handleClose={() => setIsDayPickerOpened(false)} />}
+        {isDayPickerOpened && (
+          <DatePicker
+            handleClose={() => setIsDayPickerOpened(false)}
+            id={id}
+            setDurationTextFieldValue={setDurationTextFieldValue}
+          />
+        )}
       </div>
       <div className={styles.sellAsBundle}>
         <span>Sell as bundle</span>
