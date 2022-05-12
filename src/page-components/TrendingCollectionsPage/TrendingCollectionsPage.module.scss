@@ -1,0 +1,61 @@
+.pageContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.contentWrapper {
+  width: 90%;
+  max-width: 1400px;
+  color: var(--white);
+  font-family: 'Poppins', sans-serif;
+}
+
+.pageTitle {
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+  margin-top: 41px;
+  margin-bottom: 22px;
+}
+
+.pageDescription {
+  text-align: center;
+  font-size: 18px;
+  letter-spacing: 0.02px;
+  color: var(--light-grey);
+  margin-bottom: 40px;
+}
+
+.selectsWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.tableHead {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px;
+  border-top: 1px solid var(--dark-grey);
+  border-bottom: 1px solid var(--dark-grey);
+}
+
+.collectionName,
+.notCollectionName {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.02px;
+  color: var(--white);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+}
+
+.collectionName {
+  text-align: left;
+  width: 33%;
+}
+
+.notCollectionName {
+  text-align: right;
+}

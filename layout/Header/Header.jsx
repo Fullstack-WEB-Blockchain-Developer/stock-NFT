@@ -1,34 +1,34 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 //next
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 //classnames
-import cn from "classnames";
+import cn from 'classnames';
 //axios
-import axios from "axios";
+import axios from 'axios';
 //redux
-import { useSelector, useDispatch } from "react-redux";
-import { open as openProfilePopupReducer } from "../../src/redux/slices/profilePopupSlice";
-import { open as openWalletPopupReducer } from "../../src/redux/slices/walletPopupSlice";
-import { open as openError } from "../../src/redux/slices/errorSnackbarSlice";
-import { setImage, setUsername, setBanner, setUserBio } from "../../src/redux/slices/userDataSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import { open as openProfilePopupReducer } from '../../src/redux/slices/profilePopupSlice';
+import { open as openWalletPopupReducer } from '../../src/redux/slices/walletPopupSlice';
+import { open as openError } from '../../src/redux/slices/errorSnackbarSlice';
+import { setImage, setUsername, setBanner, setUserBio } from '../../src/redux/slices/userDataSlice';
 // these are components for the second variant of header. I don't know exactly which one to implement
 // import { Username } from "../../src/components/Username/Username";
 // import { AmountWithIcon } from "../../src/components/AmountWithIcon/AmountWithIcon";
 // import { AmountDifference } from "../../src/components/AmountDifference/AmountDifference";
 // import { SmallChart } from "../../src/components/SmallChart/SmallChart";
 //components
-import { ProfilePopup } from "../../src/components/ProfilePopup/ProfilePopup";
+import { ProfilePopup } from '../../src/components/ProfilePopup/ProfilePopup';
 //utils
-import { routingCategories, profilePopupCategories } from "./Header.utils";
+import { routingCategories, profilePopupCategories } from './Header.utils';
 //hook
-import useAuth from "../../src/hooks/useAuth";
+import useAuth from '../../src/hooks/useAuth';
 //styles
-import styles from "./Header.module.css";
+import styles from './Header.module.css';
 
 const fakeChartData = new Array(15).fill({}, 0, 14).map(() => {
-  return { name: "Page A", price: Math.random() * 100 };
+  return { name: 'Page A', price: Math.random() * 100 };
 });
 
 export const Header = () => {
@@ -40,19 +40,17 @@ export const Header = () => {
   if (error && !pagesForUnauthorized.includes(router.pathname)) {
     dispatch(
       openError(
-        error.response?.data
-          ? `${error.response.data.statusCode} ${error.response.data.message}`
-          : error.message
+        error.response?.data ? `${error.response.data.statusCode} ${error.response.data.message}` : error.message
       )
     );
   }
 
   const fetchUserData = async () => {
-    const accessToken = localStorage.getItem("accessToken");
-    const publicAddress = localStorage.getItem("account");
+    const accessToken = localStorage.getItem('accessToken');
+    const publicAddress = localStorage.getItem('account');
     try {
       const { data } = await axios.get(`${process.env.BACKEND_URL}/users/${publicAddress}`, {
-        headers: { Authorization: "Bearer " + accessToken },
+        headers: { Authorization: 'Bearer ' + accessToken },
       });
       dispatch(setImage(data.profileImage));
       dispatch(setBanner(data.profileBanner));
@@ -60,9 +58,7 @@ export const Header = () => {
       dispatch(setUserBio(data.bio));
     } catch (e) {
       !pagesForUnauthorized.includes(router.pathname) &&
-        dispatch(
-          openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
-        );
+        dispatch(openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message));
     }
   };
 
@@ -90,14 +86,16 @@ export const Header = () => {
       </div>
       <div className={styles.navigation}>
         <div className={styles.navigationCategories}>
-          {routingCategories.map(({ categoryName, id, src }) => (
-            <div className={styles.category} key={id}>
-              <Image src={src} height={18} width={16} alt={categoryName} />
-              <p className={styles.categoryName}>{categoryName}</p>
-            </div>
+          {routingCategories.map(({ categoryName, id, src, href }) => (
+            <Link href={href} passHref key={id}>
+              <div className={styles.category}>
+                <Image src={src} height={18} width={16} alt={categoryName} />
+                <p className={styles.categoryName}>{categoryName}</p>
+              </div>
+            </Link>
           ))}
         </div>
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div className={styles.searchButton}>
             <Image src="/search-icon.svg" height={18} width={16} alt="search-icon" />
             <div>Search All NFTs</div>
@@ -111,17 +109,14 @@ export const Header = () => {
           </div>
         </div>
       </div>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div className={styles.userData}>
           <div className={styles.profile} onClick={openProfilePopup}>
             <div className={isAuthorized ? styles.authorisedIcon : styles.profileIcon}>
-              <img
-                src={isAuthorized ? avatar : "/profile-icon.svg"}
-                style={{ width: "100%", height: "100%" }}
-              />
+              <img src={isAuthorized ? avatar : '/profile-icon.svg'} style={{ width: '100%', height: '100%' }} />
             </div>
             <div className={styles.profileText}>
-              {isAuthorized ? (username && username !== "" ? username : "Profile") : "Profile"}
+              {isAuthorized ? (username && username !== '' ? username : 'Profile') : 'Profile'}
             </div>
           </div>
           <ProfilePopup
