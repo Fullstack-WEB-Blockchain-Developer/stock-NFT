@@ -63,10 +63,10 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
     mapping(address => uint256[]) public userInfo;
     mapping(address => uint256) public totalCollection;
     mapping(uint256 => uint256) public totalNft;
-    uint256[] saleNft;
-    uint256[] auctionNft;
-    mapping(uint256 => uint256) public saleNftList;
-    mapping(uint256 => uint256) public auctionNftList;
+    uint256[] fixedSaleNfts;
+    uint256[] auctionSaleNft;
+    mapping(uint256 => uint256) public fixedSaleNftList;
+    mapping(uint256 => uint256) public auctionSaleNftList;
     mapping(uint256 => mapping(uint256 => uint256)) idNumber;
     mapping(uint256 => fixedSale) timeForFixed;
     mapping(uint256 => auction) timeForAuction;
@@ -169,7 +169,7 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         uint256[] memory _endTimes,
         address[] memory _nftContracts
     ) public {
-        for(uint i=0; i<=_tokenIds.length; i++){
+        for (uint i = 0; i < _tokenIds.length; i++) {
             uint256 _tokenId = _tokenIds[i];
             require(!timeForAuction[_tokenId].inList, "already in sale");
             require(!nftPrice[_tokenId].inList, "already in sale");
@@ -181,13 +181,17 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
             timeForFixed[_tokenId].endTime = _endTimes[i];
             timeForFixed[_tokenId].price = _prices[i];
             timeForFixed[_tokenId].inList = true;
-            originalOwner[_tokenId] == msg.sender;
             nftPrice[_tokenId].price = _prices[i];
             nftPrice[_tokenId].inList = true;
-            saleNftList[_tokenId] = saleNft.length;
-            saleNft.push(_tokenId);
+            fixedSaleNftList[_tokenId] = fixedSaleNfts.length;
+            fixedSaleNfts.push(_tokenId);
             address firstowner = IERC721(_nftContracts[i]).ownerOf(_tokenId);
-            IERC721(_nftContracts[i]).transferFrom(firstowner, address(this), _tokenId);
+            originalOwner[_tokenId] = firstowner;
+            IERC721(_nftContracts[i]).transferFrom(
+                firstowner,
+                address(this),
+                _tokenId
+            );
         }
     }
 
@@ -198,16 +202,17 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         );
         nftPrice[_tokenId].price = 0;
         nftPrice[_tokenId].inList = false;
-        nftPrice[_tokenId].inList = false;
+        timeForFixed[_tokenId].inList = false;
         IERC721(_nftContract).transferFrom(address(this), msg.sender, _tokenId);
-        delete saleNft[(saleNftList[_tokenId])];
+        delete fixedSaleNfts[(fixedSaleNftList[_tokenId])];
     }
 
     function buyNft(uint256 _tokenId, address _nftContract) external payable {
         require(timeForFixed[_tokenId].inList, "input duration time");
         require(nftPrice[_tokenId].inList, "nft not in sale");
         require(
-            timeForFixed[_tokenId].startTime <= block.timestamp && timeForFixed[_tokenId].endTime >= block.timestamp,
+            timeForFixed[_tokenId].startTime <= block.timestamp &&
+                timeForFixed[_tokenId].endTime >= block.timestamp,
             "fixed sale not started or ended"
         );
         uint256 val = uint256(100) - fixedFee;
@@ -236,7 +241,7 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         uint256[] memory _endTimes,
         address[] memory _nftContracts
     ) external {
-        for(uint i=0; i<=_tokenIds.length; i++){
+        for (uint i = 0; i < _tokenIds.length; i++) {
             uint256 _tokenId = _tokenIds[i];
             require(!nftStakeState[_tokenId], "nft is stake");
             require(!timeForAuction[_tokenId].inList, "already in sale");
@@ -251,17 +256,22 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
             timeForAuction[_tokenId].endTime = _endTimes[i];
             timeForAuction[_tokenId].minPrice = _startPrices[i];
             timeForAuction[_tokenId].inList = true;
-            auctionNftList[_tokenId] = auctionNft.length;
-            auctionNft.push(_tokenId);
+            auctionSaleNftList[_tokenId] = auctionSaleNft.length;
+            auctionSaleNft.push(_tokenId);
             address firstowner = IERC721(_nftContracts[i]).ownerOf(_tokenId);
-            IERC721(_nftContracts[i]).transferFrom(firstowner, address(this), _tokenId);
+            IERC721(_nftContracts[i]).transferFrom(
+                firstowner,
+                address(this),
+                _tokenId
+            );
         }
     }
 
     function buyAuction(uint256 _tokenId) external payable {
         require(timeForAuction[_tokenId].inList, "nft not in sale");
         require(
-            timeForAuction[_tokenId].startTime <= block.timestamp && timeForAuction[_tokenId].endTime >= block.timestamp,
+            timeForAuction[_tokenId].startTime <= block.timestamp &&
+                timeForAuction[_tokenId].endTime >= block.timestamp,
             "auction sale not started or ended"
         );
         if (timeForAuction[_tokenId].method) {
@@ -299,7 +309,8 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
 
     function upgradeAuction(uint256 _tokenId, bool choice) external payable {
         require(
-            timeForAuction[_tokenId].startTime <= block.timestamp && timeForAuction[_tokenId].endTime >= block.timestamp,
+            timeForAuction[_tokenId].startTime <= block.timestamp &&
+                timeForAuction[_tokenId].endTime >= block.timestamp,
             "auction sale not started or ended"
         );
         uint256 val = uint256(100) - auctionFee;
@@ -347,7 +358,7 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         timeForAuction[_tokenId].startTime = 0;
         timeForAuction[_tokenId].endTime = 0;
         IERC721(_nftContract).transferFrom(address(this), msg.sender, _tokenId);
-        delete auctionNft[(auctionNftList[_tokenId])];
+        delete auctionSaleNft[(auctionSaleNftList[_tokenId])];
     }
 
     function auctionDetail(uint256 _tokenId)
@@ -375,7 +386,7 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         return auctionFee;
     }
 
-    function listSaleNft(uint256 _tokenId)
+    function listfixedSaleNfts(uint256 _tokenId)
         external
         view
         returns (
@@ -386,8 +397,8 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         )
     {
         return (
-            saleNft,
-            auctionNft,
+            fixedSaleNfts,
+            auctionSaleNft,
             timeForAuction[_tokenId].minPrice,
             nftPrice[_tokenId].price
         );
