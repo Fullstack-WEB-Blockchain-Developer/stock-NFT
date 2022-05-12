@@ -21,7 +21,6 @@ export const getServerSideProps = async ({ params }) => {
     httpsAgent,
   });
 
-  console.log("---data", data);
   return {
     props: {
       ...data,

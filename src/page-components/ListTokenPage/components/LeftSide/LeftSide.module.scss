@@ -1,15 +1,18 @@
 .leftSideTitle {
-  font-weight: bold;
-  font-size: 36px;
-  padding: 40px 0;
-  border-bottom: 1px solid var(--dark-grey);
+	padding: 40px 0;
+
+	border-bottom: 1px solid var(--dark-grey);
+
+	font-size: 36px;
+	font-weight: bold;
 }
 
 .addToken {
-  padding: 24px 0;
-  border-bottom: 1px solid var(--dark-grey);
+	padding: 24px 0;
+
+	border-bottom: 1px solid var(--dark-grey);
 }
 
 .completeListing {
-  padding: 40px 0;
+	padding: 40px 0;
 }

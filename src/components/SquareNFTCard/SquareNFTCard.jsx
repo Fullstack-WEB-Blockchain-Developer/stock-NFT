@@ -30,7 +30,6 @@ export const SquareNFTCard = ({
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
   const router = useRouter();
 
-  console.log('---currency', currency);
   useEffect(() => {
     const end = fileName.substring(fileName.indexOf('.') + 1).toLowerCase();
 
