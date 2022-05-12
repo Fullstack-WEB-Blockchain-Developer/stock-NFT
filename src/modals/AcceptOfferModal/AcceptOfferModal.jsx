@@ -49,13 +49,13 @@ const eth_nftAddr = process.env.ETH_NFT;
 const pol_tokenAddr = process.env.POL_TOKEN;
 const pol_stokeMarketAddr = process.env.POL_MARKET;
 const pol_nftAddr = process.env.POL_NFT;
+
 let tokenContract;
 let nftContract;
 let marketContract;
 let tokenAddr;
 let stokeMarketAddr;
 let nftAddr;
-let supportNetwork;
 
 export const AcceptOfferModal = ({
   isOpened,
@@ -82,7 +82,22 @@ export const AcceptOfferModal = ({
   const router = useRouter();
 
   useEffect(() => {
+    let supportNetwork;
+    console.log(tokenNetwork);
+    if (tokenNetwork === "ethereum") {
+      tokenAddr = eth_tokenAddr;
+      stokeMarketAddr = eth_stokeMarketAddr;
+      nftAddr = eth_nftAddr;
+      supportNetwork = etherChain;
+    } else if (tokenNetwork === "polygon") {
+      tokenAddr = pol_tokenAddr;
+      stokeMarketAddr = pol_stokeMarketAddr;
+      nftAddr = pol_nftAddr;
+      supportNetwork = polygonChain;
+    }
+
     if (chainId !== supportNetwork) {
+      // TODO: add switch network modal
       (async () => {
         await switchNetwork(supportNetwork, library);
         dispatch(
@@ -139,6 +154,7 @@ export const AcceptOfferModal = ({
   //get contract
   useEffect(() => {
     if (library) {
+      let supportNetwork;
       console.log(tokenNetwork);
       if (tokenNetwork === "ethereum") {
         tokenAddr = eth_tokenAddr;
@@ -180,13 +196,30 @@ export const AcceptOfferModal = ({
   }, [account, library, tokenNetwork]);
 
   const handleAccept = async () => {
+    let supportNetwork;
+    console.log(tokenNetwork);
+    if (tokenNetwork === "ethereum") {
+      tokenAddr = eth_tokenAddr;
+      stokeMarketAddr = eth_stokeMarketAddr;
+      nftAddr = eth_nftAddr;
+      supportNetwork = etherChain;
+    } else if (tokenNetwork === "polygon") {
+      tokenAddr = pol_tokenAddr;
+      stokeMarketAddr = pol_stokeMarketAddr;
+      nftAddr = pol_nftAddr;
+      supportNetwork = polygonChain;
+    }
+
     if (chainId !== supportNetwork) {
+      // TODO: add switch network modal
+      // (async () => {
       await switchNetwork(supportNetwork, library);
       dispatch(
         openSuccess({
           title: "The network has been changed successfully.",
         })
       );
+      // })()
     } else {
       const offer = offersData.find((offer) => offer.id == id);
       const sender = offer.buyer.publicAddress;

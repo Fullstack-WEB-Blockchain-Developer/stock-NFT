@@ -67,34 +67,43 @@ describe("StokeMarketPlace contract", function () {
     console.log(ethers.utils.formatUnits(amount))
   })
 
-  it("Fixed list sale", async() => {
+  it("buy order", async() => {
     await nftContract.connect(account1).createToken(1, account1.address, 'ipfs://lion');
     await nftContract.connect(account1).approve(marketContract.address, 1);
     await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
   })
 
-  it("set auctionFee", async() => {
-    const AuctionFee = await nftContract.connect(account1).timing(Token.tokenId);
-    console.log("🚀 ~ file: MarketPlace.js ~ line 77 ~ it ~ AuctionFee", AuctionFee)
-    // await nftContract.connect(account1).approve(marketContract.address, 1);
-    // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
+  it("Fixed list sale", async() => {
+    await nftContract.connect(account1).createToken(3, account1.address, 'ipfs://lion');
+    console.log("~ file: MarketPlace.js ~ line 81 ~ it ~ nftContract.address", nftContract.address);
+    console.log("~ file: MarketPlace.js ~ line 81 ~ it ~ marketContract", marketContract);
+    // await nftContract.connect(account1).approve(marketContract.address, 2);
+    amount = await marketContract.connect(account1).fixedSales([3], [5000], [1652253229], [1652512429], ["0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"]);
+    console.log("🚀 ~ file: MarketPlace.js ~ line 82 ~ it ~ amount", amount);
   })
 
-  it("start timing", async() => {
-    const time = await nftContract.connect(account1).timing(Token.tokenId);
-    // await nftContract.connect(account1).approve(marketContract.address, 1);
-    // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
-  })
-  it("start auction", async () => {
-    await nftContract.connect(account1).createToken(1, account1.address, 'ipfs://lion');
-    // await nftContract.connect(account1).approve(marketContract.address, 1);
-    await nftContract.connect(account1).startAuction(Token.tokenId, 10, 30, 24, 60, nftContract.address);
-    // await nftContract.connect(account1).approve(marketContract.address, 1);
-    // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
-  })
-  it("buy auction", async() => {
-    await nftContract.connect(account2).buyAuction(Token.tokenId, 10, 30, 24, 60, nftContract.address);
-    // await nftContract.connect(account1).approve(marketContract.address, 1);
-    // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
-  })
+  // it("set auctionFee", async() => {
+  //   const AuctionFee = await nftContract.connect(account1).setAuctionFee(Token.tokenId);
+  //   console.log("🚀 ~ file: MarketPlace.js ~ line 77 ~ it ~ AuctionFee", AuctionFee)
+  //   // await nftContract.connect(account1).approve(marketContract.address, 1);
+  //   // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
+  // })
+
+  // it("start timing", async() => {
+  //   const time = await nftContract.connect(account1).timing(Token.tokenId);
+  //   // await nftContract.connect(account1).approve(marketContract.address, 1);
+  //   // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
+  // })
+  // it("start auction", async () => {
+  //   await nftContract.connect(account1).createToken(1, account1.address, 'ipfs://lion');
+  //   // await nftContract.connect(account1).approve(marketContract.address, 1);
+  //   await nftContract.connect(account1).startAuction(Token.tokenId, 10, 30, 24, 60, nftContract.address);
+  //   // await nftContract.connect(account1).approve(marketContract.address, 1);
+  //   // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
+  // })
+  // it("buy auction", async() => {
+  //   await nftContract.connect(account2).buyAuction(Token.tokenId, 10, 30, 24, 60, nftContract.address);
+  //   // await nftContract.connect(account1).approve(marketContract.address, 1);
+  //   // await marketContract.connect(account2).buyOrder(account1.address, 1, nftContract.address, {value: 10000000});
+  // })
 })

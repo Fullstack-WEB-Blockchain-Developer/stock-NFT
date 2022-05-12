@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 //next
 import Image from 'next/image';
 //redux
-import { useSelector, useDispatch } from 'react-redux';
-import { getAllCurrencies, clearError } from '../../../../../../../../redux/slices/generalDataSlice';
-import { changeToken } from '../../../../../../../../redux/slices/ListTokenSlice';
-import { open as openError } from '../../../../../../../../redux/slices/errorSnackbarSlice';
+import { useSelector, useDispatch } from "react-redux";
+import { addToken, getAllUserTokens, clearError } from "src/redux/slices/ListTokenSlice";
+import { open as openError } from "src/redux/slices/errorSnackbarSlice";
+import { getAllCurrencies } from "src/redux/slices/generalDataSlice";
+import { changeToken } from "src/redux/slices/ListTokenSlice";
 //mui
 import TextField from '@mui/material/TextField';
 import { Select, MenuItem } from '@mui/material';
