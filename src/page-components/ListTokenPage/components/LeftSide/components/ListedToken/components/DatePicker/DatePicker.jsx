@@ -38,7 +38,7 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
 
     setSelectedDateRange(value);
     let [start, end] = duration;
-    start = new Date();
+    start = Date.parse(new Date());
     end = new Date();
     end = Date.parse(end) + dateRanges.find(({ text }) => text === value).range;
     dispatch(changeToken({ id, field: 'duration', newValue: [start, end] }));
@@ -63,7 +63,7 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
       endDate.setMinutes(endMinutes);
     }
 
-    dispatch(changeToken({ id, field: 'duration', newValue: [startDate, endDate] }));
+    dispatch(changeToken({ id, field: 'duration', newValue: [Date.parse(startDate), Date.parse(endDate)] }));
   }, [time.start, time.end]);
 
   useEffect(() => {
@@ -110,7 +110,9 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
           className={muiClasses.datePicker}
           value={duration}
           onChange={(newValue) => {
-            dispatch(changeToken({ id, field: 'duration', newValue }));
+            dispatch(
+              changeToken({ id, field: 'duration', newValue: [Date.parse(newValue[0]), Date.parse(newValue[1])] })
+            );
             setSelectedDateRange('none');
           }}
           renderInput={(startProps, endProps) => (
