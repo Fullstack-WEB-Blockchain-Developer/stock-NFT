@@ -1,65 +1,80 @@
 .pageContainer {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 .contentWrapper {
-  width: 90%;
-  max-width: 1400px;
-  color: var(--white);
-  font-family: 'Poppins', sans-serif;
-  padding-bottom: 40px;
+	width: 90%;
+	max-width: 1400px;
+	padding-bottom: 40px;
+
+	color: var(--white);
+
+	font-family: 'Poppins', sans-serif;
 }
 
 .pageTitle {
-  text-align: center;
-  font-size: 36px;
-  font-weight: bold;
-  margin-top: 41px;
-  margin-bottom: 22px;
+	margin-top: 41px;
+	margin-bottom: 22px;
+
+	text-align: center;
+
+	font-size: 36px;
+	font-weight: bold;
 }
 
 .pageDescription {
-  text-align: center;
-  font-size: 18px;
-  letter-spacing: 0.02px;
-  color: var(--light-grey);
-  margin-bottom: 40px;
+	margin-bottom: 40px;
+
+	text-align: center;
+	letter-spacing: 0.02px;
+
+	color: var(--light-grey);
+
+	font-size: 18px;
 }
 
 .selectsWrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 40px;
+	display: flex;
+	justify-content: center;
+
+	margin-bottom: 40px;
 }
 
 .tableHead {
-  display: flex;
-  justify-content: space-between;
-  padding: 40px;
-  border-top: 1px solid var(--dark-grey);
-  border-bottom: 1px solid var(--dark-grey);
+	display: flex;
+	justify-content: space-between;
+
+	padding: 40px;
+
+	border-top: 1px solid var(--dark-grey);
+	border-bottom: 1px solid var(--dark-grey);
 }
 
 .collectionName,
 .notCollectionName {
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 0.02px;
-  color: var(--white);
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: clip;
+	overflow: hidden;
+
+	white-space: nowrap;
+	letter-spacing: 0.02px;
+	text-overflow: clip;
+
+	color: var(--white);
+
+	font-size: 18px;
+	font-weight: 600;
 }
 
 .collectionName {
-  text-align: left;
-  width: 33%;
+	width: 33%;
+
+	text-align: left;
 }
 
 .notCollectionName {
-  text-align: right;
-  width: 100px;
+	width: 100px;
+
+	text-align: right;
 }
 
 .empty {
@@ -79,4 +94,38 @@
 	border-radius: 30px;
 
 	font-size: 24px;
+}
+
+.paginationButtons {
+	display: flex;
+	justify-content: center;
+
+	margin-top: 40px;
+
+	cursor: pointer;
+
+	div {
+		width: 120px;
+		padding: 16px;
+
+		text-align: center;
+
+		border: 1px solid var(--primary);
+		border-right: none;
+
+		font-size: 16px;
+	}
+
+	div:first-child {
+		border-radius: 8px 0 0 8px;
+	}
+
+	div:last-child {
+		border-right: 1px solid var(--primary);
+		border-radius: 0 8px 8px 0;
+	}
+}
+
+.choosenPagination {
+	background-color: var(--primary);
 }

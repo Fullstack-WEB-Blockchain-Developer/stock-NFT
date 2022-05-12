@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 //next
 import Image from 'next/image';
+//redux
+import { useDispatch } from 'react-redux';
+import { open as openError } from 'src/redux/slices/errorSnackbarSlice';
+//classnames
+import cn from 'classnames';
 //components
 import { Selects } from './components/Selects/Selects';
 import { CollectionRow } from './components/CollectionRow/CollectionRow';
@@ -10,18 +15,49 @@ import { getFilteredCollections } from './TrendingCollections.utils';
 import styles from './TrendingCollectionsPage.module.scss';
 
 export const TrendingCollectionsPage = ({ blockchains, categories }) => {
+  const dispatch = useDispatch();
+
   const [filter, setFilter] = useState({ duration: 'Last 7 days', category: 'All Categories', chain: 'Ethereum' });
   const [collectionsFiltered, setCollectionsFiltered] = useState([]);
+  const [collectionsQuantity, setCollectionsQuantity] = useState(0);
+  const [paginationButtons, setPaginationButtons] = useState([]);
+  const [choosenPagination, setChoosenPagination] = useState(0);
+  const [offset, setOffset] = useState(0);
+
+  const handlePagination = (index) => {
+    setChoosenPagination(index);
+    setOffset(index > 0 ? index * 100 : index);
+  };
 
   useEffect(() => {
     const blockchainTypeId = blockchains.find(({ name }) => name === filter.chain).id;
     const categoryId = categories.find(({ name }) => name === filter.category)?.id;
 
-    getFilteredCollections(filter.duration, categoryId, blockchainTypeId).then((result) => {
-      setCollectionsFiltered([...result]);
-    });
-  }, [filter.duration, filter.category, filter.chain, blockchains, categories]);
+    getFilteredCollections(filter.duration, categoryId, blockchainTypeId, offset)
+      .then(({ data, quantity }) => {
+        setCollectionsFiltered(data.length > 0 ? [...data] : null);
+        setCollectionsQuantity(quantity);
 
+        const pages = Math.ceil(quantity / 100);
+        const newPaginationButtons = new Array(pages).fill({}, 0).map((elem, index) => {
+          const start = index === 0 ? 1 : index * 100;
+          const end = quantity < 100 ? quantity : quantity < (index + 1) * 100 ? quantity : (index + 1) * 100;
+
+          return { start, end };
+        });
+
+        setPaginationButtons(newPaginationButtons);
+      })
+      .catch((error) => {
+        dispatch(
+          openError(
+            error.response?.data ? `${error.response.data.statusCode} ${error.response.data.message}` : error.message
+          )
+        );
+      });
+  }, [filter.duration, filter.category, filter.chain, blockchains, categories, dispatch, offset]);
+
+  console.log('---', collectionsFiltered);
   return (
     <div className={styles.pageContainer}>
       <div className={styles.contentWrapper}>
@@ -44,10 +80,11 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
             </div>
           ))}
         </div>
-        {collectionsFiltered.length > 0 ? (
+        {collectionsFiltered ? (
           collectionsFiltered.map(
             (
               {
+                blockchainType_id,
                 collection_id,
                 collection_logoImage,
                 collection_name,
@@ -61,6 +98,7 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
               index
             ) => (
               <CollectionRow
+                blockchainTypeIcon={blockchainType_id && blockchains.find(({ id }) => id === blockchainType_id).icon}
                 floorPrice={floorPrice}
                 id={collection_id}
                 items={items}
@@ -81,6 +119,19 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
             <span>No collections to display</span>
           </div>
         )}
+        <div className={styles.paginationButtons}>
+          {paginationButtons.map(({ start, end }, index) => (
+            <div
+              key={start}
+              className={cn(styles.paginationButton, {
+                [styles.choosenPagination]: index === choosenPagination,
+              })}
+              onClick={() => handlePagination(index)}
+            >
+              {start} - {end}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

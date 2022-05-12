@@ -5,7 +5,19 @@ import cn from 'classnames';
 //styles
 import styles from './CollectionRow.module.scss';
 
-export const CollectionRow = ({ id, items, last24h, last7d, logo, name, owners, number, volume, floorPrice }) => {
+export const CollectionRow = ({
+  blockchainTypeIcon,
+  floorPrice,
+  id,
+  items,
+  last24h,
+  last7d,
+  logo,
+  name,
+  number,
+  owners,
+  volume,
+}) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.collectionName}>
@@ -24,7 +36,22 @@ export const CollectionRow = ({ id, items, last24h, last7d, logo, name, owners, 
         <span className={styles.name}>{name}</span>
       </div>
       <div className={cn(styles.volume, styles.notCollectionName)}>
-        {volume > 0 ? <span>{volume}</span> : <span>---</span>}
+        {volume > 0 ? (
+          <>
+            {blockchainTypeIcon && (
+              <Image
+                alt="blockchain-icon"
+                height={19}
+                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`}
+                src={blockchainTypeIcon}
+                width={19}
+              />
+            )}
+            <span>{volume}</span>
+          </>
+        ) : (
+          <span>---</span>
+        )}
       </div>
       <div className={styles.notCollectionName}>
         {last24h ? (

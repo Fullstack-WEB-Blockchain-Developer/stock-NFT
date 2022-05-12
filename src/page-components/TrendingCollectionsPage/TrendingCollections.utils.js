@@ -19,8 +19,8 @@ export const durationOptions = [
   },
 ];
 
-export const getFilteredCollections = async (duration, categoryId, chainId) => {
-  let url = `${process.env.BACKEND_URL}/collections/get/trending?limit=100`;
+export const getFilteredCollections = async (duration, categoryId, chainId, offset) => {
+  let url = `${process.env.BACKEND_URL}/collections/get/trending?limit=100&offset=${offset}`;
 
   if (duration) {
     url += `&daysOffset=${durationOptions.find(({ text }) => text === duration).numberOfDays}`;
@@ -33,9 +33,9 @@ export const getFilteredCollections = async (duration, categoryId, chainId) => {
   if (chainId) {
     url += `&blockchainTypeId=${chainId}`;
   }
-console.log('---url', url)
+
   const {
-    data: { data },
+    data: { data, collections },
   } = await axios.get(url);
 
   const adaptedData = data.map((elem) => {
@@ -74,6 +74,6 @@ console.log('---url', url)
 
     return { ...elem, last24h, last7d, owners: adaptedOwners, items: adaptedItems };
   });
-
-  return adaptedData;
+  
+  return { data: adaptedData, quantity: collections };
 };
