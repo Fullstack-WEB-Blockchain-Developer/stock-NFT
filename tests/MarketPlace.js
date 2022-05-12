@@ -79,6 +79,7 @@ describe("StokeMarketPlace contract", function () {
     // console.log("~ file: MarketPlace.js ~ line 81 ~ it ~ marketContract", marketContract);
     await nftContract.connect(account1).approve(marketContract.address, 2);
     await marketContract.connect(account1).fixedSales([2], [5000], [1652253229], [1652512429], [nftContract.address]);
+    
   })
 
   // it("set auctionFee", async() => {
