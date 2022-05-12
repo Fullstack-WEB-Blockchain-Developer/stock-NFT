@@ -12,6 +12,8 @@ import { Select, MenuItem } from '@mui/material';
 import { useStyles } from '../../../../hooks/useStyles';
 //components
 import { SquareNFTCard } from '../../../../components/SquareNFTCard/SquareNFTCard';
+//utils
+import { images, videos, audios } from 'src/helpers/extentions';
 //styles
 import styles from './RightSide.module.scss';
 import { enableMapSet } from 'immer';
@@ -114,14 +116,28 @@ export const RightSide = ({ className }) => {
                       <MenuItem key={id} value={name}>
                         <span className={styles.menuItem}>
                           {fileName && (
-                            <span>
-                              <Image
-                                alt={`${name}-image`}
-                                height={25}
-                                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
-                                src={fileName}
-                                width={25}
-                              />
+                            <span style={{position: 'relative'}}>
+                              {images.includes(fileName.substring(fileName.indexOf('.') + 1).toLowerCase()) && (
+                                <Image
+                                  alt={`${name}-image`}
+                                  height={'25px'}
+                                  loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
+                                  src={fileName}
+                                  width={'25px'}
+                                />
+                              )}
+                              {videos.includes(fileName.substring(fileName.indexOf('.') + 1).toLowerCase()) && (
+                                <video
+                                  src={`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`}
+                                  alt="token-video"
+                                  className={styles.video}
+                                />
+                              )}
+                              {audios.includes(fileName.substring(fileName.indexOf('.') + 1).toLowerCase()) && (
+                                <div className={styles.audio} style={{color:'var(--white)'}}>
+                                <span>{fileName.substring(fileName.indexOf('.') + 1).toLowerCase()}</span>
+                              </div>
+                              )}
                             </span>
                           )}
                           <span>{name}</span>
@@ -133,13 +149,31 @@ export const RightSide = ({ className }) => {
                   {token.bundle.map((elem) => (
                     <div key={elem.id} className={styles.bundleItemPreview}>
                       <div className={styles.bundleItemPreviewvImage}>
-                        <Image
-                          alt={`${elem.id}-image`}
-                          layout="fill"
-                          objectFit="cover"
-                          loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
-                          src={elem.fileName}
-                        />
+                        {elem.fileName && (
+                          <>
+                            {images.includes(elem.fileName.substring(elem.fileName.indexOf('.') + 1).toLowerCase()) && (
+                              <Image
+                                alt={`${name}-image`}
+                                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
+                                src={elem.fileName}
+                                layout="fill"
+                                objectFit='cover'
+                              />
+                            )}
+                            {videos.includes(elem.fileName.substring(elem.fileName.indexOf('.') + 1).toLowerCase()) && (
+                              <video
+                                src={`${process.env.BACKEND_ASSETS_URL}/nftMedia/${elem.fileName}`}
+                                alt="token-video"
+                                className={styles.video}
+                              />
+                            )}
+                            {audios.includes(elem.fileName.substring(elem.fileName.indexOf('.') + 1).toLowerCase()) && (
+                              <div className={styles.audio}>
+                                <span>{elem.fileName.substring(elem.fileName.indexOf('.') + 1).toLowerCase()}</span>
+                              </div>
+                            )}
+                          </>
+                        )}
                       </div>
                       <div className={styles.bundleItemPreviewvDescription}>
                         <span>{elem.collection?.name}</span>

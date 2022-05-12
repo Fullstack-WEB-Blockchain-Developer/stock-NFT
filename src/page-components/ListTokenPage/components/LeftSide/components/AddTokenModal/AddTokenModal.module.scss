@@ -17,3 +17,17 @@
 		margin-left: 16px;
 	}
 }
+
+.video {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 100%;
+  }
+  
+  .audio {
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  height: 100%;
+  }

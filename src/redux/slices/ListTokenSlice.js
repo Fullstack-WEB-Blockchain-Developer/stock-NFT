@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 const initialState = {
   allUserTokens: [],
@@ -9,31 +9,33 @@ const initialState = {
   error: null,
 };
 
-export const getAllUserTokens = createAsyncThunk(
-  "tokens/getAllUserTokens",
-  async (params, { rejectWithValue }) => {
-    try {
-      const accessToken = localStorage.getItem("accessToken");
+export const getAllUserTokens = createAsyncThunk('tokens/getAllUserTokens', async (params, { rejectWithValue }) => {
+  try {
+    const accessToken = localStorage.getItem('accessToken');
 
-      const {
-        data: { data },
-      } = await axios.get(`${process.env.BACKEND_URL}/users/account/assets`, {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      });
+    const {
+      data: { data },
+    } = await axios.get(`${process.env.BACKEND_URL}/users/account/assets`, {
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+      },
+    });
 
-      return data;
-    } catch (e) {
-      return rejectWithValue(e);
-    }
+    return data;
+  } catch (e) {
+    return rejectWithValue(e);
   }
-);
+});
 
 export const listToken = createSlice({
-  name: "listToken",
+  name: 'listToken',
   initialState,
   reducers: {
+    setTokens: (state, { payload }) => {
+      state.tokens = [payload];
+      state.openedTokens = [payload.id];
+      state.openedPreviews = [payload.id];
+    },
     addToken: (state, { payload }) => {
       state.tokens = [...state.tokens, payload];
       state.openedTokens = [...state.openedTokens, payload.id];
@@ -80,7 +82,7 @@ export const listToken = createSlice({
   },
 });
 
-export const { addToken, deleteToken, toggleOpenToken, changeToken, toggleOpenPreview, clearError } =
+export const { setTokens, addToken, deleteToken, toggleOpenToken, changeToken, toggleOpenPreview, clearError } =
   listToken.actions;
 
 export default listToken.reducer;
