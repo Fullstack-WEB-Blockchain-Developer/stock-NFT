@@ -1,0 +1,77 @@
+.title {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.description {
+	margin-top: 4px;
+
+	letter-spacing: 0.01px;
+
+	color: var(--light-grey);
+
+	font-size: 14px;
+}
+
+.star {
+	color: var(--red);
+}
+
+.priceField,
+.durationField,
+.bundleNameField,
+.reservedField {
+	margin-top: 8px;
+	margin-bottom: 16px;
+}
+
+.sellAsBundle {
+	display: flex;
+	justify-content: space-between;
+
+	margin-top: 8px;
+	margin-bottom: 16px;
+
+	letter-spacing: 0.02px;
+
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.bundleNameField {
+	margin-bottom: 24px;
+}
+
+.reserveForSpecific {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.reserveForSpecific {
+	margin-bottom: 24px;
+}
+
+.fees {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+
+	padding: 24px 0;
+
+	border-top: 1px solid var(--dark-grey);
+}
+
+.feesTitleDescriptionWrapper {
+	display: flex;
+	flex-direction: column;
+}
+
+.usdPrice {
+	margin-top: 8px;
+	margin-left: 25%;
+
+	color: var(--light-grey);
+
+	font-size: 14px;
+}

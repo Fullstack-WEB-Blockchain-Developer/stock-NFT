@@ -1,33 +1,44 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from 'react';
 //next
-import Image from "next/image";
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 //classnames
-import cn from "classnames";
+import cn from 'classnames';
 //spinner
-import { Oval } from "react-loader-spinner";
+import { Oval } from 'react-loader-spinner';
 //components
-import { Tag } from "../Tag/Tag";
-import { AmountWithIcon } from "../AmountWithIcon/AmountWithIcon";
-import { AmountDifference } from "../AmountDifference/AmountDifference";
+import { Tag } from '../Tag/Tag';
 //utils
-import { videos, audios, images } from "../../helpers/extentions";
+import { videos, audios, images } from '../../helpers/extentions';
 //styles
-import styles from "./SquareNFTCard.module.scss";
+import styles from './SquareNFTCard.module.scss';
 
-export const SquareNFTCard = ({ name, category, status, price, owner, fileName, collection }) => {
+export const SquareNFTCard = ({
+  category,
+  className,
+  collection,
+  fileName,
+  id,
+  name,
+  owner,
+  price,
+  status,
+  currency,
+}) => {
   const [tokenFileError, setTokenFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
+  const router = useRouter();
 
   useEffect(() => {
-    const end = fileName.substring(fileName.indexOf(".") + 1).toLowerCase();
+    const end = fileName.substring(fileName.indexOf('.') + 1).toLowerCase();
 
     if (images.includes(end)) {
-      setTypeOfTokenFile("image");
+      setTypeOfTokenFile('image');
     } else if (videos.includes(end)) {
-      setTypeOfTokenFile("video");
+      setTypeOfTokenFile('video');
     } else if (audios.includes(end)) {
-      setTypeOfTokenFile("audio");
+      setTypeOfTokenFile('audio');
     }
   }, [fileName]);
 
@@ -43,11 +54,11 @@ export const SquareNFTCard = ({ name, category, status, price, owner, fileName, 
   const audioRef = useRef();
 
   return (
-    <div className={styles.wrapper}>
+    <div className={cn(className, styles.wrapper)} onClick={() => router.push(`/token/${id}`)}>
       <div className={styles.imageWrapperWrapper}>
         <div
           className={cn(styles.imageWrapper, {
-            [styles.blur]: status === "pending" && typeOfTokenFile !== "audio",
+            [styles.blur]: status === 'pending' && typeOfTokenFile !== 'audio',
           })}
         >
           {isLoading && (
@@ -68,7 +79,7 @@ export const SquareNFTCard = ({ name, category, status, price, owner, fileName, 
             </div>
           ) : (
             <>
-              {typeOfTokenFile === "image" && (
+              {typeOfTokenFile === 'image' && (
                 <>
                   <Image
                     alt="token-image"
@@ -81,18 +92,18 @@ export const SquareNFTCard = ({ name, category, status, price, owner, fileName, 
                   />
                 </>
               )}
-              {typeOfTokenFile === "video" && (
+              {typeOfTokenFile === 'video' && (
                 <video
                   alt="token-video"
                   autoPlay={false}
                   className={styles.video}
-                  controls={status !== "pending" ? "controls" : false}
+                  controls={status !== 'pending' ? 'controls' : false}
                   onError={() => setTokenFileError(true)}
                   ref={videoRef}
                   src={`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`}
                 />
               )}
-              {typeOfTokenFile === "audio" && (
+              {typeOfTokenFile === 'audio' && (
                 <audio
                   alt="token-audio"
                   autoPlay={false}
@@ -110,10 +121,20 @@ export const SquareNFTCard = ({ name, category, status, price, owner, fileName, 
         <div className={styles.name}>
           <span>{name}</span>
         </div>
-        {price && <div className={styles.price}>
-          <AmountWithIcon amount={price} color="red" />
-          <AmountDifference direction="down" percent="12" />
-        </div>}
+        {price && currency && (
+          <div className={styles.price}>
+            <div className={styles.priceAmount}>
+              <Image
+                src={currency.icon}
+                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`}
+                alt={currency.name}
+                width={19}
+                height={19}
+              />
+              <span>{Number(price)}</span>
+            </div>
+          </div>
+        )}
         <div className={styles.bottomSection}>
           <div className={styles.bottomLeft}>
             <div className={styles.collection}>

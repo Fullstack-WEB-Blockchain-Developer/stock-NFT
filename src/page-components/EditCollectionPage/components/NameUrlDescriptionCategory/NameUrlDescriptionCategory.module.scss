@@ -1,0 +1,32 @@
+.title {
+	margin-top: 24px;
+	margin-bottom: 8px;
+
+	letter-spacing: 0.01px;
+
+	color: var(--white);
+
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.star {
+	color: var(--red);
+}
+
+.description {
+	margin-top: 4px;
+	margin-bottom: 8px;
+
+	letter-spacing: 0.01px;
+
+	color: var(--light-grey);
+
+	font-size: 14px;
+}
+
+.link {
+	cursor: pointer;
+
+	color: var(--primary);
+}

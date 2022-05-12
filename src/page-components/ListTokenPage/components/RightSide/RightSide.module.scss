@@ -1,0 +1,135 @@
+.rightSideTitle {
+  margin-top: 66px;
+
+  letter-spacing: 0.02px;
+
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.tokenPreview {
+}
+
+.tokenListedHead {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 16px 0;
+
+  font-size: 18px;
+  font-weight: bold;
+
+  span:last-child {
+    cursor: pointer;
+  }
+}
+
+.closed {
+  display: none;
+}
+
+.asBundleSquareCard {
+  margin-top: 24px;
+  margin-bottom: 40px;
+}
+
+.itemQuantity {
+  margin-bottom: 16px;
+
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+
+  span {
+    display: flex;
+    align-items: center;
+  }
+
+  span:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 10%;
+    background-color: var(--light-grey);
+  }
+
+  span:last-child {
+    margin-left: 8px;
+  }
+}
+
+.selectedTokens {
+  padding: 16px 0;
+
+  border-top: 1px solid var(--dark-grey);
+  border-bottom: 1px solid var(--dark-grey);
+}
+
+.bundleItemPreview {
+  display: flex;
+
+  margin-bottom: 8px;
+  padding: 16px;
+
+  border: 1px solid var(--shadow);
+  border-radius: 7px;
+}
+
+.bundleItemPreview:last-child {
+  margin-bottom: 0px;
+}
+
+.bundleItemPreviewvImage {
+  position: relative;
+
+  width: 63px;
+  height: 63px;
+
+  border-radius: 8px;
+  background-color: var(--dark-grey);
+  overflow: hidden;
+}
+
+.bundleItemPreviewvDescription {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin-left: 16px;
+
+  span:first-child {
+    color: var(--light-grey);
+    align-items: center;
+
+    font-size: 16px;
+  }
+
+  span:last-child {
+    margin-top: 4px;
+
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+.video {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.audio {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}

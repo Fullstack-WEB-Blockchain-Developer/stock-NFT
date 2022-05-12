@@ -1,23 +1,64 @@
-import { createSlice } from "@reduxjs/toolkit";
+//redux
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+//axios
+import axios from "axios";
+//utils
+import { constructUrl } from "../../page-components/ProfilePage/components/ContentWrapper/ContentWrapper.utils";
 
 const initialState = {
-  selectedStatuses: [],
-  selectedPrice: {
-    min: undefined,
-    max: undefined,
-    currency: "usd",
-    text: "USD",
-  },
-  selectedCollections: { filter: "", rows: [] },
-  selectedChains: [],
-  selectedOnSaleIn: { filter: "", rows: [] },
-  selectedEventTypes: [],
+  choosenSection: "created",
+  createdNfts: 0,
+  error: null,
+  favoritedNfts: 0,
   filterText: "",
-  itemsSelect: "Single Items",
-  readyFilterOption: { text: "Price: High to Low", sortOrder: "ASC", sortBy: "price" },
-  tokensGridScale: "large",
   isShownAllOffers: true,
+  itemsSelect: "Single Items",
+  maxValue: 0,
+  mostCompleteCollection: 0,
+  offset: 0,
+  ownedNfts: 0,
+  readyFilterOption: { text: "Price: High to Low", sortOrder: "ASC", sortBy: "price" },
+  selectedChains: [],
+  selectedCollections: { filter: "", rows: [] },
+  selectedOnSaleIn: { filter: "", rows: [] },
+  selectedStatuses: [],
+  selectedPrice: { min: undefined, max: undefined, currency: undefined },
+  tokens: [],
+  tokensGridScale: "large",
+  totalValue: 0,
+  volumeTraded: 0,
 };
+
+export const getTokens = createAsyncThunk("tokens/getTokens", async ({}, { getState, rejectWithValue }) => {
+  const {
+    profileFiltration: {
+      choosenSection,
+      offset,
+      readyFilterOption,
+      selectedCollections,
+      selectedPrice,
+      selectedStatuses,
+    },
+  } = getState();
+
+  try {
+    const accessToken = localStorage.getItem("accessToken");
+    const { sortOrder, sortBy } = readyFilterOption;
+
+    let url = `${process.env.BACKEND_URL}/users/account/assets?offset=${offset}&limit=30&tab=${choosenSection}&sortOrder=${sortOrder}&sortBy=${sortBy}`;
+    url = constructUrl(url, selectedStatuses, selectedCollections, selectedPrice);
+
+    const { data } = await axios.get(`${url}`, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+
+    return data;
+  } catch (e) {
+    return rejectWithValue(e);
+  }
+});
 
 export const profileFiltration = createSlice({
   name: "profileFiltration",
@@ -42,10 +83,9 @@ export const profileFiltration = createSlice({
     },
     deletePrice: (state) => {
       state.selectedPrice = {
+        ...state.selectedPrice,
         min: undefined,
         max: undefined,
-        currency: "usd",
-        text: "USD",
       };
     },
     deleteAll: (state) => {
@@ -53,18 +93,50 @@ export const profileFiltration = createSlice({
       state.selectedPrice = {
         min: undefined,
         max: undefined,
-        currency: "usd",
-        text: "USD",
+        currency: undefined,
       };
       state.selectedCollections = { filter: "", rows: [] };
       state.selectedChains = [];
       state.selectedOnSaleIn = { filter: "", rows: [] };
       state.selectedEventTypes = [];
     },
+    clearError: (state) => {
+      state.error = null;
+    },
+    clearOffsetAndTokens: (state) => {
+      state.offset = 0;
+      state.tokens = []
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      getTokens.fulfilled,
+      (state, { payload: { data, ownedNfts, totalValue, maxValue, createdNfts, favoritedNfts } }) => {
+        if (data) {
+          state.createdNfts = createdNfts;
+          state.favoritedNfts = favoritedNfts;
+          state.maxValue = maxValue;
+          state.offset = state.tokens.length + data.length;
+          state.ownedNfts = ownedNfts;
+          state.tokens = [...state.tokens, ...data];
+          state.totalValue = totalValue;
+        }
+      }
+    );
+    builder.addCase(getTokens.rejected, (state, { payload }) => {
+      state.error = payload;
+    });
   },
 });
 
-export const { setData, deleteFromArray, deletePrice, deleteFromArrayOfObjects, deleteAll } =
-  profileFiltration.actions;
+export const {
+  clearError,
+  clearOffsetAndTokens,
+  deleteAll,
+  deleteFromArray,
+  deleteFromArrayOfObjects,
+  deletePrice,
+  setData,
+} = profileFiltration.actions;
 
 export default profileFiltration.reducer;

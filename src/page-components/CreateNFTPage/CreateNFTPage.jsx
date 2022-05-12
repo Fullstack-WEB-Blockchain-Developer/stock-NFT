@@ -40,9 +40,9 @@ export const CreateNFTPage = () => {
   const inputRef = useRef();
   const videoRef = useRef();
 
-  // if (error) {
-  //   dispatch(openError(`${error.statusCode + " " + error.message}`));
-  // }
+  if (error) {
+    dispatch(openError(`${error.statusCode + " " + error.message}`));
+  }
 
   const [values, setValues] = useState({
     file: undefined,
@@ -397,9 +397,6 @@ export const CreateNFTPage = () => {
               className={muiClasses.textField}
               value={values[id]}
               onChange={(e) => handleChange(e, id, "string")}
-              InputLabelProps={{
-                style: { color: "var(--shadow)" },
-              }}
               InputProps={{ style: { color: "white" } }}
               multiline={multiline}
               inputProps={{
@@ -579,10 +576,7 @@ export const CreateNFTPage = () => {
           setData={setValues}
         />
       </div>
-      <ConnectWalletModal
-        isOpened={isConnectWalletOpened}
-        handleClose={() => setIsConnectWalletOpened(false)}
-      />
+      <ConnectWalletModal isOpened={isConnectWalletOpened} onClose={() => setIsConnectWalletOpened(false)} />
     </div>
   );
 };

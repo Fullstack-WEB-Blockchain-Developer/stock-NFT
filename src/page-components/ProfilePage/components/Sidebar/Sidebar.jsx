@@ -1,43 +1,51 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 //next
-import Image from "next/image";
+import Image from 'next/image';
 //redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setData,
   deleteFromArray,
   deleteFromArrayOfObjects,
-} from "../../../../redux/slices/profileFiltrationSlice";
-import { open as openError } from "../../../../redux/slices/errorSnackbarSlice";
-import { clearError, getAllChains, getAllCollections } from "../../../../redux/slices/generalDataSlice";
+  getTokens,
+  clearOffsetAndTokens,
+} from '../../../../redux/slices/profileFiltrationSlice';
+import { open as openError } from '../../../../redux/slices/errorSnackbarSlice';
+import {
+  getAllCurrencies,
+  getAllCollections,
+  getAllChains,
+  clearError,
+} from '../../../../redux/slices/generalDataSlice';
 //mui
-import Checkbox from "@mui/material/Checkbox";
-import TextField from "@mui/material/TextField";
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
 //components
-import { Price } from "./components/Price/Price";
+import { Price } from './components/Price/Price';
 //hooks
-import { useStyles } from "../../../../hooks/useStyles";
-import { useDebounce } from "../../../../hooks/useDebounce";
+import { useStyles } from '../../../../hooks/useStyles';
+import { useDebounce } from '../../../../hooks/useDebounce';
 //classnames
-import cn from "classnames";
+import cn from 'classnames';
 //utils
-import { getSections, statuses, getSectionsForUseState, fakeOnSaleIn, eventTypes } from "./Sidebar.utils";
+import { getSections, statuses, getSectionsForUseState, fakeOnSaleIn, eventTypes } from './Sidebar.utils';
 //styles
-import styles from "./Sidebar.module.scss";
+import styles from './Sidebar.module.scss';
 
 export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) => {
   const dispatch = useDispatch();
   const muiClasses = useStyles();
 
   //useSelectors
-  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections, selectedEventTypes } =
-    useSelector((state) => state.profileFiltration);
-  const { chains, collections, error } = useSelector((state) => state.generalData);
-
+  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections, selectedPrice } = useSelector(
+    (state) => state.profileFiltration
+  );
+  const { chains, collections, error, currencies } = useSelector((state) => state.generalData);
   //useStates
   // this state will contain such data as { status: false, price: false, collections: false ...etc}
   const [openedSections, setOpenedSections] = useState(getSectionsForUseState(choosenTopSection));
-  const [onSalesInRows, setOnSalesInRows] = useState(fakeOnSaleIn);
+  //here it was fakeOnSaleIn
+  const [onSalesInRows, setOnSalesInRows] = useState([]);
   const [onSalesInSearch, setOnSalesInSearch] = useState(selectedOnSaleIn.filter);
   const [collectionsRows, setCollectionsRows] = useState(collections);
   const [collectionsSearch, setCollectionsSearch] = useState(selectedCollections.filter);
@@ -47,29 +55,32 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
   const iconLoader = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`;
 
-  //handlers
+  const handleGetNewTokens = () => {
+    dispatch(clearOffsetAndTokens());
+    dispatch(getTokens());
+  };
 
   const handleToggleSection = (section) =>
     setOpenedSections({ ...openedSections, [section]: !openedSections[section] });
-console.log('---selectedStatuses', selectedStatuses)
+  console.log('---selectedStatuses', selectedStatuses);
   const handleToggleStatus = (status, text) => {
     const statusesStringsArray = selectedStatuses.map((elem) => elem.name);
-    console.log('---statusesStringsArray', statusesStringsArray)
+    console.log('---statusesStringsArray', statusesStringsArray);
     if (statusesStringsArray.includes(status)) {
-      dispatch(deleteFromArrayOfObjects({ field: "selectedStatuses", objectField: "name", data: status }));
+      dispatch(deleteFromArrayOfObjects({ field: 'selectedStatuses', objectField: 'name', data: status }));
+      handleGetNewTokens();
     } else {
-      dispatch(setData({ field: "selectedStatuses", data: [...selectedStatuses, { name: status, text }] }));
+      dispatch(setData({ field: 'selectedStatuses', data: [...selectedStatuses, { name: status, text }] }));
+      handleGetNewTokens();
     }
   };
 
   const handleToggleEventType = (eventType, text) => {
     const eventTypesStringsArray = selectedEventTypes.map((elem) => elem.name);
     if (eventTypesStringsArray.includes(eventType)) {
-      dispatch(deleteFromArrayOfObjects({ field: "selectedEventTypes", objectField: "name", data: eventType }));
+      dispatch(deleteFromArrayOfObjects({ field: 'selectedEventTypes', objectField: 'name', data: eventType }));
     } else {
-      dispatch(
-        setData({ field: "selectedEventTypes", data: [...selectedEventTypes, { name: eventType, text }] })
-      );
+      dispatch(setData({ field: 'selectedEventTypes', data: [...selectedEventTypes, { name: eventType, text }] }));
     }
   };
 
@@ -77,43 +88,52 @@ console.log('---selectedStatuses', selectedStatuses)
     const chainsStringsArray = selectedChains.map((elem) => elem.name);
 
     if (chainsStringsArray.includes(chain)) {
-      dispatch(deleteFromArrayOfObjects({ field: "selectedChains", objectField: "name", data: chain }));
+      dispatch(deleteFromArrayOfObjects({ field: 'selectedChains', objectField: 'name', data: chain }));
+      handleGetNewTokens();
     } else {
-      dispatch(setData({ field: "selectedChains", data: [...selectedChains, { name: chain, icon }] }));
+      dispatch(setData({ field: 'selectedChains', data: [...selectedChains, { name: chain, icon }] }));
+      handleGetNewTokens();
     }
   };
 
   const handleToggleOnSaleIn = (onSaleIn) => {
     if (selectedOnSaleIn.rows.includes(onSaleIn)) {
-      dispatch(deleteFromArray({ field: "selectedOnSaleIn", data: { ...selectedOnSaleIn, rows: onSaleIn } }));
+      dispatch(deleteFromArray({ field: 'selectedOnSaleIn', data: { ...selectedOnSaleIn, rows: onSaleIn } }));
+      handleGetNewTokens();
     } else {
       dispatch(
         setData({
-          field: "selectedOnSaleIn",
+          field: 'selectedOnSaleIn',
           data: { ...selectedOnSaleIn, rows: [...selectedOnSaleIn.rows, onSaleIn] },
         })
       );
+      handleGetNewTokens();
     }
   };
 
-  const handleToggleCollections = (collection, icon) => {
+  const handleToggleCollections = (collection, id, icon) => {
     const collectionsStringsArray = selectedCollections.rows.map((elem) => elem.name);
 
     if (collectionsStringsArray.includes(collection)) {
       dispatch(
         deleteFromArrayOfObjects({
-          field: "selectedCollections",
-          objectField: "name",
+          field: 'selectedCollections',
+          objectField: 'name',
           data: { rows: collection },
         })
       );
+      handleGetNewTokens();
     } else {
       dispatch(
         setData({
-          field: "selectedCollections",
-          data: { ...selectedCollections, rows: [...selectedCollections.rows, { name: collection, icon }] },
+          field: 'selectedCollections',
+          data: {
+            ...selectedCollections,
+            rows: [...selectedCollections.rows, { name: collection, icon, id }],
+          },
         })
       );
+      handleGetNewTokens();
     }
   };
 
@@ -123,9 +143,7 @@ console.log('---selectedStatuses', selectedStatuses)
     if (error) {
       dispatch(
         openError(
-          error.response?.data
-            ? `${error.response.data.statusCode} ${error.response.data.message}`
-            : error.message
+          error.response?.data ? `${error.response.data.statusCode} ${error.response.data.message}` : error.message
         )
       );
       dispatch(clearError());
@@ -133,14 +151,15 @@ console.log('---selectedStatuses', selectedStatuses)
   }, [error, dispatch]);
 
   useEffect(() => {
-    dispatch(getAllChains());
     dispatch(getAllCollections());
-  }, [dispatch]);
+    chains.length === 0 && dispatch(getAllChains());
+    currencies.length === 0 && dispatch(getAllCurrencies());
+  }, [dispatch, currencies, chains]);
 
   useEffect(() => {
     dispatch(
       setData({
-        field: "selectedOnSaleIn",
+        field: 'selectedOnSaleIn',
         data: {
           ...selectedOnSaleIn,
           filter: debouncedOnSalesInSearch,
@@ -149,14 +168,15 @@ console.log('---selectedStatuses', selectedStatuses)
     );
 
     setOnSalesInRows(
-      fakeOnSaleIn.filter(({ name }) => name.toLowerCase().includes(debouncedOnSalesInSearch.toLowerCase()))
+      // it was fakeOnSaleIn
+      [].filter(({ name }) => name.toLowerCase().includes(debouncedOnSalesInSearch.toLowerCase()))
     );
   }, [debouncedOnSalesInSearch]);
 
   useEffect(() => {
     dispatch(
       setData({
-        field: "selectedCollections",
+        field: 'selectedCollections',
         data: {
           ...selectedCollections,
           filter: debouncedCollectionSearch,
@@ -169,7 +189,7 @@ console.log('---selectedStatuses', selectedStatuses)
     );
   }, [debouncedCollectionSearch, collections]);
 
-  console.log('---selectedEventTypes', selectedEventTypes)
+  console.log('---selectedEventTypes', selectedEventTypes);
 
   return (
     <div
@@ -200,7 +220,7 @@ console.log('---selectedStatuses', selectedStatuses)
               <Image src="/view-token/Icon-ArrowDown.svg" width={19} height={19} alt="arrow-icon" />
             )}
           </div>
-          {section === "status" && (
+          {section === 'status' && (
             <div
               className={cn(styles.sectionContent, styles.statusesWrapper, {
                 [styles.sectionClosed]: !openedSections.status,
@@ -219,7 +239,7 @@ console.log('---selectedStatuses', selectedStatuses)
               ))}
             </div>
           )}
-          {section === "eventType" && (
+          {section === 'eventType' && (
             <div
               className={cn(styles.sectionContent, styles.statusesWrapper, {
                 [styles.sectionClosed]: !openedSections.eventType,
@@ -238,16 +258,16 @@ console.log('---selectedStatuses', selectedStatuses)
               ))}
             </div>
           )}
-          {section === "price" && (
+          {section === 'price' && (
             <div
               className={cn(styles.sectionContent, {
                 [styles.sectionClosed]: !openedSections.price,
               })}
             >
-              <Price />
+              <Price currencies={currencies} />
             </div>
           )}
-          {section === "collections" && (
+          {section === 'collections' && (
             <div
               className={cn(styles.sectionContent, {
                 [styles.sectionClosed]: !openedSections.collections,
@@ -262,11 +282,11 @@ console.log('---selectedStatuses', selectedStatuses)
                 className={muiClasses.textField}
                 value={collectionsSearch}
                 onChange={({ target: { value } }) => setCollectionsSearch(value)}
-                InputProps={{ style: { color: "white" } }}
+                InputProps={{ style: { color: 'white' } }}
               />
               <div className={styles.scrollable}>
-                {collectionsRows.map(({ name }) => (
-                  <div key={name} className={styles.collection} onClick={() => handleToggleCollections(name)}>
+                {collectionsRows.map(({ name, id }) => (
+                  <div key={name} className={styles.collection} onClick={() => handleToggleCollections(name, id)}>
                     <div className={styles.collectionIcon}>
                       {selectedCollections.rows.map((elem) => elem.name).includes(name) ? (
                         <Image src="/Icon_Check.svg" width={19} height={19} alt="icon-checked" />
@@ -280,7 +300,7 @@ console.log('---selectedStatuses', selectedStatuses)
               </div>
             </div>
           )}
-          {section === "chains" && (
+          {section === 'chains' && (
             <div
               className={cn(styles.sectionContent, {
                 [styles.sectionClosed]: !openedSections.chains,
@@ -300,7 +320,7 @@ console.log('---selectedStatuses', selectedStatuses)
               ))}
             </div>
           )}
-          {section === "onSaleIn" && (
+          {section === 'onSaleIn' && (
             <div
               className={cn(styles.sectionContent, {
                 [styles.sectionClosed]: !openedSections.onSaleIn,
@@ -315,19 +335,19 @@ console.log('---selectedStatuses', selectedStatuses)
                 className={muiClasses.textField}
                 value={onSalesInSearch}
                 onChange={({ target: { value } }) => setOnSalesInSearch(value)}
-                InputProps={{ style: { color: "white" } }}
+                InputProps={{ style: { color: 'white' } }}
               />
               <div className={styles.scrollable}>
                 {onSalesInRows.map(({ name, id }) => (
                   <div key={id} className={styles.onSaleInRow}>
                     <Checkbox
                       sx={{
-                        color: "var(--light-grey)",
-                        "&.Mui-checked": {
-                          color: "var(--light-grey)",
+                        color: 'var(--light-grey)',
+                        '&.Mui-checked': {
+                          color: 'var(--light-grey)',
                         },
-                        position: "relative",
-                        bottom: "1px",
+                        position: 'relative',
+                        bottom: '1px',
                       }}
                       checked={selectedOnSaleIn.rows.includes(name)}
                       onChange={() => handleToggleOnSaleIn(name)}

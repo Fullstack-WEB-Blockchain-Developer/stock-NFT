@@ -6,6 +6,8 @@ import {
   deleteFromArrayOfObjects,
   deletePrice,
   deleteAll,
+  clearOffsetAndTokens,
+  getTokens,
 } from "../../../../../../redux/slices/profileFiltrationSlice";
 //components
 import { Tag } from "./components/Tag";
@@ -17,25 +19,18 @@ import styles from "./TagsWrapper.module.scss";
 
 export const TagsWrapper = ({ choosenSection }) => {
   const [isClearAll, setIsClearAll] = useState(false);
-  const [displayedSections] = useState(getAvailableSections(choosenSection));
+  const [displayedSections, setDisplayedSections] = useState(getAvailableSections(choosenSection));
   const dispatch = useDispatch();
-  const {
-    selectedChains,
-    selectedCollections,
-    selectedEventTypes,
-    selectedOnSaleIn,
-    selectedPrice,
-    selectedStatuses,
-  } = useSelector((state) => state.profileFiltration);
+  const { selectedStatuses, selectedPrice, selectedCollections, selectedChains, selectedOnSaleIn } =
+    useSelector((state) => state.profileFiltration);
 
   useEffect(() => {
     if (
-      (displayedSections.includes("chains") && selectedChains.length > 0) ||
-      (displayedSections.includes("collections") && selectedCollections.rows.length > 0) ||
-      (displayedSections.includes("eventType") && selectedEventTypes.length > 0) ||
-      (displayedSections.includes("onSaleIn") && selectedOnSaleIn.rows.length > 0) ||
+      (displayedSections.includes("status") && selectedStatuses.length > 0) ||
       (displayedSections.includes("price") && selectedPrice.min) ||
-      (displayedSections.includes("status") && selectedStatuses.length > 0)
+      (displayedSections.includes("collections") && selectedCollections.rows.length > 0) ||
+      (displayedSections.includes("chains") && selectedChains.length > 0) ||
+      (displayedSections.includes("onSaleIn") && selectedOnSaleIn.rows.length > 0)
     ) {
       setIsClearAll(true);
     } else {
@@ -43,100 +38,89 @@ export const TagsWrapper = ({ choosenSection }) => {
     }
   }, [
     displayedSections,
-    selectedChains,
-    selectedCollections,
-    selectedEventTypes,
-    selectedOnSaleIn,
-    selectedPrice,
     selectedStatuses,
+    selectedPrice,
+    selectedCollections,
+    selectedChains,
+    selectedOnSaleIn,
   ]);
 
+  const handleClose = (callback) => {
+    dispatch(clearOffsetAndTokens())
+    dispatch(callback());
+    dispatch(getTokens())
+  };
+
   return (
-    <>
-      {isClearAll &&
-        <div className={styles.wrapper}>
-          {displayedSections.includes("status") &&
-            selectedStatuses.map(({ text, name }, i) => (
-              <Tag
-                key={`${name}-${i}`}
-                text={text}
-                handleClose={() =>
-                  dispatch(
-                    deleteFromArrayOfObjects({ field: "selectedStatuses", objectField: "name", data: name })
-                  )
-                }
-              />
-            ))}
-          {displayedSections.includes("eventType") &&
-            selectedEventTypes.map(({ name, text }, i) => (
-              <Tag
-                key={`${name}-${i}`}
-                text={text}
-                handleClose={() =>
-                  dispatch(
-                    deleteFromArrayOfObjects({ field: "selectedEventTypes", objectField: "name", data: name })
-                  )
-                }
-              />
-            ))}
-          {displayedSections.includes("chains") &&
-            selectedChains.map(({ name, icon }, i) => (
-              <Tag
-                key={`${name}-${i}`}
-                text={name}
-                icon={icon}
-                handleClose={() =>
-                  dispatch(
-                    deleteFromArrayOfObjects({ field: "selectedChains", objectField: "name", data: name })
-                  )
-                }
-              />
-            ))}
-          {selectedPrice.min && (
-            <PriceTag
-              key="price-tag"
-              text={selectedPrice.text}
-              min={selectedPrice.min}
-              max={selectedPrice.max}
-              handleClose={() => dispatch(deletePrice())}
-            />
-          )}
-          {displayedSections.includes("collections") &&
-            selectedCollections.rows.map(({ name, icon }, i) => (
-              <Tag
-                key={`${name}-${i}`}
-                text={name}
-                icon={icon}
-                handleClose={() =>
-                  dispatch(
-                    deleteFromArrayOfObjects({
-                      field: "selectedCollections",
-                      objectField: "name",
-                      data: { rows: name },
-                    })
-                  )
-                }
-              />
-            ))}
-          {displayedSections.includes("onSaleIn") &&
-            selectedOnSaleIn.rows.map((elem, i) => (
-              <Tag
-                key={`${elem}-${i}`}
-                text={elem}
-                handleClose={() =>
-                  dispatch(
-                    deleteFromArray({ field: "selectedOnSaleIn", data: { ...selectedOnSaleIn, rows: elem } })
-                  )
-                }
-              />
-            ))}
-          {isClearAll && (
-            <div className={styles.clearAll}>
-              <span onClick={() => dispatch(deleteAll())}>Clear All</span>
-            </div>
-          )}
+    <div className={styles.wrapper}>
+      {displayedSections.includes("status") &&
+        selectedStatuses.map(({ text, name }, i) => (
+          <Tag
+            key={`${name}-${i}`}
+            text={text}
+            handleClose={() =>
+              handleClose(() =>
+                deleteFromArrayOfObjects({ field: "selectedStatuses", objectField: "name", data: name })
+              )
+            }
+          />
+        ))}
+      {displayedSections.includes("chains") &&
+        selectedChains.map(({ name, icon }, i) => (
+          <Tag
+            key={`${name}-${i}`}
+            text={name}
+            icon={icon}
+            handleClose={() =>
+              handleClose(() =>
+                deleteFromArrayOfObjects({ field: "selectedChains", objectField: "name", data: name })
+              )
+            }
+          />
+        ))}
+      {selectedPrice.min && (
+        <PriceTag
+          key="price-tag"
+          currency={selectedPrice.currency}
+          min={selectedPrice.min}
+          max={selectedPrice.max}
+          handleClose={() => handleClose(() => deletePrice())}
+        />
+      )}
+      {displayedSections.includes("collections") &&
+        selectedCollections.rows.map(({ name, icon }, i) => (
+          <Tag
+            key={`${name}-${i}`}
+            text={name}
+            icon={icon}
+            handleClose={() =>
+              handleClose(() =>
+                deleteFromArrayOfObjects({
+                  field: "selectedCollections",
+                  objectField: "name",
+                  data: { rows: name },
+                })
+              )
+            }
+          />
+        ))}
+      {displayedSections.includes("onSaleIn") &&
+        selectedOnSaleIn.rows.map((elem, i) => (
+          <Tag
+            key={`${elem}-${i}`}
+            text={elem}
+            handleClose={() =>
+              handleClose(() =>
+                deleteFromArray({ field: "selectedOnSaleIn", data: { ...selectedOnSaleIn, rows: elem } })
+              )
+            }
+          />
+        ))}
+      {isClearAll && (
+        <div className={styles.clearAll}>
+          <span onClick={() => handleClose(() => deleteAll())}>Clear All</span>
         </div>
-      }
-    </>
+      )}
+    </div>
   );
 };

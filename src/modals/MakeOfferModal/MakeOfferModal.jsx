@@ -57,7 +57,6 @@ let tokenContract;
 let etherPrice;
 let tokenAddr;
 let stokeMarketAddr;
-let supportNetwork;
 
 export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
   const { account, activate, library, chainId } = useWeb3React();
@@ -83,9 +82,9 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
   });
   const muiClasses = useStyles();
 
-  const loadIcon = ({ src }) => {
-    return `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
-  };
+  console.log("🚀 ~ file: MakeOfferModal.jsx ~ line 73 ~ MakeOfferModal ~ modalData", modalData.balance)
+
+  const loadIcon = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
 
   const sendOfferToServer = async () => {
     const {
@@ -123,7 +122,7 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
             openSuccess({
               title: "Your order was successfully placed",
               description:
-                "To trade this token, you must first complete a free (plus gas) transaction. <br/> Confirm it in your wallet and keep this tab open!",
+                "To trade this token, you must first complete a free (plus gas) transaction. Confirm it in your wallet and keep this tab open!",
             })
           );
         });
@@ -163,9 +162,7 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
     }
   };
 
-  const getPricePerItem = async () => {
-    return await getEtherPrice();
-  };
+  const getPricePerItem = async () => await getEtherPrice();
 
   const handleMakeOffer = async () => {
     if (modalData.currency.name === "ETH") {
@@ -173,23 +170,37 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
       return;
     }
 
+    let supportNetwork;
+    if (tokenNetwork === "ethereum") {
+      tokenAddr = eth_tokenAddr;
+      stokeMarketAddr = eth_stokeMarketAddr;
+      supportNetwork = etherChain;
+    } else if (tokenNetwork === "polygon") {
+      tokenAddr = pol_tokenAddr;
+      stokeMarketAddr = pol_stokeMarketAddr;
+      supportNetwork = polygonChain;
+    }
+    // if (chainId == supportNetwork) {
     if (chainId !== supportNetwork) {
+      // TODO: add switch network modal
+      // (async () => {
       await switchNetwork(supportNetwork, library);
       dispatch(
         openSuccess({
           title: "The network has been changed successfully.",
         })
       );
+      // })()
     } else {
       // await tokenContract.deposit({from: account, value:ethers.utils.parseEther('0.1')})
       const value = modalData.amount;
       const offerClass = new Offer({ contractAddress: tokenAddr, signer: library?.getSigner(), library });
       const nonce = await tokenContract.nonces(account);
-      console.log(modalData);
+      console.log("modalData", modalData);
       const { offer, signature } = await offerClass.makeOffer(
         account,
         stokeMarketAddr,
-        value * 10 ** 18,
+        String(value * 10 ** 18),
         ethers.utils.formatUnits(nonce) * 10 ** 18,
         Date.now("2022-04-20")
       );
@@ -217,8 +228,32 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
           openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
         );
       }
-    }
+    } 
   };
+
+  useEffect(() => {
+    let supportNetwork;
+    if (tokenNetwork === "ethereum") {
+      tokenAddr = eth_tokenAddr;
+      stokeMarketAddr = eth_stokeMarketAddr;
+      supportNetwork = etherChain;
+    } else if (tokenNetwork === "polygon") {
+      tokenAddr = pol_tokenAddr;
+      stokeMarketAddr = pol_stokeMarketAddr;
+      supportNetwork = polygonChain;
+    }
+    if (chainId !== supportNetwork && isOpened) {
+      // TODO: add switch network modal
+        (async() => {
+          await switchNetwork(supportNetwork, library);
+          dispatch(
+            openSuccess({
+              title: "The network has been changed successfully.",
+            })
+          );
+        })()
+      }
+  }, [isOpened]);
 
   useEffect(() => {
     if (
@@ -243,6 +278,7 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
 
   useEffect(() => {
     if (library) {
+      let supportNetwork;
       if (tokenNetwork === "ethereum") {
         tokenAddr = eth_tokenAddr;
         stokeMarketAddr = eth_stokeMarketAddr;
@@ -252,18 +288,25 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
         stokeMarketAddr = pol_stokeMarketAddr;
         supportNetwork = polygonChain;
       }
-
+      // TODO: add switch network modal
+      console.log("🚀 ~ file: MakeOfferModal.jsx ~ line 268 ~ useEffect ~ chainId === supportNetwork", chainId === supportNetwork)
       if (chainId === supportNetwork) {
         const IToken = new ethers.ContractFactory(
           tokenArtifacts.abi,
           tokenArtifacts.deployedBytecode,
           library?.getSigner()
         );
-
         tokenContract = IToken.attach(tokenAddr);
-
-        console.log("---account", account);
         account && getTokenBalance();
+      // } else {
+      //   (async() => {
+      //     await switchNetwork(supportNetwork, library);
+      //     dispatch(
+      //       openSuccess({
+      //         title: "The network has been changed successfully.",
+      //       })
+      //     );
+      //   })()
       }
     }
   }, [account, library]);

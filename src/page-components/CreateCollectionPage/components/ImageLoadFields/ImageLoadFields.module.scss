@@ -1,0 +1,74 @@
+.wrapper {
+	margin-top: 40px;
+
+	font-family: "Poppins", sans-serif;
+}
+
+.title {
+	letter-spacing: 0.01px;
+
+	color: var(--white);
+
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.star {
+	color: var(--red);
+}
+
+.description {
+	margin-top: 4px;
+
+	letter-spacing: 0.01px;
+
+	color: var(--light-grey);
+
+	font-size: 14px;
+}
+
+.loadField {
+	position: relative;
+
+	display: flex;
+	overflow: hidden;
+	align-items: center;
+	justify-content: center;
+
+	height: 200px;
+	margin-top: 16px;
+	margin-bottom: 24px;
+
+	border: 1px dashed var(--shadow);
+}
+
+.loadField:hover {
+	background-color: var(--shadow);
+}
+
+.loadLogoPlaceholder {
+	width: 200px;
+
+	border-radius: 200px;
+}
+
+.fileInput {
+	position: absolute;
+
+	width: 100%;
+	height: 100%;
+
+	opacity: 0;
+}
+
+.loadFeaturedPlaceholder {
+	width: 400px;
+
+	border-radius: 30px;
+}
+
+.loadBannerPlaceholder {
+	width: 800px;
+
+	border-radius: 30px;
+}

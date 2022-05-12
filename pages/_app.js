@@ -1,3 +1,4 @@
+// import { useState, useEffect, createContext } from "react";
 //web3
 import { Web3ReactProvider } from "@web3-react/core";
 //redux
@@ -15,12 +16,35 @@ const getLibrary = (provider) => {
   return library;
 };
 
+// const UserContext = createContext()
+
+// export const TokenNetworkProvider = (Component) => {
+//   const [tokenNetwork, setTokenNetwork] = useState("");
+
+//   useEffect(() => {
+//     const { tokenId } = router.query;
+//     (async () => {
+//       const response = await axios.get(`${process.env.BACKEND_URL}/nfts/${tokenId}`);
+//       const { blockchainType } = response.data;
+//       setTokenNetwork(String(blockchainType.name).toLowerCase());
+//     })();
+//   }, []);
+
+//   return (
+//     <UserContext.Provider value={tokenNetwork}>
+//         <Component {...props} />
+//     </UserContext.Provider>
+//   );
+// }
+
 function MyApp({ Component, pageProps }) {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <Provider store={store}>
         <AuthProvider>
-          <Component {...pageProps} />
+          {/* <TokenNetworkProvider> */}
+            <Component {...pageProps} />
+          {/* </TokenNetworkProvider> */}
         </AuthProvider>
       </Provider>
     </Web3ReactProvider>

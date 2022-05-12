@@ -1,0 +1,8 @@
+**/node_modules/*
+**/artifacts/*
+**/out/*
+**/.next/*
+**/tests/*
+**/deploy/*
+hardhat.config.js
+# **/*.js

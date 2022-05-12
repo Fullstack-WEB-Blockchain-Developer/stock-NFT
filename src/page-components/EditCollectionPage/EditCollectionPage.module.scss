@@ -1,0 +1,94 @@
+.navigationBar {
+	display: flex;
+
+	padding: 29px 2%;
+
+	letter-spacing: 0.01px;
+
+	background-color: #212020;
+
+	font-family: "Poppins", sans-serif;
+	font-size: 16px;
+}
+
+.navigationArrow {
+	width: fit-content;
+	height: fit-content;
+	margin-right: 8px;
+
+	transform: rotate(-90deg);
+}
+
+.navigationItem {
+	display: flex;
+
+	color: var(--light-grey);
+
+	span {
+		cursor: pointer;
+	}
+}
+
+.navigationItem:last-child {
+	color: var(--white);
+	.navigationArrow {
+		display: none;
+	}
+}
+
+.pageContainer {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+
+	width: 100%;
+	padding: 40px 2% 86px;
+
+	font-family: "Poppins", sans-serif;
+}
+
+.wrapper {
+	width: 100%;
+	max-width: 800px;
+}
+
+.pageTitle {
+	color: var(--white);
+
+	font-size: 36px;
+	font-weight: bold;
+}
+
+.title {
+	margin-top: 24px;
+	margin-bottom: 8px;
+
+	letter-spacing: 0.01px;
+
+	color: var(--white);
+
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.description {
+	margin-top: 4px;
+	margin-bottom: 8px;
+
+	letter-spacing: 0.01px;
+
+	color: var(--light-grey);
+
+	font-size: 16px;
+}
+
+.bottomButtons {
+	display: flex;
+
+	margin-top: 40px;
+	margin-bottom: 86px;
+}
+
+.bottomLeftButton {
+	margin-right: 16px;
+}

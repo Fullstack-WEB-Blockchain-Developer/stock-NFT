@@ -27,7 +27,7 @@ import {
   images,
   videos,
   audios,
-} from "../../page-components/ViewIndividualTokenPage/ViewIndividualToken.utils";
+} from '../../helpers/extentions';
 import { toHex, Offer, switchNetwork } from "../../utils";
 //styles
 import { styles as jsStyles } from "../modalStyles/modalJsStyles";
@@ -49,13 +49,13 @@ const eth_nftAddr = process.env.ETH_NFT;
 const pol_tokenAddr = process.env.POL_TOKEN;
 const pol_stokeMarketAddr = process.env.POL_MARKET;
 const pol_nftAddr = process.env.POL_NFT;
+
 let tokenContract;
 let nftContract;
 let marketContract;
 let tokenAddr;
 let stokeMarketAddr;
 let nftAddr;
-let supportNetwork;
 
 export const AcceptOfferModal = ({
   isOpened,
@@ -82,14 +82,42 @@ export const AcceptOfferModal = ({
   const router = useRouter();
 
   useEffect(() => {
+    let supportNetwork;
+    console.log(tokenNetwork);
+    if (tokenNetwork === "ethereum") {
+      tokenAddr = eth_tokenAddr;
+      stokeMarketAddr = eth_stokeMarketAddr;
+      nftAddr = eth_nftAddr;
+      supportNetwork = etherChain;
+    } else if (tokenNetwork === "polygon") {
+      tokenAddr = pol_tokenAddr;
+      stokeMarketAddr = pol_stokeMarketAddr;
+      nftAddr = pol_nftAddr;
+      supportNetwork = polygonChain;
+    }
+
+    if (chainId !== supportNetwork) {
+      // TODO: add switch network modal
+      (async () => {
+        await switchNetwork(supportNetwork, library);
+        dispatch(
+          openSuccess({
+            title: "The network has been changed successfully.",
+          })
+        );
+      })()
+    }
+  }, [isOpened]);
+
+  useEffect(() => {
     if (tokenFileName) {
       const end = tokenFileName.substring(tokenFileName.indexOf(".") + 1).toLowerCase();
-      if (images.includes(end)) {
+      if (images?.includes(end)) {
         setTypeOfTokenFile("image");
-      } else if (videos.includes(end)) {
+      } else if (videos?.includes(end)) {
         setTypeOfTokenFile("video");
         setTokenFileLink(`${process.env.BACKEND_ASSETS_URL}/nftMedia/${tokenFileName}`);
-      } else if (audios.includes(end)) {
+      } else if (audios?.includes(end)) {
         setIsFileLoading(false);
         setTypeOfTokenFile("audio");
       }
@@ -126,6 +154,7 @@ export const AcceptOfferModal = ({
   //get contract
   useEffect(() => {
     if (library) {
+      let supportNetwork;
       console.log(tokenNetwork);
       if (tokenNetwork === "ethereum") {
         tokenAddr = eth_tokenAddr;
@@ -146,37 +175,55 @@ export const AcceptOfferModal = ({
       );
 
       console.log("---tokenAddr", tokenAddr);
-      tokenContract = IToken.attach(tokenAddr);
+      if (tokenAddr) {
+        tokenContract = IToken?.attach(tokenAddr);
 
-      const IMarket = new ethers.ContractFactory(
-        marketPlaceArtifacts.abi,
-        marketPlaceArtifacts.deployedBytecode,
-        library?.getSigner()
-      );
-      marketContract = IMarket.attach(stokeMarketAddr);
+        const IMarket = new ethers.ContractFactory(
+          marketPlaceArtifacts.abi,
+          marketPlaceArtifacts.deployedBytecode,
+          library?.getSigner()
+        );
+        marketContract = IMarket?.attach(stokeMarketAddr);
 
-      const IStokeNFT = new ethers.ContractFactory(
-        stokeNFTArtifacts.abi,
-        stokeNFTArtifacts.deployedBytecode,
-        library?.getSigner()
-      );
-      nftContract = IStokeNFT.attach(nftAddr);
+        const IStokeNFT = new ethers.ContractFactory(
+          stokeNFTArtifacts.abi,
+          stokeNFTArtifacts.deployedBytecode,
+          library?.getSigner()
+        );
+        nftContract = IStokeNFT.attach(nftAddr);
+      }
     }
-  }, [account, library]);
+  }, [account, library, tokenNetwork]);
 
   const handleAccept = async () => {
-    console.log(supportNetwork);
+    let supportNetwork;
+    console.log(tokenNetwork);
+    if (tokenNetwork === "ethereum") {
+      tokenAddr = eth_tokenAddr;
+      stokeMarketAddr = eth_stokeMarketAddr;
+      nftAddr = eth_nftAddr;
+      supportNetwork = etherChain;
+    } else if (tokenNetwork === "polygon") {
+      tokenAddr = pol_tokenAddr;
+      stokeMarketAddr = pol_stokeMarketAddr;
+      nftAddr = pol_nftAddr;
+      supportNetwork = polygonChain;
+    }
+
     if (chainId !== supportNetwork) {
+      // TODO: add switch network modal
+      // (async () => {
       await switchNetwork(supportNetwork, library);
       dispatch(
         openSuccess({
           title: "The network has been changed successfully.",
         })
       );
+      // })()
     } else {
       const offer = offersData.find((offer) => offer.id == id);
       const sender = offer.buyer.publicAddress;
-      const wei = await tokenContract.balanceOf(sender);
+      const wei = await tokenContract?.balanceOf(sender);
       const balance = ethers.utils.formatUnits(wei);
       if (Number(balance) >= price) {
         const offerC = {
@@ -189,35 +236,43 @@ export const AcceptOfferModal = ({
           tokenId: Number(tokenId),
           tokenURI: `${process.env.BACKEND_URL}/nfts/metadata/${tokenId}`,
         };
-        await marketContract.accept(offerC, tokenAddr, nftAddr, Token);
+        const tx = await marketContract.accept(offerC, tokenAddr, nftAddr, Token);
+
+        console.log(tx.hash);
+
+        const res = await axios.post(
+            `${process.env.BACKEND_URL}/offers/${id}/${tx.hash}`)
+        if(res.data) {
+        // if(res.data.status === "pending") {
+          try {
+            const accessToken = localStorage.getItem("accessToken");
+  
+            await axios.post(
+              `${process.env.BACKEND_URL}/offers/accept/${id}`,
+              {},
+              {
+                headers: {
+                  Authorization: "Bearer " + accessToken,
+                },
+              }
+            );
+            handleClose();
+            dispatch(
+              openSuccess({
+                title: "Your order was successfully accepted",
+                description:
+                  "To trade this token, you must first complete a free (plus gas) transaction. Confirm it in your wallet and keep this tab open!",
+              })
+            );
+          } catch (e) {
+            dispatch(
+              openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
+            );
+          }
+        }
+
       } else {
         dispatch(openError("Offer's owner has not enough balance"));
-      }
-
-      try {
-        const accessToken = localStorage.getItem("accessToken");
-
-        await axios.post(
-          `${process.env.BACKEND_URL}/offers/accept/${id}`,
-          {},
-          {
-            headers: {
-              Authorization: "Bearer " + accessToken,
-            },
-          }
-        );
-        handleClose();
-        dispatch(
-          openSuccess({
-            title: "Your order was successfully accepted",
-            description:
-              "To trade this token, you must first complete a free (plus gas) transaction. <br/> Confirm it in your wallet and keep this tab open!",
-          })
-        );
-      } catch (e) {
-        dispatch(
-          openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
-        );
       }
     }
   };

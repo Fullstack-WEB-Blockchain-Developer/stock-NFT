@@ -55,6 +55,16 @@ export const ProfilePopup = ({ categories, className }) => {
       {isAuthorized && (
         <>
           <div className={styles.category}>
+            <Link href="/my-collections" passHref>
+              <a onClick={closePopup}>
+                <div className={styles.icon}>
+                  <Image src="/collections-icon.svg" alt="collections-icon" layout="fill" />
+                </div>
+                <div className={styles.text}>My Collections</div>
+              </a>
+            </Link>
+          </div>
+          <div className={styles.category}>
             <Link href="/settings" passHref>
               <a onClick={closePopup}>
                 <div className={styles.icon}>
