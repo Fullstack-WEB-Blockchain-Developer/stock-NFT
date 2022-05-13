@@ -37,9 +37,8 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   const muiClasses = useStyles();
 
   //useSelectors
-  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections, selectedPrice } = useSelector(
-    (state) => state.profileFiltration
-  );
+  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections, selectedPrice, selectedEventTypes } =
+    useSelector((state) => state.profileFiltration);
   const { chains, collections, error, currencies } = useSelector((state) => state.generalData);
   //useStates
   // this state will contain such data as { status: false, price: false, collections: false ...etc}
@@ -62,10 +61,8 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
   const handleToggleSection = (section) =>
     setOpenedSections({ ...openedSections, [section]: !openedSections[section] });
-  console.log('---selectedStatuses', selectedStatuses);
   const handleToggleStatus = (status, text) => {
     const statusesStringsArray = selectedStatuses.map((elem) => elem.name);
-    console.log('---statusesStringsArray', statusesStringsArray);
     if (statusesStringsArray.includes(status)) {
       dispatch(deleteFromArrayOfObjects({ field: 'selectedStatuses', objectField: 'name', data: status }));
       handleGetNewTokens();
@@ -188,8 +185,6 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
       collections.filter(({ name }) => name.toLowerCase().includes(debouncedCollectionSearch.toLowerCase()))
     );
   }, [debouncedCollectionSearch, collections]);
-
-  console.log('---selectedEventTypes', selectedEventTypes);
 
   return (
     <div

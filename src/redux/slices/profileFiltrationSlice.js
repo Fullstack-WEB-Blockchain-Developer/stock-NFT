@@ -1,56 +1,66 @@
 //redux
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 //axios
-import axios from "axios";
+import axios from 'axios';
 //utils
-import { constructUrl } from "../../page-components/ProfilePage/components/ContentWrapper/ContentWrapper.utils";
+import { constructUrl } from '../../page-components/ProfilePage/components/ContentWrapper/ContentWrapper.utils';
 
 const initialState = {
-  choosenSection: "created",
+  choosenSection: 'created',
   createdNfts: 0,
   error: null,
   favoritedNfts: 0,
-  filterText: "",
+  filterText: '',
   isShownAllOffers: true,
-  itemsSelect: "Single Items",
+  itemsSelect: 'Single Items',
   maxValue: 0,
   mostCompleteCollection: 0,
   offset: 0,
   ownedNfts: 0,
-  readyFilterOption: { text: "Price: High to Low", sortOrder: "ASC", sortBy: "price" },
+  readyFilterOption: { text: 'Price: High to Low', sortOrder: 'ASC', sortBy: 'price' },
   selectedChains: [],
-  selectedCollections: { filter: "", rows: [] },
-  selectedOnSaleIn: { filter: "", rows: [] },
+  selectedCollections: { filter: '', rows: [] },
+  selectedEventTypes: [],
+  selectedOnSaleIn: { filter: '', rows: [] },
   selectedStatuses: [],
   selectedPrice: { min: undefined, max: undefined, currency: undefined },
   tokens: [],
-  tokensGridScale: "large",
+  tokensGridScale: 'large',
   totalValue: 0,
   volumeTraded: 0,
 };
 
-export const getTokens = createAsyncThunk("tokens/getTokens", async ({}, { getState, rejectWithValue }) => {
+export const getTokens = createAsyncThunk('tokens/getTokens', async ({}, { getState, rejectWithValue }) => {
   const {
     profileFiltration: {
       choosenSection,
       offset,
       readyFilterOption,
       selectedCollections,
+      selectedEventTypes,
       selectedPrice,
       selectedStatuses,
     },
   } = getState();
 
   try {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem('accessToken');
     const { sortOrder, sortBy } = readyFilterOption;
 
     let url = `${process.env.BACKEND_URL}/users/account/assets?offset=${offset}&limit=30&tab=${choosenSection}&sortOrder=${sortOrder}&sortBy=${sortBy}`;
-    url = constructUrl(url, selectedStatuses, selectedCollections, selectedPrice);
+
+    if (choosenSection !== 'activity') {
+      url = constructUrl(url, selectedStatuses, selectedCollections, selectedPrice);
+    }
+    
+    url +=
+      choosenSection === 'activity' && selectedEventTypes.length > 0
+        ? selectedEventTypes.map(({ name }) => name).join(',')
+        : '';
 
     const { data } = await axios.get(`${url}`, {
       headers: {
-        Authorization: "Bearer " + accessToken,
+        Authorization: 'Bearer ' + accessToken,
       },
     });
 
@@ -61,7 +71,7 @@ export const getTokens = createAsyncThunk("tokens/getTokens", async ({}, { getSt
 });
 
 export const profileFiltration = createSlice({
-  name: "profileFiltration",
+  name: 'profileFiltration',
   initialState,
   reducers: {
     setData: (state, { payload: { field, data } }) => {
@@ -95,9 +105,9 @@ export const profileFiltration = createSlice({
         max: undefined,
         currency: undefined,
       };
-      state.selectedCollections = { filter: "", rows: [] };
+      state.selectedCollections = { filter: '', rows: [] };
       state.selectedChains = [];
-      state.selectedOnSaleIn = { filter: "", rows: [] };
+      state.selectedOnSaleIn = { filter: '', rows: [] };
       state.selectedEventTypes = [];
     },
     clearError: (state) => {
@@ -105,7 +115,7 @@ export const profileFiltration = createSlice({
     },
     clearOffsetAndTokens: (state) => {
       state.offset = 0;
-      state.tokens = []
+      state.tokens = [];
     },
   },
   extraReducers: (builder) => {

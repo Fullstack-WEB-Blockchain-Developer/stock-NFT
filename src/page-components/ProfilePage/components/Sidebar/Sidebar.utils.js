@@ -47,8 +47,8 @@ export const onlyCollections = [
   },
 ];
 
-export const forNormal = ["created", "collected", "favorited", "hidden"];
-export const forCollectionsOnly = ["offers", "listings"];
+export const forNormal = ["created", "collected", "favorited"];
+export const forCollectionsOnly = ["offers"];
 
 export const getSections = (choosenTopSection) => {
   if (forNormal.includes(choosenTopSection)) return normalSections;
@@ -102,76 +102,5 @@ export const eventTypes = [
   {
     text: "Transfers",
     eventType: "transfers",
-  },
-];
-
-export const fakeOnSaleIn = [
-  {
-    name: "First One",
-    id: "1",
-  },
-  {
-    name: "Second One",
-    id: "12",
-  },
-  {
-    name: "Third One",
-    id: "13",
-  },
-  {
-    name: "Fourth One",
-    id: "14",
-  },
-  {
-    name: "Fifth One",
-    id: "15",
-  },
-  {
-    name: "Sixth One",
-    id: "16",
-  },
-  {
-    name: "Seventh One",
-    id: "17",
-  },
-  {
-    name: "Eighth One",
-    id: "18",
-  },
-];
-
-export const fakeCollections = [
-  {
-    name: "First One",
-    icon: "",
-    id: "1",
-  },
-  {
-    name: "Second One",
-    id: "12",
-  },
-  {
-    name: "Third One",
-    id: "13",
-  },
-  {
-    name: "Fourth One",
-    id: "14",
-  },
-  {
-    name: "Fifth One",
-    id: "15",
-  },
-  {
-    name: "Sixth One",
-    id: "16",
-  },
-  {
-    name: "Seventh One",
-    id: "17",
-  },
-  {
-    name: "Eighth One",
-    id: "18",
   },
 ];
