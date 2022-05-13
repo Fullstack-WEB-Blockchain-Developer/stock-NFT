@@ -151,6 +151,7 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
                 label="Start time"
                 onError={() => setTime({ ...time, start: new Date() + 1000 + 60 })}
                 value={time.start}
+                className={muiClasses.textField}
                 onChange={(newValue) => {
                   setTime({ ...time, start: newValue });
                 }}
@@ -170,6 +171,7 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
               <DesktopTimePicker
                 label="End time"
                 value={time.end}
+                className={muiClasses.textField}
                 onChange={(newValue) => {
                   setTime({ ...time, end: newValue });
                 }}
