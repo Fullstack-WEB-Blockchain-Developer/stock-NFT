@@ -159,9 +159,7 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
                   fullWidth
                   type="time"
                   className={muiClasses.textField}
-                  sx={{
-                    color: 'white',
-                  }}
+                  InputProps={{ style: { color: 'white', svg: {fill: 'white'} }, readOnly: true }}
                 />
               )}
             />
@@ -182,9 +180,7 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
                   fullWidth
                   type="time"
                   className={muiClasses.textField}
-                  sx={{
-                    color: 'white',
-                  }}
+                  InputProps={{ style: { color: 'white', svg: {fill: 'white'} }, readOnly: true }}
                 />
               )}
             />
