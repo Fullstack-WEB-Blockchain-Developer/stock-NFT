@@ -95,6 +95,10 @@ export const useStyles = makeStyles(
     },
     textField: {
       borderRadius: '7px',
+      color: 'white !important',
+      svg: {
+        fill: 'white !important'
+      },
       '& label': {
         color: 'var(--shadow)',
       },
