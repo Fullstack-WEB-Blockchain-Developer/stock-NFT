@@ -20,7 +20,7 @@ export const durationOptions = [
 ];
 
 export const getFilteredCollections = async (duration, categoryId, chainId, offset) => {
-  let url = `${process.env.BACKEND_URL}/collections/get/trending?limit=2&offset=${offset}`;
+  let url = `${process.env.BACKEND_URL}/collections/get/trending?limit=100&offset=${offset}`;
 
   if (duration) {
     url += `&daysOffset=${durationOptions.find(({ text }) => text === duration).numberOfDays}`;
