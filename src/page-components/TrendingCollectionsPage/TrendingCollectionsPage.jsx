@@ -23,7 +23,7 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
   const [paginationButtons, setPaginationButtons] = useState([]);
   const [choosenPagination, setChoosenPagination] = useState(0);
   const [offset, setOffset] = useState(0);
-
+console.log('---collectionsFiltered', collectionsFiltered)
   const handlePagination = (index) => {
     setChoosenPagination(index);
     const thisOffset = index > 0 ? index * 100 : index;
@@ -116,7 +116,7 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
                 collection_id,
                 collection_logoImage,
                 collection_name,
-                floorPrice,
+                floor_price,
                 items,
                 last24h,
                 last7d,
@@ -127,7 +127,7 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
             ) => (
               <CollectionRow
                 blockchainTypeIcon={blockchainType_id && blockchains.find(({ id }) => id === blockchainType_id).icon}
-                floorPrice={floorPrice}
+                floorPrice={floor_price}
                 id={collection_id}
                 items={items}
                 key={collection_id}
