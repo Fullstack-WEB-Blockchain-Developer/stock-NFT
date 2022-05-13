@@ -1,0 +1,71 @@
+.wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	height: 100px;
+	padding: 0 40px;
+
+	cursor: pointer;
+}
+
+.wrapper:hover {
+	background-color: #2F2F2F;
+}
+
+.number {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.imageWrapper {
+	position: relative;
+
+	overflow: hidden;
+
+	width: 63px;
+	height: 63px;
+	margin-left: 9px;
+
+	border: 1px solid #707070;
+	border-radius: 50%;
+	background-color: var(--dark-grey);
+}
+
+.collectionName,
+.notCollectionName {
+	overflow: hidden;
+
+	white-space: nowrap;
+	text-overflow: clip;
+}
+
+.collectionName {
+	display: flex;
+	align-items: center;
+
+	width: 33%;
+
+	text-align: left;
+}
+
+
+.notCollectionName {
+	width: 100px;
+
+	text-align: right;
+}
+
+.volume {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.name {
+	margin-left: 18px;
+
+	letter-spacing: 0.02px;
+
+	font-size: 18px;
+}
