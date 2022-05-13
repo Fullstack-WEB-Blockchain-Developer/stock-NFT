@@ -26,22 +26,21 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
 
   const handlePagination = (index) => {
     setChoosenPagination(index);
-    setOffset(index > 0 ? index * 100 : index);
-  };
-
-  useEffect(() => {
+    const thisOffset = index > 0 ? index * 2 : index;
+    setOffset(index > 0 ? index * 2 : index);
     const blockchainTypeId = blockchains.find(({ name }) => name === filter.chain).id;
     const categoryId = categories.find(({ name }) => name === filter.category)?.id;
 
-    getFilteredCollections(filter.duration, categoryId, blockchainTypeId, offset)
+    getFilteredCollections(filter.duration, categoryId, blockchainTypeId, thisOffset)
       .then(({ data, quantity }) => {
+        quantity !== collectionsQuantity && setChoosenPagination(0);
         setCollectionsFiltered(data.length > 0 ? [...data] : null);
         setCollectionsQuantity(quantity);
 
-        const pages = Math.ceil(quantity / 100);
+        const pages = Math.ceil(quantity / 2);
         const newPaginationButtons = new Array(pages).fill({}, 0).map((elem, index) => {
-          const start = index === 0 ? 1 : index * 100;
-          const end = quantity < 100 ? quantity : quantity < (index + 1) * 100 ? quantity : (index + 1) * 100;
+          const start = index === 0 ? 1 : index * 2;
+          const end = quantity < 2 ? quantity : quantity < (index + 1) * 2 ? quantity : (index + 1) * 2;
 
           return { start, end };
         });
@@ -55,9 +54,38 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
           )
         );
       });
-  }, [filter.duration, filter.category, filter.chain, blockchains, categories, dispatch, offset]);
+  };
 
-  console.log('---', collectionsFiltered);
+  useEffect(() => {
+    setOffset(0);
+    const blockchainTypeId = blockchains.find(({ name }) => name === filter.chain).id;
+    const categoryId = categories.find(({ name }) => name === filter.category)?.id;
+
+    getFilteredCollections(filter.duration, categoryId, blockchainTypeId, 0)
+      .then(({ data, quantity }) => {
+        quantity !== collectionsQuantity && setChoosenPagination(0);
+        setCollectionsFiltered(data.length > 0 ? [...data] : null);
+        setCollectionsQuantity(quantity);
+
+        const pages = Math.ceil(quantity / 2);
+        const newPaginationButtons = new Array(pages).fill({}, 0).map((elem, index) => {
+          const start = index === 0 ? 1 : index * 2;
+          const end = quantity < 2 ? quantity : quantity < (index + 1) * 2 ? quantity : (index + 1) * 2;
+
+          return { start, end };
+        });
+
+        setPaginationButtons(newPaginationButtons);
+      })
+      .catch((error) => {
+        dispatch(
+          openError(
+            error.response?.data ? `${error.response.data.statusCode} ${error.response.data.message}` : error.message
+          )
+        );
+      });
+  }, [filter.duration, filter.category, filter.chain, blockchains, categories, dispatch, collectionsQuantity]);
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.contentWrapper}>
