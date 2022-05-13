@@ -5,12 +5,12 @@ import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeToken } from '../../../../../../../../redux/slices/ListTokenSlice';
 //mui
-import TextField from "@mui/material/TextField";
-import { Select, MenuItem, Box } from "@mui/material";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
+import TextField from '@mui/material/TextField';
+import { Select, MenuItem, Box } from '@mui/material';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 //hooks
 import { useStyles } from '../../../../../../../../hooks/useStyles';
 //utils
@@ -174,6 +174,7 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
               onChange={(newValue) => {
                 setTime({ ...time, end: newValue });
               }}
+              sx={{ color: 'white', svg: { fill: white } }}
               minTime={new Date(duration.start)}
               renderInput={(params) => (
                 <TextField
