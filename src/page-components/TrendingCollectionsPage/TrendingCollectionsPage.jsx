@@ -26,8 +26,8 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
 
   const handlePagination = (index) => {
     setChoosenPagination(index);
-    const thisOffset = index > 0 ? index * 2 : index;
-    setOffset(index > 0 ? index * 2 : index);
+    const thisOffset = index > 0 ? index * 100 : index;
+    setOffset(index > 0 ? index * 100 : index);
     const blockchainTypeId = blockchains.find(({ name }) => name === filter.chain).id;
     const categoryId = categories.find(({ name }) => name === filter.category)?.id;
 
@@ -37,10 +37,10 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
         setCollectionsFiltered(data.length > 0 ? [...data] : null);
         setCollectionsQuantity(quantity);
 
-        const pages = Math.ceil(quantity / 2);
+        const pages = Math.ceil(quantity / 100);
         const newPaginationButtons = new Array(pages).fill({}, 0).map((elem, index) => {
-          const start = index === 0 ? 1 : index * 2;
-          const end = quantity < 2 ? quantity : quantity < (index + 1) * 2 ? quantity : (index + 1) * 2;
+          const start = index === 0 ? 1 : index * 100;
+          const end = quantity < 100 ? quantity : quantity < (index + 1) * 100 ? quantity : (index + 1) * 100;
 
           return { start, end };
         });
@@ -67,10 +67,10 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
         setCollectionsFiltered(data.length > 0 ? [...data] : null);
         setCollectionsQuantity(quantity);
 
-        const pages = Math.ceil(quantity / 2);
+        const pages = Math.ceil(quantity / 100);
         const newPaginationButtons = new Array(pages).fill({}, 0).map((elem, index) => {
-          const start = index === 0 ? 1 : index * 2;
-          const end = quantity < 2 ? quantity : quantity < (index + 1) * 2 ? quantity : (index + 1) * 2;
+          const start = index === 0 ? 1 : index * 100;
+          const end = quantity < 100 ? quantity : quantity < (index + 1) * 100 ? quantity : (index + 1) * 100;
 
           return { start, end };
         });
