@@ -159,7 +159,7 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
                   fullWidth
                   type="time"
                   className={muiClasses.textField}
-                  InputProps={{ style: { color: 'white', svg: {fill: 'white'} }, readOnly: true }}
+                  InputProps={{ style: { color: 'white', svg: { fill: 'white' } }, readOnly: true }}
                 />
               )}
             />
@@ -172,7 +172,7 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
               onChange={(newValue) => {
                 setTime({ ...time, end: newValue });
               }}
-              sx={{ color: 'white', svg: { fill: white } }}
+              sx={{ color: 'white !important', svg: { fill: 'white !important' } }}
               minTime={new Date(duration.start)}
               renderInput={(params) => (
                 <TextField
@@ -180,7 +180,10 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
                   fullWidth
                   type="time"
                   className={muiClasses.textField}
-                  InputProps={{ style: { color: 'white', svg: {fill: 'white'} }, readOnly: true }}
+                  InputProps={{
+                    style: { color: 'white !important', svg: { fill: 'white !important' } },
+                    readOnly: true,
+                  }}
                 />
               )}
             />
