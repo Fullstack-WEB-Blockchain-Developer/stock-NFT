@@ -9,15 +9,16 @@ pipelines:
           services:
             - docker
           script:
-            - export IMAGE_NAME="${DOCKERHUB_USERNAME}/${BITBUCKET_REPO_SLUG}:latest"
-            - docker build -t "${IMAGE_NAME}" .
+            - export IMAGE_NAME="${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest"
+            - docker build -t $IMAGE_NAME .
             - pipe: atlassian/aws-ecr-push-image:1.5.0
               variables:
                 AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
                 AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
                 AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
-                IMAGE_NAME: ${BITBUCKET_REPO_SLUG}
+                IMAGE_NAME: $IMAGE_NAME
                 ECR_PUBLIC: "false"
+                PUBLIC_REGISTRY_ALIAS: registry-alias
       - step:
           name: Deploy to ECS
           script:
