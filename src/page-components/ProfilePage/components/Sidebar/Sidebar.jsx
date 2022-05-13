@@ -37,8 +37,9 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   const muiClasses = useStyles();
 
   //useSelectors
-  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections, selectedPrice, selectedEventTypes } =
-    useSelector((state) => state.profileFiltration);
+  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections, selectedEventTypes } = useSelector(
+    (state) => state.profileFiltration
+  );
   const { chains, collections, error, currencies } = useSelector((state) => state.generalData);
   //useStates
   // this state will contain such data as { status: false, price: false, collections: false ...etc}
