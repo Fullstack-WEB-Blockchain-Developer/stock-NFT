@@ -8,17 +8,16 @@ pipelines:
           name: Build and publish docker image.
           services:
             - docker
+          caches:
+            - pip
           script:
-            - export IMAGE_NAME="${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest"
+            - pip3 install awscli
+            - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
+            - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
+            - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${AWS_USERNAME}"
+            - export IMAGE_NAME="${AWS_USERNAME}/${IMAGE_NAME}:latest"
             - docker build -t $IMAGE_NAME .
-            - pipe: atlassian/aws-ecr-push-image:1.5.0
-              variables:
-                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
-                IMAGE_NAME: $IMAGE_NAME
-                ECR_PUBLIC: "false"
-                PUBLIC_REGISTRY_ALIAS: registry-alias
+            - docker push $IMAGE_NAME
       - step:
           name: Deploy to ECS
           script:
