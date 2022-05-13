@@ -9,7 +9,7 @@ pipelines:
           services:
             - docker
           caches:
-            - pip
+            - pip3
           script:
             - pip3 install awscli
             - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
