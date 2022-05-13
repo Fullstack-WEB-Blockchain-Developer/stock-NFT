@@ -12,6 +12,8 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 //utils
 import { images, audios, videos } from 'src/helpers/extentions';
+
+import { sendFixedPriceToServer, sendTimedAuctionToServer } from './CompleteListingModal.utils';
 //styles
 import { styles as jsStyles } from '../../../../../../modals/modalStyles/modalJsStyles';
 //ethers
@@ -50,6 +52,20 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
   const { account, library, chainId } = useWeb3React();
   const tokenNetwork = useContext(UserContext);
   const { stokeFee, creatorRoyalty } = useSelector((state) => state.administration.fees);
+
+  // please use sendFixedPriceToServer functions with these parameters
+  // tokens.map((token) =>
+  //   sendFixedPriceToServer({ ...token, currency: currencies.find(({ name }) => name === token.currency) })
+  // );
+
+  //and this one for timad auctions
+  tokens.map((token) =>
+    sendTimedAuctionToServer({
+      ...token,
+      auctionStartingCurrency: currencies.find(({ name }) => name === token.auctionStartingCurrency),
+      auctionReserveCurrency: currencies.find(({ name }) => name === token.auctionReserveCurrency),
+    })
+  );
 
   //get contract
   useEffect(() => {
@@ -107,26 +123,31 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
   }, [account, library, tokenNetwork]);
 
   useEffect(() => {
-
     if (nftContract && marketContract) {
       (async () => {
-        await tokens.forEach(async(token) => {
-          await nftContract.approve(marketContract.address, token.id)
-          .then(() => {
-            setActiveStep("confirm");
+        await tokens.forEach(async (token) => {
+          await nftContract.approve(marketContract.address, token.id).then(() => {
+            setActiveStep('confirm');
           });
         });
-        if (activeStep === "confirm") {
+        if (activeStep === 'confirm') {
           const fixedSaleData = { tokenIds: [], prices: [], startTimes: [], endTimes: [], nftAddrs: [] };
-          const auctionSaleData = { tokenIds: [], startPrices: [], endPrices: [], startTimes: [], endTimes: [], nftAddrs: [] };
+          const auctionSaleData = {
+            tokenIds: [],
+            startPrices: [],
+            endPrices: [],
+            startTimes: [],
+            endTimes: [],
+            nftAddrs: [],
+          };
           // propunits filtering param
           tokens.forEach((token) => {
             const startTime = Math.floor(token.duration[0].getTime() / 1000);
             const endTime = Math.floor(token.duration[1].getTime() / 1000);
-            if (token.listingType === "timeAuction") {
+            if (token.listingType === 'timeAuction') {
               auctionSaleData.tokenIds.push(token.id);
               auctionSaleData.startPrices.push(String(token.auctionStartingPrice * 10 ** 18));
-              if (token.auctionMethod === "Sell to the highest bidder") {
+              if (token.auctionMethod === 'Sell to the highest bidder') {
                 auctionSaleData.methods.push(true);
               } else {
                 auctionSaleData.methods.push(false);
@@ -143,8 +164,8 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
               fixedSaleData.nftAddrs.push(nftAddr);
             }
           });
-          console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 132 ~ auctionSaleData", auctionSaleData)
-          console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 136 ~ fixedSaleData", fixedSaleData)
+          console.log('🚀 ~ file: CompleteListingModal.jsx ~ line 132 ~ auctionSaleData', auctionSaleData);
+          console.log('🚀 ~ file: CompleteListingModal.jsx ~ line 136 ~ fixedSaleData', fixedSaleData);
           if (auctionSaleData.tokenIds.length > 0) {
             await auctionSale(auctionSaleData);
           }
@@ -163,7 +184,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
           //   return { tokenIds, prices, startTimes, endTimes, nftAddrs };
           // });
         }
-      })()
+      })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpened, tokens]);

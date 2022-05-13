@@ -67,7 +67,24 @@ export const CollectionRow = ({
           <span>---</span>
         )}
       </div>
-      <div className={styles.notCollectionName}>{floorPrice ? <span>{floorPrice.text}</span> : <span>---</span>}</div>
+      <div className={cn(styles.volume, styles.notCollectionName)}>
+        {floorPrice ? (
+          <>
+            {blockchainTypeIcon && (
+              <Image
+                alt="blockchain-icon"
+                height={19}
+                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`}
+                src={blockchainTypeIcon}
+                width={19}
+              />
+            )}
+            <span>{floorPrice}</span>
+          </>
+        ) : (
+          <span>---</span>
+        )}
+      </div>
       <div className={styles.notCollectionName}>{owners}</div>
       <div className={styles.notCollectionName}>
         <span>{items}</span>
