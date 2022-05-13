@@ -2,32 +2,33 @@ image:
   name: atlassian/default-image:2
 
 pipelines:
-  default:
-    - step:
-        name: Build and publish docker image.
-        services:
-          - docker
-        before_script:
-          - export AWS_ACCESS_KEY_ID=$TEST_AWS_ACCESS_KEY_ID
-          - export AWS_SECRET_ACCESS_KEY=$TEST_AWS_SECRET_ACCESS_KEY
-          - export AWS_DEFAULT_REGION=$TEST_AWS_DEFAULT_REGION
-        script:
-          - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-          - unzip awscli-bundle.zip
-          - ./awscli-bundle/install -b ~/bin/aws
-          - export PATH=~/bin:$PATH
-          - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${DOCKERHUB_USERNAME}
-          - export IMAGE_NAME="${DOCKERHUB_USERNAME}/${BITBUCKET_REPO_SLUG}:${BITBUCKET_BUILD_NUMBER}"
-          - docker build -t "$IMAGE_NAME" .
-          - docker push "$IMAGE_NAME"
-    - step:
-        name: Deploy to ECS
-        script:
-          - apt-get update && apt-get install -y jq
-          - export IMAGE_NAME="${DOCKERHUB_USERNAME}/${BITBUCKET_REPO_SLUG}:${BITBUCKET_BUILD_NUMBER}"
-          - envsubst < task-definition.json >  task-definition-envsubst.json
-          - >
-            export UPDATED_TASK_DEFINITION=$(aws ecs register-task-definition --cli-input-json file://task-definition-envsubst.json | \
-                jq '.taskDefinition.taskDefinitionArn' --raw-output)
-          - echo $UPDATED_TASK_DEFINITION
-          - aws ecs update-service --service example-ecs-service --cluster example-ecs-cluster --task-definition ${UPDATED_TASK_DEFINITION}
+  branches:   
+    feature/adding-ci:
+      - step:
+          name: Build and publish docker image.
+          services:
+            - docker
+          before_script:
+            - export AWS_ACCESS_KEY_ID=$TEST_AWS_ACCESS_KEY_ID
+            - export AWS_SECRET_ACCESS_KEY=$TEST_AWS_SECRET_ACCESS_KEY
+            - export AWS_DEFAULT_REGION=$TEST_AWS_DEFAULT_REGION
+          script:
+            - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+            - unzip awscli-bundle.zip
+            - ./awscli-bundle/install -b ~/bin/aws
+            - export PATH=~/bin:$PATH
+            - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${DOCKERHUB_USERNAME}
+            - export IMAGE_NAME="${DOCKERHUB_USERNAME}/${BITBUCKET_REPO_SLUG}:${BITBUCKET_BUILD_NUMBER}"
+            - docker build -t "$IMAGE_NAME" .
+            - docker push "$IMAGE_NAME"
+      - step:
+          name: Deploy to ECS
+          script:
+            - apt-get update && apt-get install -y jq
+            - export IMAGE_NAME="${DOCKERHUB_USERNAME}/${BITBUCKET_REPO_SLUG}:${BITBUCKET_BUILD_NUMBER}"
+            - envsubst < task-definition.json >  task-definition-envsubst.json
+            - >
+              export UPDATED_TASK_DEFINITION=$(aws ecs register-task-definition --cli-input-json file://task-definition-envsubst.json | \
+                  jq '.taskDefinition.taskDefinitionArn' --raw-output)
+            - echo $UPDATED_TASK_DEFINITION
+            - aws ecs update-service --service example-ecs-service --cluster example-ecs-cluster --task-definition ${UPDATED_TASK_DEFINITION}
