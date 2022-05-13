@@ -119,18 +119,20 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
             <span>No collections to display</span>
           </div>
         )}
-        <div className={styles.paginationButtons}>
-          {paginationButtons.map(({ start, end }, index) => (
-            <div
-              key={start}
-              className={cn(styles.paginationButton, {
-                [styles.choosenPagination]: index === choosenPagination,
-              })}
-              onClick={() => handlePagination(index)}
-            >
-              {start} - {end}
-            </div>
-          ))}
+        <div className={styles.paginationContainer}>
+          <div className={styles.paginationButtons}>
+            {paginationButtons.map(({ start, end }, index) => (
+              <div
+                key={start}
+                className={cn(styles.paginationButton, {
+                  [styles.choosenPagination]: index === choosenPagination,
+                })}
+                onClick={() => handlePagination(index)}
+              >
+                {start} - {end}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
