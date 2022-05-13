@@ -399,5 +399,5 @@ export const useStyles = makeStyles(
     },
   },
 
-  { name: 'MuiCustomized' }
+  { name: 'MuiCustomized', index: 1 }
 );
