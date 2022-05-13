@@ -60,6 +60,7 @@ export const LeftSide = ({ className }) => {
         <CustButton
           text="Complete Listing"
           color="primary"
+          style={{width: 'fit-content'}}
           disabled={disabledComplete}
           onClick={() => setIsCompleteModalOpened(true)}
         />

@@ -5,12 +5,13 @@ import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeToken } from '../../../../../../../../redux/slices/ListTokenSlice';
 //mui
-import TextField from "@mui/material/TextField";
-import { Select, MenuItem } from "@mui/material";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
+import TextField from '@mui/material/TextField';
+import { Select, MenuItem, Box } from '@mui/material';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
+import { StylesProvider } from '@material-ui/core';
 //hooks
 import { useStyles } from '../../../../../../../../hooks/useStyles';
 //utils
@@ -71,125 +72,124 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
   }, [duration]);
 
   return (
-    <div className={styles.wrapper} ref={wrapperRef}>
-      <div className={styles.title}>
-        <span>Date range</span>
-        <span onClick={handleClose} style={{ cursor: 'pointer' }}>
-          <Image src="/create-nft/Icon-Close.svg" alt="close-icon" width={15} height={15} onClick={handleClose} />
-        </span>
-      </div>
-      <Select
-        fullWidth
-        id=""
-        type="text"
-        variant="outlined"
-        IconComponent={() => (
-          <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
-            <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
-          </div>
-        )}
-        sx={{ maxHeight: '56px', color: 'white' }}
-        className={muiClasses.select}
-        value={selectedDateRange}
-        InputProps={{ style: { color: 'white' }, inputRef: selectRef }}
-        onChange={handleSelectDateRange}
-      >
-        <MenuItem disabled value="none">
-          <span style={{ color: 'rgb(77, 77, 77)' }}>Select range</span>
-        </MenuItem>
-        {dateRanges.map(({ text }) => (
-          <MenuItem value={text} key={text}>
-            <span>{text}</span>
-          </MenuItem>
-        ))}
-      </Select>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DateRangePicker
-          startText="Starting date"
-          endText="Ending date"
-          className={muiClasses.datePicker}
-          value={duration}
-          onChange={(newValue) => {
-            dispatch(
-              changeToken({ id, field: 'duration', newValue: [Date.parse(newValue[0]), Date.parse(newValue[1])] })
-            );
-            setSelectedDateRange('none');
-          }}
-          renderInput={(startProps, endProps) => (
-            <div className={styles.dateTextFieldsWrapper}>
-              <div className={styles.leftTextField}>
-                <TextField
-                  {...startProps}
-                  fullWidth
-                  id="date"
-                  type="date"
-                  variant="outlined"
-                  className={muiClasses.textField}
-                  InputProps={{ style: { color: 'white' }, readOnly: true }}
-                />
-              </div>
-              <div className={styles.dash}>-</div>
-              <div className={styles.rightTextField}>
-                <TextField
-                  {...endProps}
-                  fullWidth
-                  id="date"
-                  type="date"
-                  variant="outlined"
-                  className={muiClasses.textField}
-                  InputProps={{ style: { color: 'white' }, readOnly: true }}
-                />
-              </div>
+    <StylesProvider injectFirst>
+      <div className={styles.wrapper} ref={wrapperRef}>
+        <div className={styles.title}>
+          <span>Date range</span>
+          <span onClick={handleClose} style={{ cursor: 'pointer' }}>
+            <Image src="/create-nft/Icon-Close.svg" alt="close-icon" width={15} height={15} onClick={handleClose} />
+          </span>
+        </div>
+        <Select
+          fullWidth
+          id=""
+          type="text"
+          variant="outlined"
+          IconComponent={() => (
+            <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
+              <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
             </div>
           )}
-        />
-        <div className={styles.timePickersWrapper}>
-          <div className={styles.timePicker}>
-            <DesktopTimePicker
-              label="Start time"
-              onError={() => setTime({ ...time, start: new Date() + 1000 + 60 })}
-              value={time.start}
-              onChange={(newValue) => {
-                setTime({ ...time, start: newValue });
-              }}
-              minTime={new Date()}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  type="time"
-                  className={muiClasses.textField}
-                  sx={{
-                    color: 'white',
-                  }}
-                />
-              )}
-            />
+          sx={{ maxHeight: '56px', color: 'white' }}
+          className={muiClasses.select}
+          value={selectedDateRange}
+          InputProps={{ style: { color: 'white' }, inputRef: selectRef }}
+          onChange={handleSelectDateRange}
+        >
+          <MenuItem disabled value="none">
+            <span style={{ color: 'rgb(77, 77, 77)' }}>Select range</span>
+          </MenuItem>
+          {dateRanges.map(({ text }) => (
+            <MenuItem value={text} key={text}>
+              <span>{text}</span>
+            </MenuItem>
+          ))}
+        </Select>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DateRangePicker
+            startText="Starting date"
+            endText="Ending date"
+            className={muiClasses.datePicker}
+            value={duration}
+            onChange={(newValue) => {
+              dispatch(
+                changeToken({ id, field: 'duration', newValue: [Date.parse(newValue[0]), Date.parse(newValue[1])] })
+              );
+              setSelectedDateRange('none');
+            }}
+            renderInput={(startProps, endProps) => (
+              <div className={styles.dateTextFieldsWrapper}>
+                <div className={styles.leftTextField}>
+                  <TextField
+                    {...startProps}
+                    fullWidth
+                    id="date"
+                    type="date"
+                    variant="outlined"
+                    className={muiClasses.textField}
+                    InputProps={{ style: { color: 'white' }, readOnly: true }}
+                  />
+                </div>
+                <div className={styles.dash}>-</div>
+                <div className={styles.rightTextField}>
+                  <TextField
+                    {...endProps}
+                    fullWidth
+                    id="date"
+                    type="date"
+                    variant="outlined"
+                    className={muiClasses.textField}
+                    InputProps={{ style: { color: 'white' }, readOnly: true }}
+                  />
+                </div>
+              </div>
+            )}
+          />
+          <div className={styles.timePickersWrapper}>
+            <div className={styles.timePicker}>
+              <DesktopTimePicker
+                label="Start time"
+                onError={() => setTime({ ...time, start: new Date() + 1000 + 60 })}
+                value={time.start}
+                className={muiClasses.textField}
+                onChange={(newValue) => {
+                  setTime({ ...time, start: newValue });
+                }}
+                minTime={new Date()}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    type="time"
+                    className={muiClasses.textField}
+                  />
+                )}
+              />
+            </div>
+            <div className={styles.dash}>-</div>
+            <div className={styles.timePicker}>
+              <DesktopTimePicker
+                label="End time"
+                value={time.end}
+                className={muiClasses.textField}
+                onChange={(newValue) => {
+                  setTime({ ...time, end: newValue });
+                }}
+                minTime={new Date(duration.start)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    type="time"
+                    className={muiClasses.textField}
+                    a={console.log(params)}
+                  />
+                )}
+              />
+            </div>
           </div>
-          <div className={styles.dash}>-</div>
-          <div className={styles.timePicker}>
-            <DesktopTimePicker
-              label="End time"
-              value={time.end}
-              onChange={(newValue) => {
-                setTime({ ...time, end: newValue });
-              }}
-              minTime={new Date(duration.start)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  type="time"
-                  className={muiClasses.textField}
-                  sx={{
-                    color: 'white',
-                  }}
-                />
-              )}
-            />
-          </div>
-        </div>
-      </LocalizationProvider>
-    </div>
+        </LocalizationProvider>
+      </div>
+    </StylesProvider>
   );
 };

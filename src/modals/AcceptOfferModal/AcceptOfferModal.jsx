@@ -1,45 +1,41 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from 'react';
 //next
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
 //redux
-import { useDispatch, useSelector } from "react-redux";
-import { open as openError } from "../../redux/slices/errorSnackbarSlice";
-import { open as openSuccess } from "../../redux/slices/successfulOrderSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { open as openError } from '../../redux/slices/errorSnackbarSlice';
+import { open as openSuccess } from '../../redux/slices/successfulOrderSlice';
 //next
-import Image from "next/image";
+import Image from 'next/image';
 //classnames
-import cn from "classnames";
+import cn from 'classnames';
 //axios
-import axios from "axios";
+import axios from 'axios';
 //mui
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 //spinner
-import { Oval } from "react-loader-spinner";
+import { Oval } from 'react-loader-spinner';
 //components
-import { CustButton } from "../../components/CustButton/CustButton";
-import { ChooseWalletBox } from "../../components/ChooseWalletBox/ChooseWalletBox";
+import { CustButton } from '../../components/CustButton/CustButton';
+import { ChooseWalletBox } from '../../components/ChooseWalletBox/ChooseWalletBox';
 //hooks
-import useAuth from "../../hooks/useAuth";
+import useAuth from '../../hooks/useAuth';
 //utils
-import {
-  images,
-  videos,
-  audios,
-} from '../../helpers/extentions';
-import { toHex, Offer, switchNetwork } from "../../utils";
+import { images, videos, audios } from '../../helpers/extentions';
+import { toHex, Offer, switchNetwork } from '../../utils';
 //styles
-import { styles as jsStyles } from "../modalStyles/modalJsStyles";
-import cssStyles from "./AcceptOfferModal.module.css";
+import { styles as jsStyles } from '../modalStyles/modalJsStyles';
+import cssStyles from './AcceptOfferModal.module.css';
 //ethers
-import { ethers } from "ethers";
+import { ethers } from 'ethers';
 //web3
-import { useWeb3React } from "@web3-react/core";
+import { useWeb3React } from '@web3-react/core';
 //contract
-import stokeNFTArtifacts from "../../../artifacts/contracts/StokeNFT.sol/StokeNFT.json";
-import marketPlaceArtifacts from "../../../artifacts/contracts/StokeMarketPlace.sol/StokeMarketplace.json";
-import tokenArtifacts from "../../../artifacts/contracts/WETH.sol/WETH9.json";
+import stokeNFTArtifacts from '../../../artifacts/contracts/StokeNFT.sol/StokeNFT.json';
+import marketPlaceArtifacts from '../../../artifacts/contracts/StokeMarketPlace.sol/StokeMarketplace.json';
+import tokenArtifacts from '../../../artifacts/contracts/WETH.sol/WETH9.json';
 
 const etherChain = process.env.ETHER_CHAIN;
 const polygonChain = process.env.POLYGON_CHAIN;
@@ -68,7 +64,7 @@ export const AcceptOfferModal = ({
   tokenNetwork,
 }) => {
   const [imageRatio, setImageRatio] = useState(16 / 9);
-  const [tokenFileLink, setTokenFileLink] = useState("/");
+  const [tokenFileLink, setTokenFileLink] = useState('/');
   const [isFileLoading, setIsFileLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
   const [videoSizes, setVideoSizes] = useState();
@@ -84,12 +80,12 @@ export const AcceptOfferModal = ({
   useEffect(() => {
     let supportNetwork;
     console.log(tokenNetwork);
-    if (tokenNetwork === "ethereum") {
+    if (tokenNetwork === 'ethereum') {
       tokenAddr = eth_tokenAddr;
       stokeMarketAddr = eth_stokeMarketAddr;
       nftAddr = eth_nftAddr;
       supportNetwork = etherChain;
-    } else if (tokenNetwork === "polygon") {
+    } else if (tokenNetwork === 'polygon') {
       tokenAddr = pol_tokenAddr;
       stokeMarketAddr = pol_stokeMarketAddr;
       nftAddr = pol_nftAddr;
@@ -102,35 +98,35 @@ export const AcceptOfferModal = ({
         await switchNetwork(supportNetwork, library);
         dispatch(
           openSuccess({
-            title: "The network has been changed successfully.",
+            title: 'The network has been changed successfully.',
           })
         );
-      })()
+      })();
     }
   }, [isOpened]);
 
   useEffect(() => {
     if (tokenFileName) {
-      const end = tokenFileName.substring(tokenFileName.indexOf(".") + 1).toLowerCase();
+      const end = tokenFileName.substring(tokenFileName.indexOf('.') + 1).toLowerCase();
       if (images?.includes(end)) {
-        setTypeOfTokenFile("image");
+        setTypeOfTokenFile('image');
       } else if (videos?.includes(end)) {
-        setTypeOfTokenFile("video");
+        setTypeOfTokenFile('video');
         setTokenFileLink(`${process.env.BACKEND_ASSETS_URL}/nftMedia/${tokenFileName}`);
       } else if (audios?.includes(end)) {
         setIsFileLoading(false);
-        setTypeOfTokenFile("audio");
+        setTypeOfTokenFile('audio');
       }
     }
   }, [tokenFileName]);
 
   useEffect(() => {
-    if (typeOfTokenFile === "video" && videoRef.current?.src) {
+    if (typeOfTokenFile === 'video' && videoRef.current?.src) {
       const width = videoRef.current.clientWidth;
       const height = videoRef.current.clientHeight;
       const ratio = width / height;
       setVideoSizes({
-        width: "70px",
+        width: '70px',
         height: `${70 / ratio}px`,
       });
     }
@@ -144,7 +140,7 @@ export const AcceptOfferModal = ({
   const { isAuthorized } = useAuth();
 
   const handleFileError = () => {
-    dispatch(openError("404 Token image is not found"));
+    dispatch(openError('404 Token image is not found'));
   };
 
   const handleLoadImage = (width, height) => {
@@ -156,12 +152,12 @@ export const AcceptOfferModal = ({
     if (library) {
       let supportNetwork;
       console.log(tokenNetwork);
-      if (tokenNetwork === "ethereum") {
+      if (tokenNetwork === 'ethereum') {
         tokenAddr = eth_tokenAddr;
         stokeMarketAddr = eth_stokeMarketAddr;
         nftAddr = eth_nftAddr;
         supportNetwork = etherChain;
-      } else if (tokenNetwork === "polygon") {
+      } else if (tokenNetwork === 'polygon') {
         tokenAddr = pol_tokenAddr;
         stokeMarketAddr = pol_stokeMarketAddr;
         nftAddr = pol_nftAddr;
@@ -174,7 +170,7 @@ export const AcceptOfferModal = ({
         library?.getSigner()
       );
 
-      console.log("---tokenAddr", tokenAddr);
+      console.log('---tokenAddr', tokenAddr);
       if (tokenAddr) {
         tokenContract = IToken?.attach(tokenAddr);
 
@@ -198,12 +194,12 @@ export const AcceptOfferModal = ({
   const handleAccept = async () => {
     let supportNetwork;
     console.log(tokenNetwork);
-    if (tokenNetwork === "ethereum") {
+    if (tokenNetwork === 'ethereum') {
       tokenAddr = eth_tokenAddr;
       stokeMarketAddr = eth_stokeMarketAddr;
       nftAddr = eth_nftAddr;
       supportNetwork = etherChain;
-    } else if (tokenNetwork === "polygon") {
+    } else if (tokenNetwork === 'polygon') {
       tokenAddr = pol_tokenAddr;
       stokeMarketAddr = pol_stokeMarketAddr;
       nftAddr = pol_nftAddr;
@@ -216,7 +212,7 @@ export const AcceptOfferModal = ({
       await switchNetwork(supportNetwork, library);
       dispatch(
         openSuccess({
-          title: "The network has been changed successfully.",
+          title: 'The network has been changed successfully.',
         })
       );
       // })()
@@ -240,28 +236,27 @@ export const AcceptOfferModal = ({
 
         console.log(tx.hash);
 
-        const res = await axios.post(
-            `${process.env.BACKEND_URL}/offers/${id}/${tx.hash}`)
-        if(res.data) {
-        // if(res.data.status === "pending") {
+        const res = await axios.post(`${process.env.BACKEND_URL}/offers/${id}/${tx.hash}`);
+        if (res.data) {
+          // if(res.data.status === "pending") {
           try {
-            const accessToken = localStorage.getItem("accessToken");
-  
+            const accessToken = localStorage.getItem('accessToken');
+
             await axios.post(
               `${process.env.BACKEND_URL}/offers/accept/${id}`,
               {},
               {
                 headers: {
-                  Authorization: "Bearer " + accessToken,
+                  Authorization: 'Bearer ' + accessToken,
                 },
               }
             );
             handleClose();
             dispatch(
               openSuccess({
-                title: "Your order was successfully accepted",
+                title: 'Your order was successfully accepted',
                 description:
-                  "To trade this token, you must first complete a free (plus gas) transaction. Confirm it in your wallet and keep this tab open!",
+                  'To trade this token, you must first complete a free (plus gas) transaction. Confirm it in your wallet and keep this tab open!',
               })
             );
           } catch (e) {
@@ -270,7 +265,6 @@ export const AcceptOfferModal = ({
             );
           }
         }
-
       } else {
         dispatch(openError("Offer's owner has not enough balance"));
       }
@@ -295,13 +289,7 @@ export const AcceptOfferModal = ({
             <Typography id="modal-modal-title" variant="h6" component="h2" style={jsStyles.header}>
               <span>Accept offer</span>
               <div className={cssStyles.cross} onClick={handleClose}>
-                <Image
-                  src="/create-nft/Icon-Close.svg"
-                  alt="close-icon"
-                  width={15}
-                  height={15}
-                  onClick={handleClose}
-                />
+                <Image src="/create-nft/Icon-Close.svg" alt="close-icon" width={15} height={15} onClick={handleClose} />
               </div>
             </Typography>
             <div className={cssStyles.section}>
@@ -314,8 +302,8 @@ export const AcceptOfferModal = ({
                   className={cssStyles.tokenFileWrapper}
                   style={{
                     height:
-                      (typeOfTokenFile === "video" && videoRef.current && videoSizes.height) ||
-                      (typeOfTokenFile === "audio" && "70px"),
+                      (typeOfTokenFile === 'video' && videoRef.current && videoSizes.height) ||
+                      (typeOfTokenFile === 'audio' && '70px'),
                   }}
                 >
                   {isFileLoading && (
@@ -330,7 +318,7 @@ export const AcceptOfferModal = ({
                       />
                     </div>
                   )}
-                  {typeOfTokenFile === "image" && (
+                  {typeOfTokenFile === 'image' && (
                     <Image
                       src={tokenFileName}
                       loader={imageLoader}
@@ -345,10 +333,10 @@ export const AcceptOfferModal = ({
                       }
                     />
                   )}
-                  {typeOfTokenFile === "video" && (
+                  {typeOfTokenFile === 'video' && (
                     <video src={tokenFileLink} alt="token-video" ref={videoRef} className={cssStyles.video} />
                   )}
-                  {typeOfTokenFile === "audio" && (
+                  {typeOfTokenFile === 'audio' && (
                     <div className={cssStyles.audio}>
                       <div>{tokenFileName.substring(tokenFileName.length - 3)}</div>
                       <div>file</div>
@@ -412,7 +400,7 @@ export const AcceptOfferModal = ({
               </div>
             </div>
             <footer className={cssStyles.footer}>
-              <CustButton color="primary" text="Accept Offer" onClick={handleAccept} />
+              <CustButton color="primary" style={{ width: 'fit-content' }} text="Accept Offer" onClick={handleAccept} />
             </footer>
           </>
         ) : (
@@ -420,13 +408,7 @@ export const AcceptOfferModal = ({
             <Typography id="modal-modal-title" variant="h6" component="h2" style={jsStyles.header}>
               <span>Please connect wallet</span>
               <div className={cssStyles.cross} onClick={handleClose}>
-                <Image
-                  src="/create-nft/Icon-Close.svg"
-                  alt="close-icon"
-                  width={15}
-                  height={15}
-                  onClick={handleClose}
-                />
+                <Image src="/create-nft/Icon-Close.svg" alt="close-icon" width={15} height={15} onClick={handleClose} />
               </div>
             </Typography>
             <ChooseWalletBox />
