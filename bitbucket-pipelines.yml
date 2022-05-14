@@ -3,7 +3,7 @@ image:
 
 pipelines:
   branches:   
-    feature/adding-ci:
+    dev:
       - step:
           name: Build and publish docker image.
           services:
