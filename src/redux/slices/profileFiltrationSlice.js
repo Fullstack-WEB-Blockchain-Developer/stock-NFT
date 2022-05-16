@@ -56,7 +56,7 @@ export const getTokens = createAsyncThunk('tokens/getTokens', async ({}, { getSt
     
     url +=
       choosenSection === 'activity' && selectedEventTypes.length > 0
-        ? selectedEventTypes.map(({ name }) => name).join(',')
+        ? `&${selectedEventTypes.map(({ name }) => name).join(',')}`
         : '';
 
     const { data } = await axios.get(`${url}`, {

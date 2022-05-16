@@ -38,12 +38,10 @@ export const ContentWrapper = () => {
   } = useSelector((state) => state.profileFiltration);
   const filtrationOptions = useSelector((state) => state.profileFiltration);
 
-  console.log('---tokens', tokens)
   useEffect(() => {
     const address = localStorage.getItem('account');
     setPublicAddress(address);
   }, []);
-  console.log('---adaptedActivities', adaptedActivities);
 
   useEffect(() => {
     if (error) {
@@ -59,6 +57,7 @@ export const ContentWrapper = () => {
   const handleGetTokens = useCallback(() => {
     dispatch(getTokens(choosenSection));
   }, [choosenSection, dispatch]);
+  
   useEffect(() => {
     dispatch(clearOffsetAndTokens());
     handleGetTokens();

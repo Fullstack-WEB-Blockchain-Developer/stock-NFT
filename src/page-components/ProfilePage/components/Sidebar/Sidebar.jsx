@@ -59,7 +59,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     dispatch(clearOffsetAndTokens());
     dispatch(getTokens());
   };
-
+console.log('---selectedEventTypes', selectedEventTypes)
   const handleToggleSection = (section) =>
     setOpenedSections({ ...openedSections, [section]: !openedSections[section] });
   const handleToggleStatus = (status, text) => {
@@ -77,8 +77,10 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     const eventTypesStringsArray = selectedEventTypes.map((elem) => elem.name);
     if (eventTypesStringsArray.includes(eventType)) {
       dispatch(deleteFromArrayOfObjects({ field: 'selectedEventTypes', objectField: 'name', data: eventType }));
+      handleGetNewTokens();
     } else {
       dispatch(setData({ field: 'selectedEventTypes', data: [...selectedEventTypes, { name: eventType, text }] }));
+      handleGetNewTokens();
     }
   };
 
