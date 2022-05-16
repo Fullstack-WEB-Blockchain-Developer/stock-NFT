@@ -71,7 +71,8 @@ export const RightSideInfoWrapper = ({
   }, []);
 
   useEffect(() => {
-    if (owner.publicAddress === userAccount) {
+    const account = localStorage.getItem("account");
+    if (owner.publicAddress === account) {
       setTokenOwner("you");
     } else if (!owner.username) {
       const { publicAddress } = owner;

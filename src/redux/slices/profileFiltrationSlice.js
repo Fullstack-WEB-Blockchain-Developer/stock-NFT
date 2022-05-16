@@ -50,10 +50,8 @@ export const getTokens = createAsyncThunk('tokens/getTokens', async ({}, { getSt
 
     let url = `${process.env.BACKEND_URL}/users/account/assets?offset=${offset}&limit=30&tab=${choosenSection}&sortOrder=${sortOrder}&sortBy=${sortBy}`;
 
-    if (choosenSection !== 'activity') {
-      url = constructUrl(url, selectedStatuses, selectedCollections, selectedPrice);
-    }
-    
+    url = constructUrl(url, selectedStatuses, selectedCollections, selectedPrice, choosenSection);
+
     url +=
       choosenSection === 'activity' && selectedEventTypes.length > 0
         ? `&${selectedEventTypes.map(({ name }) => name).join(',')}`
