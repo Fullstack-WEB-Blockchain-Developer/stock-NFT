@@ -37,10 +37,15 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   const muiClasses = useStyles();
 
   //useSelectors
-  const { selectedStatuses, selectedChains, selectedOnSaleIn, selectedCollections, selectedEventTypes } = useSelector(
-    (state) => state.profileFiltration
-  );
-  const { chains, collections, error, currencies } = useSelector((state) => state.generalData);
+  const {
+    selectedCategories,
+    selectedChains,
+    selectedCollections,
+    selectedEventTypes,
+    selectedOnSaleIn,
+    selectedStatuses,
+  } = useSelector((state) => state.profileFiltration);
+  const { chains, collections, error, currencies, categories } = useSelector((state) => state.generalData);
   //useStates
   // this state will contain such data as { status: false, price: false, collections: false ...etc}
   const [openedSections, setOpenedSections] = useState(getSectionsForUseState(choosenTopSection));
@@ -59,7 +64,6 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     dispatch(clearOffsetAndTokens());
     dispatch(getTokens());
   };
-
   const handleToggleSection = (section) =>
     setOpenedSections({ ...openedSections, [section]: !openedSections[section] });
 
@@ -85,6 +89,18 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     }
   };
 
+  const handleToggleCategory = (category, icon, id) => {
+    const collectionsStringsArray = selectedCategories.map((elem) => elem.name);
+
+    if (collectionsStringsArray.includes(category)) {
+      dispatch(deleteFromArrayOfObjects({ field: 'selectedCategories', objectField: 'name', data: category }));
+      handleGetNewTokens();
+    } else {
+      dispatch(setData({ field: 'selectedCategories', data: [...selectedCategories, { name: category, icon, id }] }));
+      handleGetNewTokens();
+    }
+  };
+
   const handleToggleChains = (chain, icon, id) => {
     const chainsStringsArray = selectedChains.map((elem) => elem.name);
 
@@ -97,20 +113,20 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     }
   };
 
-  const handleToggleOnSaleIn = (onSaleIn) => {
-    if (selectedOnSaleIn.rows.includes(onSaleIn)) {
-      dispatch(deleteFromArray({ field: 'selectedOnSaleIn', data: { ...selectedOnSaleIn, rows: onSaleIn } }));
-      handleGetNewTokens();
-    } else {
-      dispatch(
-        setData({
-          field: 'selectedOnSaleIn',
-          data: { ...selectedOnSaleIn, rows: [...selectedOnSaleIn.rows, onSaleIn] },
-        })
-      );
-      handleGetNewTokens();
-    }
-  };
+  // const handleToggleOnSaleIn = (onSaleIn) => {
+  //   if (selectedOnSaleIn.rows.includes(onSaleIn)) {
+  //     dispatch(deleteFromArray({ field: 'selectedOnSaleIn', data: { ...selectedOnSaleIn, rows: onSaleIn } }));
+  //     handleGetNewTokens();
+  //   } else {
+  //     dispatch(
+  //       setData({
+  //         field: 'selectedOnSaleIn',
+  //         data: { ...selectedOnSaleIn, rows: [...selectedOnSaleIn.rows, onSaleIn] },
+  //       })
+  //     );
+  //     handleGetNewTokens();
+  //   }
+  // };
 
   const handleToggleCollections = (collection, id, icon) => {
     const collectionsStringsArray = selectedCollections.rows.map((elem) => elem.name);
@@ -318,8 +334,32 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
                   <div className={styles.chainIcon}>
                     {selectedChains.map((elem) => elem.name).includes(name) ? (
                       <Image src="/Icon_Check.svg" width={19} height={19} alt="icon-checked" />
-                    ) : (
+                    ) : icon ? (
                       <Image src={icon} loader={iconLoader} width={19} height={19} alt="icon-chain" />
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <span>{name}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          {section === 'categories' && (
+            <div
+              className={cn(styles.sectionContent, {
+                [styles.sectionClosed]: !openedSections.categories,
+              })}
+            >
+              {categories.map(({ name, icon, id }) => (
+                <div key={name} className={styles.chain} onClick={() => handleToggleCategory(name, icon, id)}>
+                  <div className={styles.chainIcon}>
+                    {selectedCategories.map((elem) => elem.name).includes(name) ? (
+                      <Image src="/Icon_Check.svg" width={19} height={19} alt="icon-checked" />
+                    ) : icon ? (
+                      <Image src={icon} loader={iconLoader} width={19} height={19} alt="icon-chain" />
+                    ) : (
+                      <></>
                     )}
                   </div>
                   <span>{name}</span>

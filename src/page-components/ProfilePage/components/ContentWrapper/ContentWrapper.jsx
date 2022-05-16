@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTokens, setData, clearOffsetAndTokens, clearError } from '../../../../redux/slices/profileFiltrationSlice';
 import { open as openError } from '../../../../redux/slices/errorSnackbarSlice';
+import { getAllCategories } from 'src/redux/slices/generalDataSlice';
 //classnames
 import cn from 'classnames';
 //infivite-scroll
@@ -57,11 +58,15 @@ export const ContentWrapper = () => {
   const handleGetTokens = useCallback(() => {
     dispatch(getTokens(choosenSection));
   }, [choosenSection, dispatch]);
-  
+
   useEffect(() => {
     dispatch(clearOffsetAndTokens());
     handleGetTokens();
   }, [choosenSection]);
+
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, [dispatch]);
 
   useEffect(() => {
     if (choosenSection === 'activity') {

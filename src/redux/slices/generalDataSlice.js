@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
+  categories: [],
   chains: [],
   collections: [],
   currencies: [],
@@ -22,6 +23,18 @@ export const getAllCurrencies = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(`${process.env.BACKEND_URL}/offers/currencyTypes/all`);
+      return data;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
+export const getAllCategories = createAsyncThunk(
+  "categories/getAllCategories",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(`${process.env.BACKEND_URL}/collections/categories/all`);
       return data;
     } catch (e) {
       return rejectWithValue(e);
@@ -59,6 +72,12 @@ export const generalData = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(getAllCategories.fulfilled, (state, action) => {
+      state.categories = action.payload;
+    });
+    builder.addCase(getAllCategories.rejected, (state, action) => {
+      state.error = action.payload;
+    });
     builder.addCase(getAllChains.fulfilled, (state, action) => {
       state.chains = action.payload;
     });

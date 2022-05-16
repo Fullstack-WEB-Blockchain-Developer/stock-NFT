@@ -108,11 +108,13 @@ export const constructUrl = (
   selectedCollections,
   selectedPrice,
   selectedChains,
+  selectedCategories,
   choosenSeltion
 ) => {
   const statuses = selectedStatuses.map(({ name }) => name).join(',');
   const collections = selectedCollections.rows.map(({ id }) => id).join(',');
   const chains = selectedChains.map(({ id }) => id).join(',');
+  const categories = selectedCategories.map(({ id }) => id).join(',');
   const { min, max, currency } = selectedPrice;
 
   initialUrl += collections.length > 0 ? `&collectionId=${collections}` : '';
@@ -122,6 +124,7 @@ export const constructUrl = (
     initialUrl += statuses.length > 0 ? `&status=${statuses}` : '';
     initialUrl += collections.length > 0 ? `&collectionId=${collections}` : '';
     initialUrl += min ? `&priceFilterType=${currency}&priceFilterMin=${min}&priceFilterMax=${max}` : '';
+    initialUrl += categories.length > 0 ? `&categoryId=${categories}` : '';
   }
 
   return initialUrl;

@@ -107,7 +107,7 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
           Authorization: 'Bearer ' + accessToken,
         },
       });
-      console.log('---data', data);
+
       router.push('/my-collections');
       dispatch(addCollection(data));
       dispatch(openSuccess('Collection is successfully created!'));

@@ -101,7 +101,6 @@ export const ViewIndividualTokenPage = ({
         })
       );
     } else {
-      console.log('---router.query', router.query)
       router.push(`/token/${router.query.tokenId}/list`)
     }
   };

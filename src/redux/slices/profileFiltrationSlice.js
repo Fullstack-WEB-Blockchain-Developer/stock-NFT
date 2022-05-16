@@ -24,6 +24,7 @@ const initialState = {
   selectedEventTypes: [],
   selectedOnSaleIn: { filter: '', rows: [] },
   selectedStatuses: [],
+  selectedCategories: [],
   selectedPrice: { min: undefined, max: undefined, currency: undefined },
   tokens: [],
   tokensGridScale: 'large',
@@ -37,11 +38,12 @@ export const getTokens = createAsyncThunk('tokens/getTokens', async ({}, { getSt
       choosenSection,
       offset,
       readyFilterOption,
+      selectedCategories,
       selectedChains,
       selectedCollections,
       selectedEventTypes,
       selectedPrice,
-      selectedStatuses,
+      selectedStatuses
     },
   } = getState();
 
@@ -51,7 +53,15 @@ export const getTokens = createAsyncThunk('tokens/getTokens', async ({}, { getSt
 
     let url = `${process.env.BACKEND_URL}/users/account/assets?offset=${offset}&limit=30&tab=${choosenSection}&sortOrder=${sortOrder}&sortBy=${sortBy}`;
 
-    url = constructUrl(url, selectedStatuses, selectedCollections, selectedPrice, selectedChains, choosenSection);
+    url = constructUrl(
+      url,
+      selectedStatuses,
+      selectedCollections,
+      selectedPrice,
+      selectedChains,
+      selectedCategories,
+      choosenSection
+    );
 
     url +=
       choosenSection === 'activity' && selectedEventTypes.length > 0

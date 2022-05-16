@@ -23,7 +23,7 @@ export const TrendingCollectionsPage = ({ blockchains, categories }) => {
   const [paginationButtons, setPaginationButtons] = useState([]);
   const [choosenPagination, setChoosenPagination] = useState(0);
   const [offset, setOffset] = useState(0);
-console.log('---collectionsFiltered', collectionsFiltered)
+
   const handlePagination = (index) => {
     setChoosenPagination(index);
     const thisOffset = index > 0 ? index * 100 : index;
