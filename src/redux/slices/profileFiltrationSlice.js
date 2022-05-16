@@ -7,7 +7,7 @@ import { constructUrl } from '../../page-components/ProfilePage/components/Conte
 
 const initialState = {
   //FE
-  choosenSection: 'activity',
+  choosenSection: 'created',
   createdNfts: 0,
   error: null,
   favoritedNfts: 0,

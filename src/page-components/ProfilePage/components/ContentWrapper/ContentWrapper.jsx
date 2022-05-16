@@ -37,7 +37,6 @@ export const ContentWrapper = () => {
     error,
   } = useSelector((state) => state.profileFiltration);
   const filtrationOptions = useSelector((state) => state.profileFiltration);
-  console.log('---adaptedActivities', adaptedActivities);
 
   useEffect(() => {
     const address = localStorage.getItem('account');
