@@ -128,8 +128,8 @@ export const CreateNFTPage = () => {
     const imageHash = await pinFileToIPFS(values.file); //use `https://ipfs.io/ipfs/${imageHash}` as image
     //code here.
     const blockchainTypeId = blockchainTypes.find((type) => type.name === values.blockchainType)?.id || 0;
-    const collectionId = collections.find((elem) => elem.name === values.collection.name)?.id || 0;
-
+    const collectionId = collections.find((elem) => elem.name === values.collection)?.id || 0;
+    
     try {
       const accessToken = localStorage.getItem('accessToken');
       const form = new FormData();

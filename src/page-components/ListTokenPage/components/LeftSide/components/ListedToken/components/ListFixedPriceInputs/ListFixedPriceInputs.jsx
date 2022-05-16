@@ -2,22 +2,22 @@ import { useEffect, useState, useRef } from 'react';
 //next
 import Image from 'next/image';
 //redux
-import { useSelector, useDispatch } from "react-redux";
-import { getAllCurrencies } from "src/redux/slices/generalDataSlice";
-import { changeToken } from "src/redux/slices/ListTokenSlice";
-import { addToken, getAllUserTokens, clearError } from "src/redux/slices/ListTokenSlice";
-import { open as openError } from "src/redux/slices/errorSnackbarSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllCurrencies } from 'src/redux/slices/generalDataSlice';
+import { changeToken } from 'src/redux/slices/ListTokenSlice';
+import { addToken, getAllUserTokens, clearError } from 'src/redux/slices/ListTokenSlice';
+import { open as openError } from 'src/redux/slices/errorSnackbarSlice';
 //mui
 import TextField from '@mui/material/TextField';
 import { Select, MenuItem } from '@mui/material';
 //components
-import { CustSwitch } from "src/components/CustSwitch/CustSwitch.jsx";
+import { CustSwitch } from 'src/components/CustSwitch/CustSwitch.jsx';
 // import { CustSwitch } from "src/components/CustSwitch/CustSwitch";
-import { DatePicker } from "../DatePicker/DatePicker";
+import { DatePicker } from '../DatePicker/DatePicker';
 //hooks
-import { useStyles } from "src/hooks/useStyles";
+import { useStyles } from 'src/hooks/useStyles';
 //utils
-import { getEtherPrice } from "src/utils/index";
+import { getEtherPrice } from 'src/utils/index';
 //styles
 import styles from './ListFixedPriceInputs.module.scss';
 
@@ -127,12 +127,14 @@ export const ListFixedPriceInputs = ({ id }) => {
           className={muiClasses.textFieldRightHalf}
           value={price}
           // TODO: please implement max price function
-          InputProps={{ style: { color: "white" } }}
+          InputProps={{ style: { color: 'white' } }}
         />
-        {price && usdPrice && (
+        {price && usdPrice ? (
           <div className={styles.usdPrice}>
             <span>${usdPrice}</span>
           </div>
+        ) : (
+          <></>
         )}
       </div>
       <div className={styles.title}>

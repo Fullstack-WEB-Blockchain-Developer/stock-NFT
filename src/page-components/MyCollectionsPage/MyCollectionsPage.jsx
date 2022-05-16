@@ -60,7 +60,7 @@ export const MyCollectionsPage = () => {
         <div className={styles.collectionsWrapper}>
           {userCollections &&
             userCollections.map(
-              ({ id, logoImage, name, owner: { username, publicAddress, profileImage } }) => (
+              ({ id, logoImage, name, owner: { username, publicAddress, profileImage }, nfts }) => (
                 <CollectionCard
                   id={id}
                   key={id}
@@ -69,6 +69,7 @@ export const MyCollectionsPage = () => {
                   publicAddress={publicAddress}
                   userProfileImage={profileImage}
                   username={username}
+                  nfts={nfts}
                 />
               )
             )}

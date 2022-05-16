@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 //next
 import Image from 'next/image';
 //redux
-import { useSelector, useDispatch } from "react-redux";
-import { addToken, getAllUserTokens, clearError } from "src/redux/slices/ListTokenSlice";
-import { open as openError } from "src/redux/slices/errorSnackbarSlice";
-import { getAllCurrencies } from "src/redux/slices/generalDataSlice";
-import { changeToken } from "src/redux/slices/ListTokenSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import { addToken, getAllUserTokens, clearError } from 'src/redux/slices/ListTokenSlice';
+import { open as openError } from 'src/redux/slices/errorSnackbarSlice';
+import { getAllCurrencies } from 'src/redux/slices/generalDataSlice';
+import { changeToken } from 'src/redux/slices/ListTokenSlice';
 //mui
 import TextField from '@mui/material/TextField';
 import { Select, MenuItem } from '@mui/material';
@@ -269,10 +269,12 @@ export const ListAuctionInputs = ({ id }) => {
               value={auctionEndPrice}
               InputProps={{ style: { color: 'white' } }}
             />
-            {auctionEndPrice && auctionEndUsdPrice && (
+            {auctionEndPrice && auctionEndUsdPrice ? (
               <div className={styles.usdPrice}>
                 <span>${auctionEndUsdPrice}</span>
               </div>
+            ) : (
+              <></>
             )}
           </div>
         </>
@@ -360,10 +362,12 @@ export const ListAuctionInputs = ({ id }) => {
               value={auctionReservePrice}
               InputProps={{ style: { color: 'white' } }}
             />
-            {auctionReservePrice && auctionReserveUsdPrice && (
+            {auctionReservePrice && auctionReserveUsdPrice ? (
               <div className={styles.usdPrice}>
                 <span>${auctionReserveUsdPrice}</span>
               </div>
+            ) : (
+              <></>
             )}
           </div>
         </>

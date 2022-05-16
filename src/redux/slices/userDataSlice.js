@@ -1,14 +1,14 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 export const getUserCollections = createAsyncThunk(
-  "collections/getUserCollections",
+  'collections/getUserCollections',
   async (userData, { rejectWithValue }) => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = localStorage.getItem('accessToken');
       const { data } = await axios.get(`${process.env.BACKEND_URL}/collections`, {
         headers: {
-          Authorization: "Bearer " + accessToken,
+          Authorization: 'Bearer ' + accessToken,
         },
       });
       return data;
@@ -20,11 +20,11 @@ export const getUserCollections = createAsyncThunk(
 
 const initialState = {
   banner: undefined,
-  bio: "",
+  bio: '',
   userCollections: [],
   error: null,
   imageUrl: undefined,
-  username: "Profile",
+  username: 'Profile',
   ownedNfts: 0,
   totalValue: 0,
   maxValue: 0,
@@ -35,7 +35,7 @@ const initialState = {
 };
 
 export const userData = createSlice({
-  name: "userData",
+  name: 'userData',
   initialState,
   reducers: {
     setImage: (state, action) => {
@@ -61,6 +61,20 @@ export const userData = createSlice({
     setField: (state, { payload: { field, value } }) => {
       state[field] = value;
     },
+    addCollection: (state, { payload }) => {
+      state.userCollections = [...state.userCollections, payload];
+    },
+    deleteCollection: (state, { payload }) => {
+      state.userCollections = state.userCollections.filter(({ id }) => id !== payload);
+    },
+    editCollection: (state, { payload }) => {
+      state.userCollections = state.userCollections.map((elem) => {
+        if (payload.id === elem.id) {
+          return payload;
+        }
+        return elem;
+      });
+    },
     clearError: (state) => {
       state.error = null;
     },
@@ -75,6 +89,16 @@ export const userData = createSlice({
   },
 });
 
-export const { setImage, setUsername, setBanner, setUserBio, clearError, setField } = userData.actions;
+export const {
+  addCollection,
+  clearError,
+  deleteCollection,
+  editCollection,
+  setBanner,
+  setField,
+  setImage,
+  setUserBio,
+  setUsername,
+} = userData.actions;
 
 export default userData.reducer;

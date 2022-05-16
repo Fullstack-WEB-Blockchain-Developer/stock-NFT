@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 //redux
 import { useDispatch } from 'react-redux';
+import { addCollection } from 'src/redux/slices/userDataSlice';
 import { open as openSuccess } from '../../redux/slices/successSnackbarSlice';
 import { open as openError } from '../../redux/slices/errorSnackbarSlice';
 //axios
@@ -101,12 +102,14 @@ export const CreateCollectionPage = ({ categories, blockchains, paymentTokens })
         ];
       }
 
-      await axios.post(`${process.env.BACKEND_URL}/collections`, body, {
+      const { data } = await axios.post(`${process.env.BACKEND_URL}/collections`, body, {
         headers: {
           Authorization: 'Bearer ' + accessToken,
         },
       });
+      console.log('---data', data);
       router.push('/my-collections');
+      dispatch(addCollection(data));
       dispatch(openSuccess('Collection is successfully created!'));
     } catch (e) {
       dispatch(openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message));

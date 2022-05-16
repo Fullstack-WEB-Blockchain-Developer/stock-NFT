@@ -615,12 +615,12 @@ export const ViewIndividualTokenPage = ({
               owner={user}
               userId={user.userId}
               offers={offers}
+              tokenNetwork={tokenNetwork}
               /// fake data
               likes={fakeLikes}
               usdPrice={fakePrice.usd}
               ethPrice={fakePrice.eth}
-              listing={fakeListing}
-              tokenNetwork={tokenNetwork}
+              listing={[]}
               ///
             />
           </div>

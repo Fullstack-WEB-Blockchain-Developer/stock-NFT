@@ -22,6 +22,7 @@ export const getServerSideProps = async ({ params }) => {
   const { data } = await axios.get(`${process.env.BACKEND_URL}/nfts/${params.tokenId}`, {
     httpsAgent,
   });
+  console.log('---data', data)
 
   const adaptPriceAndType = async (array, type) => {
     const newArray = Promise.all(array.map(

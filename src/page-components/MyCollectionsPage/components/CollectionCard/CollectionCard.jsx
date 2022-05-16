@@ -64,14 +64,14 @@ export const CollectionCard = ({
               `${publicAddress.substring(0, 6)}...${publicAddress.substring(publicAddress.length - 6)}`}
           </span>
         </div>
-        {nfts && (
+        {nfts ? (
           <div className={styles.nftsData}>
             <span>
               {nfts} NFTs {(listedNfts || auctionedNfts) && "/"} {listedNfts && `${listedNfts} Listed`}
               {listedNfts && auctionedNfts && ","} {auctionedNfts && `${auctionedNfts} in Auction`}
             </span>
           </div>
-        )}
+        ): <></>}
       </div>
     </div>
   );

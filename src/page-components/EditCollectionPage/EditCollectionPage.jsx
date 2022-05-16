@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 //redux
 import { useDispatch } from 'react-redux';
+import { deleteCollection, editCollection } from 'src/redux/slices/userDataSlice';
 import { open as openSuccess } from '../../redux/slices/successSnackbarSlice';
 import { open as openError } from '../../redux/slices/errorSnackbarSlice';
 //axios
@@ -92,6 +93,8 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
       };
 
       if (logoImage) body.logoImage = logoImage;
+      else body.logoImage = values.logo.link;
+      
       if (featuredImage) body.featuredImage = featuredImage;
       if (bannerImage) body.bannerImage = bannerImage;
       if (values.category !== 'none') {
@@ -107,12 +110,14 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
         ];
       }
 
-      await axios.patch(`${process.env.BACKEND_URL}/collections/${collectionId}`, body, {
+      const { data } = await axios.patch(`${process.env.BACKEND_URL}/collections/${collectionId}`, body, {
         headers: {
           Authorization: 'Bearer ' + accessToken,
         },
       });
+
       router.push('/my-collections');
+      dispatch(editCollection(data));
       dispatch(openSuccess('Collection is successfully changed!'));
     } catch (e) {
       dispatch(openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message));
@@ -124,13 +129,14 @@ export const EditCollectionPage = ({ categories, blockchains, paymentTokens, ...
       const accessToken = localStorage.getItem('accessToken');
       const { collectionId } = router.query;
 
-      await axios.delete(`${process.env.BACKEND_URL}/collections/${collectionId}`, {
+      const { data } = await axios.delete(`${process.env.BACKEND_URL}/collections/${collectionId}`, {
         headers: {
           Authorization: 'Bearer ' + accessToken,
         },
       });
 
       router.push('/my-collections');
+      dispatch(deleteCollection(data));
       dispatch(openSuccess('Collection is successfully deleted!'));
     } catch (e) {
       dispatch(openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message));
