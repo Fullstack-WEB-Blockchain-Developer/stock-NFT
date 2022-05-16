@@ -102,16 +102,27 @@ export const adaptActivities = async (activities) => {
   );
 };
 
-export const constructUrl = (initialUrl, selectedStatuses, selectedCollections, selectedPrice, choosenSeltion) => {
+export const constructUrl = (
+  initialUrl,
+  selectedStatuses,
+  selectedCollections,
+  selectedPrice,
+  selectedChains,
+  choosenSeltion
+) => {
   const statuses = selectedStatuses.map(({ name }) => name).join(',');
   const collections = selectedCollections.rows.map(({ id }) => id).join(',');
+  const chains = selectedChains.map(({ id }) => id).join(',');
   const { min, max, currency } = selectedPrice;
-  if (choosenSeltion === 'activity') {
-    initialUrl += collections.length > 0 ? `&collectionId=${collections}` : '';
-  } else {
+
+  initialUrl += collections.length > 0 ? `&collectionId=${collections}` : '';
+  initialUrl += chains.length > 0 ? `&blockchainId=${chains}` : '';
+
+  if (choosenSeltion !== 'activity') {
     initialUrl += statuses.length > 0 ? `&status=${statuses}` : '';
     initialUrl += collections.length > 0 ? `&collectionId=${collections}` : '';
     initialUrl += min ? `&priceFilterType=${currency}&priceFilterMin=${min}&priceFilterMax=${max}` : '';
   }
+
   return initialUrl;
 };

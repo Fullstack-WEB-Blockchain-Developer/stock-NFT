@@ -37,6 +37,7 @@ export const getTokens = createAsyncThunk('tokens/getTokens', async ({}, { getSt
       choosenSection,
       offset,
       readyFilterOption,
+      selectedChains,
       selectedCollections,
       selectedEventTypes,
       selectedPrice,
@@ -50,11 +51,11 @@ export const getTokens = createAsyncThunk('tokens/getTokens', async ({}, { getSt
 
     let url = `${process.env.BACKEND_URL}/users/account/assets?offset=${offset}&limit=30&tab=${choosenSection}&sortOrder=${sortOrder}&sortBy=${sortBy}`;
 
-    url = constructUrl(url, selectedStatuses, selectedCollections, selectedPrice, choosenSection);
+    url = constructUrl(url, selectedStatuses, selectedCollections, selectedPrice, selectedChains, choosenSection);
 
     url +=
       choosenSection === 'activity' && selectedEventTypes.length > 0
-        ? `&${selectedEventTypes.map(({ name }) => name).join(',')}`
+        ? `&eventType=${selectedEventTypes.map(({ name }) => name).join(',')}`
         : '';
 
     const { data } = await axios.get(`${url}`, {

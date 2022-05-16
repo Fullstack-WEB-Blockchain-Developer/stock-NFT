@@ -11,7 +11,6 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
-import { StylesProvider } from '@material-ui/core';
 //hooks
 import { useStyles } from '../../../../../../../../hooks/useStyles';
 //utils
@@ -72,7 +71,6 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
   }, [duration]);
 
   return (
-    <StylesProvider injectFirst>
       <div className={styles.wrapper} ref={wrapperRef}>
         <div className={styles.title}>
           <span>Date range</span>
@@ -190,6 +188,5 @@ export const DatePicker = ({ id, handleClose, setDurationTextFieldValue, duratio
           </div>
         </LocalizationProvider>
       </div>
-    </StylesProvider>
   );
 };

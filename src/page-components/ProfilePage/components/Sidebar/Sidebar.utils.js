@@ -19,10 +19,10 @@ export const normalSections = [
     text: "Categories",
     section: "categories",
   },
-  {
-    text: "On Sale In",
-    section: "onSaleIn",
-  },
+  // {
+  //   text: "On Sale In",
+  //   section: "onSaleIn",
+  // },
 ];
 
 export const activitySections = [

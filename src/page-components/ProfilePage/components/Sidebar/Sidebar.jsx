@@ -59,9 +59,10 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     dispatch(clearOffsetAndTokens());
     dispatch(getTokens());
   };
-  console.log('---selectedEventTypes', selectedEventTypes);
+
   const handleToggleSection = (section) =>
     setOpenedSections({ ...openedSections, [section]: !openedSections[section] });
+
   const handleToggleStatus = (status, text) => {
     const statusesStringsArray = selectedStatuses.map((elem) => elem.name);
     if (statusesStringsArray.includes(status)) {
@@ -84,14 +85,14 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     }
   };
 
-  const handleToggleChains = (chain, icon) => {
+  const handleToggleChains = (chain, icon, id) => {
     const chainsStringsArray = selectedChains.map((elem) => elem.name);
 
     if (chainsStringsArray.includes(chain)) {
       dispatch(deleteFromArrayOfObjects({ field: 'selectedChains', objectField: 'name', data: chain }));
       handleGetNewTokens();
     } else {
-      dispatch(setData({ field: 'selectedChains', data: [...selectedChains, { name: chain, icon }] }));
+      dispatch(setData({ field: 'selectedChains', data: [...selectedChains, { name: chain, icon, id }] }));
       handleGetNewTokens();
     }
   };
@@ -188,7 +189,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
       collections.filter(({ name }) => name.toLowerCase().includes(debouncedCollectionSearch.toLowerCase()))
     );
   }, [debouncedCollectionSearch, collections]);
-  console.log('---collectionsRows', collectionsRows);
+
   return (
     <div
       className={cn(styles.wrapper, {
@@ -312,8 +313,8 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
                 [styles.sectionClosed]: !openedSections.chains,
               })}
             >
-              {chains.map(({ name, icon }) => (
-                <div key={name} className={styles.chain} onClick={() => handleToggleChains(name, icon)}>
+              {chains.map(({ name, icon, id }) => (
+                <div key={name} className={styles.chain} onClick={() => handleToggleChains(name, icon, id)}>
                   <div className={styles.chainIcon}>
                     {selectedChains.map((elem) => elem.name).includes(name) ? (
                       <Image src="/Icon_Check.svg" width={19} height={19} alt="icon-checked" />
@@ -326,7 +327,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
               ))}
             </div>
           )}
-          {section === 'onSaleIn' && (
+          {/* {section === 'onSaleIn' && (
             <div
               className={cn(styles.sectionContent, {
                 [styles.sectionClosed]: !openedSections.onSaleIn,
@@ -363,7 +364,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
                 ))}
               </div>
             </div>
-          )}
+          )} */}
         </div>
       ))}
     </div>
