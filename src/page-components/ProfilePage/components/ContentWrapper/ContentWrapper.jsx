@@ -24,6 +24,7 @@ import styles from './ContentWrapper.module.scss';
 export const ContentWrapper = () => {
   const dispatch = useDispatch();
   const [isSidebarOpened, setIsSidebarOpened] = useState(true);
+  const [publicAddress, setPublicAddress] = useState('');
   const [adaptedActivities, setAdaptedActivities] = useState([]);
   const {
     choosenSection,
@@ -37,6 +38,11 @@ export const ContentWrapper = () => {
   } = useSelector((state) => state.profileFiltration);
   const filtrationOptions = useSelector((state) => state.profileFiltration);
   console.log('---adaptedActivities', adaptedActivities);
+
+  useEffect(() => {
+    const address = localStorage.getItem('account');
+    setPublicAddress(address);
+  }, []);
 
   useEffect(() => {
     if (choosenSection === 'activity') {
@@ -210,13 +216,15 @@ export const ContentWrapper = () => {
                                 <span>{quantity}</span>
                               </div>
                               <div className={styles.from}>
-                                <span>{userFrom.name}</span>
+                                <span>{userFrom.publicAddress === publicAddress ?
+                                'you' : userFrom.name ? userFrom.name : userFrom.publicAddress}</span>
                               </div>
                               <div className={styles.to}>
-                                <span>{userTo?.name}</span>
+                              <span>{userTo?.publicAddress === publicAddress ?
+                                'you' : userTo?.name ? userTo?.name : userTo?.publicAddress}</span>
                               </div>
                               <div className={styles.time}>
-                                <span>{date}</span>{' ' }
+                                <span>{date}</span>
                                 <Image src="/activity/Icon-FullSc.svg" alt="fullscreen" width={19} height={19} />
                               </div>
                             </div>
