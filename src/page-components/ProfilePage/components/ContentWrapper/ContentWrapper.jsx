@@ -145,11 +145,7 @@ export const ContentWrapper = () => {
                       </InfiniteScroll>
                     )}
                     {choosenSection === 'activity' && (
-                      <InfiniteScroll
-                        dataLength={30}
-                        next={handleGetTokens}
-                        hasMore={true}
-                      >
+                      <InfiniteScroll dataLength={30} next={handleGetTokens} hasMore={true}>
                         <div className={styles.activitiesHead}>
                           <div className={styles.eventType} />
                           <div className={styles.itemInfo}>
@@ -171,7 +167,8 @@ export const ContentWrapper = () => {
                             <span>Time</span>
                           </div>
                         </div>
-                        {adaptedActivities[0] &&
+                        {adaptedActivities &&
+                          adaptedActivities[0] &&
                           adaptedActivities[0].eventType &&
                           adaptedActivities.map(
                             ({ id, userFrom, userTo, price, eventType, quantity, item, usdPrice, date }) => (
