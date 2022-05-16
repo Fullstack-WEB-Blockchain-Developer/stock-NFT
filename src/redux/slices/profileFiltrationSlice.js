@@ -6,7 +6,8 @@ import axios from 'axios';
 import { constructUrl } from '../../page-components/ProfilePage/components/ContentWrapper/ContentWrapper.utils';
 
 const initialState = {
-  choosenSection: 'created',
+  //FE
+  choosenSection: 'activity',
   createdNfts: 0,
   error: null,
   favoritedNfts: 0,

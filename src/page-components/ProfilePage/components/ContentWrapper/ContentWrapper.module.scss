@@ -1,230 +1,230 @@
 .wrapper {
-	font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .chooseSectionWrapper {
-	display: flex;
+  display: flex;
 
-	border-bottom: 1px solid var(--dark-grey);
+  border-bottom: 1px solid var(--dark-grey);
 }
 
 .chooseSection {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 
-	padding: 40px;
+  padding: 40px;
 
-	cursor: pointer;
-	letter-spacing: 0.01px;
+  cursor: pointer;
+  letter-spacing: 0.01px;
 
-	color: var(--light-grey);
+  color: var(--light-grey);
 
-	font-size: 16px;
+  font-size: 16px;
 
-	span {
-		margin-left: 8px;
-	}
+  span {
+    margin-left: 8px;
+  }
 }
 
 .chooseSectionActive {
-	color: var(--purple);
-	box-shadow: 0px -8px 0px -4px var(--purple) inset;
+  color: var(--purple);
+  box-shadow: 0px -8px 0px -4px var(--purple) inset;
 
-	svg {
-		fill: var(--purple);
-		stroke: var(--purple);
-	}
+  svg {
+    fill: var(--purple);
+    stroke: var(--purple);
+  }
 }
 
 .bottomSideWrapper {
-	display: flex;
+  display: flex;
 }
 
 .rightBottomSide {
-	overflow: visible;
+  overflow: visible;
 
-	width: 100%;
-	padding: 2%;
+  width: 100%;
+  padding: 2%;
 }
 
 .topFiltrationSection {
-	width: inherit;
+  width: inherit;
 }
 
 .tokensGrid {
-	display: grid;
-	overflow: visible !important;
+  display: grid;
+  overflow: visible !important;
 
-	padding: 20px 0;
+  padding: 20px 0;
 }
 
 .tokensGridSmall {
-	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-	gap: 40px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 40px;
 
-	@media screen and (max-width: 1550px) {
-		gap: 40px;
-	}
+  @media screen and (max-width: 1550px) {
+    gap: 40px;
+  }
 
-	@media screen and (max-width: 1400px) {
-		gap: 35px;
-	}
+  @media screen and (max-width: 1400px) {
+    gap: 35px;
+  }
 }
 
 .tokensGridLarge {
-	grid-template-columns: 1fr 1fr 1fr;
-	gap: 60px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 60px;
 
-	@media screen and (max-width: 1550px) {
-		gap: 40px;
-	}
+  @media screen and (max-width: 1550px) {
+    gap: 40px;
+  }
 
-	@media screen and (max-width: 1400px) {
-		gap: 35px;
-	}
+  @media screen and (max-width: 1400px) {
+    gap: 35px;
+  }
 }
 
 .emptyTokens {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 
-	width: 100%;
-	height: 337px;
+  width: 100%;
+  height: 337px;
 
-	letter-spacing: 0.02px;
+  letter-spacing: 0.02px;
 
-	color: #FFFFFF;
-	border: 1px solid var(--dark-grey);
-	border-radius: 30px;
+  color: var(--white);
+  border: 1px solid var(--dark-grey);
+  border-radius: 30px;
 
-	font-size: 24px;
+  font-size: 24px;
 }
 
 .activitiesHead {
-	padding-bottom: 40px;
-}
+  padding: 18px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--dark-grey);
 
-.activityRow,
-.activitiesHead {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-
-	text-align: center;
-	letter-spacing: 0.02px;
-
-	color: var(--white);
-
-	font-size: 18px;
-	font-weight: 600;
-
-	div {
-		overflow: hidden;
-
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
+  div {
+    font: normal normal 600 18px/33px Poppins;
+    letter-spacing: 0.02px;
+    color: #ffffff;
+  }
 }
 
 .activityRow {
-	padding: 24px 0;
-}
+  padding: 18px;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-.activity {
-	font-size: 16px;
+  span {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 }
 
 .activityRow:hover {
-	background-color: #2F2F2F;
+  background-color: var(--dark-grey);
 }
 
-.actionColumn {
-	display: flex;
-	align-items: center;
-
-	width: calc(95px + 2.8%);
-	padding-left: 2.8%;
-
-	text-align: left;
-
-	span {
-		margin-left: 12px;
-	}
+.eventType,
+.priceInfo,
+.quantity,
+.from,
+.to,
+.time {
+  font: normal normal 600 16px Poppins;
+  letter-spacing: 0.01px;
+  width: 85px;
+  text-align: center;
 }
 
-.itemDisplayFlex {
-	display: flex;
+.from,
+.to,
+.time {
+  font: normal normal medium 18px Poppins;
+  letter-spacing: 0.02px;
+  color: var(--primary);
+  cursor: pointer;
 }
 
-.tokenInfoWrapper {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+.eventType {
+  text-align: left;
+  width: 90px;
+  display: flex;
+  align-items: center;
 
-	margin-left: 16px;
+  span:last-child {
+	  margin-left: 8px;
+  }
 }
 
-.itemImageWrapper {
-	position: relative;
-
-	min-width: 63px;
-	min-height: 63px;
-
-	border: 1px solid #707070;
-	border-radius: 8px;
+.time {
+  width: 9.8%;
+  display: flex;
+  align-items: center;
 }
 
-.activityRowCollectionName {
-	letter-spacing: 0.01px;
-
-	color: var(--light-grey);
-
-	font-size: 16px;
-	font-weight: normal;
+.from, .to {
+	width: 8%;
 }
 
-.activityRowEthPriceWrapper {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
+.itemInfo {
+  width: 26%;
+  text-align: left;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 
-	span {
-		margin-left: 4px;
-	}
+  div:last-child {
+    display: flex;
+    flex-direction: column;
+    margin-left: 16px;
+	overflow: hidden;
+
+    span:first-child {
+      font: normal normal normal 16px Poppins;
+      letter-spacing: 0.01px;
+      color: var(--light-grey);
+    }
+
+    span:last-child {
+      font: normal normal 600 18px Poppins;
+      letter-spacing: 0.02px;
+      color: var(--white);
+    }
+  }
 }
 
-.activityRowUsdPrice {
-	letter-spacing: 0.01px;
+.priceInfo {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
 
-	color: #898D96;
-
-	font-size: 16px;
-	font-weight: normal;
+  .usdPrice {
+    font: normal normal normal 16px Poppins;
+    letter-spacing: 0.01px;
+    color: var(--light-grey);
+  }
 }
 
-.itemColumn {
-	width: 22.17%;
-
-	text-align: left;
+.activityImageWrapper {
+  position: relative;
+  min-width: 63px;
+  height: 63px;
+  border: 1px solid #707070;
+  border-radius: 8px;
 }
 
-.priceColumn {
-	width: 90px;
-
-	text-align: right;
-}
-
-.quantityColumn {
-	width: 80px;
-}
-
-.fromColumn,
-.toColumn {
-	width: 120px;
-}
-
-.timeColumn {
-	width: 160px;
+.currency {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }

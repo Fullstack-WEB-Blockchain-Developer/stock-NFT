@@ -31,7 +31,7 @@ export const SquareNFTCard = ({
   const router = useRouter();
 
   useEffect(() => {
-    const end = fileName.substring(fileName.indexOf('.') + 1).toLowerCase();
+    const end = fileName?.substring(fileName.indexOf('.') + 1).toLowerCase();
 
     if (images.includes(end)) {
       setTypeOfTokenFile('image');
@@ -138,11 +138,11 @@ export const SquareNFTCard = ({
         <div className={styles.bottomSection}>
           <div className={styles.bottomLeft}>
             <div className={styles.collection}>
-              <span>{collection.name}</span>
+              <span>{collection?.name}</span>
             </div>
             <div className={styles.address}>
-              {owner.publicAddress.substring(0, 6)}...
-              {owner.publicAddress.substring(owner.publicAddress.length - 6)}
+              {owner?.publicAddress.substring(0, 6)}...
+              {owner?.publicAddress.substring(owner.publicAddress.length - 6)}
             </div>
           </div>
           <div className={styles.bottomRight}>
