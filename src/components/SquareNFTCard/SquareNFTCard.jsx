@@ -23,13 +23,14 @@ export const SquareNFTCard = ({
   owner,
   price,
   status,
-  currency,
+  blockchainType,
 }) => {
   const [tokenFileError, setTokenFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
   const router = useRouter();
-
+  console.log('---price', price);
+  console.log('---blockchainType', blockchainType);
   useEffect(() => {
     const end = fileName?.substring(fileName.indexOf('.') + 1).toLowerCase();
 
@@ -121,19 +122,21 @@ export const SquareNFTCard = ({
         <div className={styles.name}>
           <span>{name}</span>
         </div>
-        {price && currency && (
+        {price && blockchainType.icon ? (
           <div className={styles.price}>
             <div className={styles.priceAmount}>
               <Image
-                src={currency.icon}
+                src={blockchainType.icon}
                 loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`}
-                alt={currency.name}
+                alt={blockchainType.name}
                 width={19}
                 height={19}
               />
-              <span>{Number(price)}</span>
+              <span>{price}</span>
             </div>
           </div>
+        ) : (
+          <></>
         )}
         <div className={styles.bottomSection}>
           <div className={styles.bottomLeft}>

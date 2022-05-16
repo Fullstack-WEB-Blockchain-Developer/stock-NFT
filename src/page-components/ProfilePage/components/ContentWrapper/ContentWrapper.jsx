@@ -38,6 +38,7 @@ export const ContentWrapper = () => {
   } = useSelector((state) => state.profileFiltration);
   const filtrationOptions = useSelector((state) => state.profileFiltration);
 
+  console.log('---tokens', tokens)
   useEffect(() => {
     const address = localStorage.getItem('account');
     setPublicAddress(address);
@@ -58,7 +59,6 @@ export const ContentWrapper = () => {
   const handleGetTokens = useCallback(() => {
     dispatch(getTokens(choosenSection));
   }, [choosenSection, dispatch]);
-
   useEffect(() => {
     dispatch(clearOffsetAndTokens());
     handleGetTokens();
@@ -115,33 +115,39 @@ export const ContentWrapper = () => {
                         hasMore={true}
                       >
                         {tokensGridScale === 'large' &&
-                          tokens.map(({ name, category, status, price, collection, owner, fileName, id }) => (
-                            <SquareNFTCard
-                              category={category}
-                              collection={collection}
-                              fileName={fileName}
-                              id={id}
-                              key={id}
-                              name={name}
-                              owner={owner}
-                              price={price}
-                              status={status}
-                            />
-                          ))}
+                          tokens.map(
+                            ({ name, category, blockchainType, status, price, collection, owner, fileName, id }) => (
+                              <SquareNFTCard
+                                blockchainType={blockchainType}
+                                category={category}
+                                collection={collection}
+                                fileName={fileName}
+                                id={id}
+                                key={id}
+                                name={name}
+                                owner={owner}
+                                price={price}
+                                status={status}
+                              />
+                            )
+                          )}
                         {tokensGridScale === 'small' &&
-                          tokens.map(({ name, category, status, price, collection, owner, fileName, id }) => (
-                            <SmallNFTCard
-                              category={category}
-                              collection={collection}
-                              fileName={fileName}
-                              id={id}
-                              key={id}
-                              name={name}
-                              owner={owner}
-                              price={price}
-                              status={status}
-                            />
-                          ))}
+                          tokens.map(
+                            ({ name, category, blockchainType, status, price, collection, owner, fileName, id }) => (
+                              <SmallNFTCard
+                                blockchainType={blockchainType}
+                                category={category}
+                                collection={collection}
+                                fileName={fileName}
+                                id={id}
+                                key={id}
+                                name={name}
+                                owner={owner}
+                                price={price}
+                                status={status}
+                              />
+                            )
+                          )}
                       </InfiniteScroll>
                     )}
                     {choosenSection === 'activity' && (

@@ -15,7 +15,7 @@ import { videos, audios, images } from '../../helpers/extentions';
 //styles
 import styles from './SmallNFTCard.module.scss';
 
-export const SmallNFTCard = ({ id, name, category, status, price, owner, fileName, collection, currency }) => {
+export const SmallNFTCard = ({ id, name, category, status, price, owner, fileName, collection, blockchainType }) => {
   const [tokenFileError, setTokenFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
@@ -112,19 +112,21 @@ export const SmallNFTCard = ({ id, name, category, status, price, owner, fileNam
         <div className={styles.name}>
           <span>{name}</span>
         </div>
-        {price && currency && (
+        {price && blockchainType.icon ? (
           <div className={styles.price}>
             <div className={styles.priceAmount}>
               <Image
-                src={currency.icon}
+                src={blockchainType.icon}
                 loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`}
-                alt={currency.name}
+                alt={blockchainType.name}
                 width={19}
                 height={19}
               />
-              <span>{Number(price)}</span>
+              <span>{price}</span>
             </div>
           </div>
+        ) : (
+          <></>
         )}
         <div className={styles.bottomSection}>
           <div className={styles.bottomLeft}>
