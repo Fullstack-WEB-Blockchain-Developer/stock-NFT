@@ -112,7 +112,7 @@ export const SmallNFTCard = ({ id, name, category, status, price, owner, fileNam
         <div className={styles.name}>
           <span>{name}</span>
         </div>
-        {price && blockchainType.icon ? (
+        {price && blockchainType?.icon ? (
           <div className={styles.price}>
             <div className={styles.priceAmount}>
               <Image
