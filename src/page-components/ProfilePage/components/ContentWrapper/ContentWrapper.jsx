@@ -42,12 +42,7 @@ export const ContentWrapper = () => {
     const address = localStorage.getItem('account');
     setPublicAddress(address);
   }, []);
-
-  useEffect(() => {
-    if (choosenSection === 'activity') {
-      adaptActivities(tokens).then((result) => setAdaptedActivities(result));
-    }
-  }, [choosenSection, tokens]);
+  console.log('---adaptedActivities', adaptedActivities);
 
   useEffect(() => {
     if (error) {
@@ -68,6 +63,12 @@ export const ContentWrapper = () => {
     dispatch(clearOffsetAndTokens());
     handleGetTokens();
   }, [choosenSection]);
+
+  useEffect(() => {
+    if (choosenSection === 'activity') {
+      adaptActivities(tokens).then((res) => setAdaptedActivities(res));
+    }
+  }, [tokens, choosenSection]);
 
   return (
     <div className={styles.wrapper}>
@@ -144,7 +145,11 @@ export const ContentWrapper = () => {
                       </InfiniteScroll>
                     )}
                     {choosenSection === 'activity' && (
-                      <>
+                      <InfiniteScroll
+                        dataLength={30}
+                        next={handleGetTokens}
+                        hasMore={true}
+                      >
                         <div className={styles.activitiesHead}>
                           <div className={styles.eventType} />
                           <div className={styles.itemInfo}>
@@ -166,70 +171,82 @@ export const ContentWrapper = () => {
                             <span>Time</span>
                           </div>
                         </div>
-                        {adaptedActivities.map(
-                          ({ id, userFrom, userTo, price, eventType, quantity, item, usdPrice, date }) => (
-                            <div className={styles.activityRow} key={id}>
-                              <div className={styles.eventType}>
-                                {eventType === 'listings' && (
-                                  <Image src="/activity/Icon-List.svg" alt="list" width={19} height={19} />
-                                )}
-                                {eventType === 'sales' && (
-                                  <Image src="/activity/Icon-Sale.svg" alt="list" width={19} height={19} />
-                                )}
-                                {eventType === 'bids' && (
-                                  <Image src="/activity/Icon-Minted.svg" alt="list" width={19} height={19} />
-                                )}
-                                {eventType === 'transfers' && (
-                                  <Image src="/activity/Icon-Offer.svg" alt="list" width={19} height={19} />
-                                )}
-                                <span>{eventType[0].toUpperCase() + eventType.substring(1)}</span>
-                              </div>
-                              <div className={styles.itemInfo}>
-                                <div className={styles.activityImageWrapper}>
-                                  <Image
-                                    src={item.fileName}
-                                    loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
-                                    alt="nft-prewiev"
-                                    layout="fill"
-                                  />
+                        {adaptedActivities[0] &&
+                          adaptedActivities[0].eventType &&
+                          adaptedActivities.map(
+                            ({ id, userFrom, userTo, price, eventType, quantity, item, usdPrice, date }) => (
+                              <div className={styles.activityRow} key={id}>
+                                <div className={styles.eventType}>
+                                  {eventType === 'listings' && (
+                                    <Image src="/activity/Icon-List.svg" alt="list" width={19} height={19} />
+                                  )}
+                                  {eventType === 'sales' && (
+                                    <Image src="/activity/Icon-Sale.svg" alt="list" width={19} height={19} />
+                                  )}
+                                  {eventType === 'bids' && (
+                                    <Image src="/activity/Icon-Minted.svg" alt="list" width={19} height={19} />
+                                  )}
+                                  {eventType === 'transfers' && (
+                                    <Image src="/activity/Icon-Offer.svg" alt="list" width={19} height={19} />
+                                  )}
+                                  <span>{eventType[0].toUpperCase() + eventType.substring(1)}</span>
                                 </div>
-                                <div className={styles.itemInfoName}>
-                                  <span>{item.name}</span>
-                                  <span>{item.collection.name}</span>
+                                <div className={styles.itemInfo}>
+                                  <div className={styles.activityImageWrapper}>
+                                    <Image
+                                      src={item.fileName}
+                                      loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
+                                      alt="nft-prewiev"
+                                      layout="fill"
+                                    />
+                                  </div>
+                                  <div className={styles.itemInfoName}>
+                                    <span>{item.name}</span>
+                                    <span>{item.collection.name}</span>
+                                  </div>
+                                </div>
+                                <div className={styles.priceInfo}>
+                                  <span className={styles.currency}>
+                                    <Image
+                                      src={item.blockchainType.icon}
+                                      loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`}
+                                      alt="blockchain"
+                                      width={19}
+                                      height={19}
+                                    />
+                                    {price}
+                                  </span>
+                                  <span className={styles.usdPrice}>${usdPrice}</span>
+                                </div>
+                                <div className={styles.quantity}>
+                                  <span>{quantity}</span>
+                                </div>
+                                <div className={styles.from}>
+                                  <span>
+                                    {userFrom.publicAddress === publicAddress
+                                      ? 'you'
+                                      : userFrom.name
+                                      ? userFrom.name
+                                      : userFrom.publicAddress}
+                                  </span>
+                                </div>
+                                <div className={styles.to}>
+                                  <span>
+                                    {userTo?.publicAddress === publicAddress
+                                      ? 'you'
+                                      : userTo?.name
+                                      ? userTo?.name
+                                      : userTo?.publicAddress}
+                                  </span>
+                                </div>
+                                <div className={styles.time}>
+                                  <span>{date}</span>
+                                  <Image src="/activity/Icon-FullSc.svg" alt="fullscreen" width={19} height={19} />
                                 </div>
                               </div>
-                              <div className={styles.priceInfo}>
-                                <span className={styles.currency}>
-                                  <Image
-                                    src={item.blockchainType.icon}
-                                    loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`}
-                                    alt="blockchain"
-                                    width={19}
-                                    height={19}
-                                  />
-                                  {price}
-                                </span>
-                                <span className={styles.usdPrice}>${usdPrice}</span>
-                              </div>
-                              <div className={styles.quantity}>
-                                <span>{quantity}</span>
-                              </div>
-                              <div className={styles.from}>
-                                <span>{userFrom.publicAddress === publicAddress ?
-                                'you' : userFrom.name ? userFrom.name : userFrom.publicAddress}</span>
-                              </div>
-                              <div className={styles.to}>
-                              <span>{userTo?.publicAddress === publicAddress ?
-                                'you' : userTo?.name ? userTo?.name : userTo?.publicAddress}</span>
-                              </div>
-                              <div className={styles.time}>
-                                <span>{date}</span>
-                                <Image src="/activity/Icon-FullSc.svg" alt="fullscreen" width={19} height={19} />
-                              </div>
-                            </div>
-                          )
-                        )}
-                      </>
+                            )
+                          )}
+                      </InfiniteScroll>
                     )}
                   </div>
                 )}
