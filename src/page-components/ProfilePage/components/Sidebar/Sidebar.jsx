@@ -59,7 +59,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     dispatch(clearOffsetAndTokens());
     dispatch(getTokens());
   };
-console.log('---selectedEventTypes', selectedEventTypes)
+  console.log('---selectedEventTypes', selectedEventTypes);
   const handleToggleSection = (section) =>
     setOpenedSections({ ...openedSections, [section]: !openedSections[section] });
   const handleToggleStatus = (status, text) => {
@@ -188,7 +188,7 @@ console.log('---selectedEventTypes', selectedEventTypes)
       collections.filter(({ name }) => name.toLowerCase().includes(debouncedCollectionSearch.toLowerCase()))
     );
   }, [debouncedCollectionSearch, collections]);
-
+  console.log('---collectionsRows', collectionsRows);
   return (
     <div
       className={cn(styles.wrapper, {
@@ -283,11 +283,19 @@ console.log('---selectedEventTypes', selectedEventTypes)
                 InputProps={{ style: { color: 'white' } }}
               />
               <div className={styles.scrollable}>
-                {collectionsRows.map(({ name, id }) => (
+                {collectionsRows.map(({ name, id, logoImage }) => (
                   <div key={name} className={styles.collection} onClick={() => handleToggleCollections(name, id)}>
                     <div className={styles.collectionIcon}>
                       {selectedCollections.rows.map((elem) => elem.name).includes(name) ? (
                         <Image src="/Icon_Check.svg" width={19} height={19} alt="icon-checked" />
+                      ) : logoImage ? (
+                        <Image
+                          alt="collection-logo"
+                          layout="fill"
+                          loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/collectionImages/${src}`}
+                          objectFit="cover"
+                          src={logoImage}
+                        />
                       ) : (
                         <></>
                       )}
