@@ -92,9 +92,10 @@
 .price {
 	display: flex;
 	justify-content: space-between;
-	color: white;
 
 	margin-top: 8px;
+
+	color: white;
 
 	@media screen and (max-width: 1700px) {
 		margin-top: 6px;

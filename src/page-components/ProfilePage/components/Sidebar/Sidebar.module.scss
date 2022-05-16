@@ -167,11 +167,12 @@
 }
 
 .chainIcon, .collectionIcon {
+	position: relative;
+
 	display: flex;
+	overflow: hidden;
 	align-items: center;
 	justify-content: center;
-	position: relative;
-	overflow: hidden;
 
 	width: 34px;
 	height: 34px;
