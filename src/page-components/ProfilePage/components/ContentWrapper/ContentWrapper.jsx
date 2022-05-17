@@ -78,19 +78,37 @@ export const ContentWrapper = () => {
     <div className={styles.wrapper}>
       <div className={styles.chooseSectionWrapper}>
         {chooseSections.map(({ text, icon, nameForBE, forRedux }) => (
-          <div
-            className={cn(styles.chooseSection, {
-              [styles.chooseSectionActive]: choosenSection === nameForBE,
-            })}
-            onClick={() => dispatch(setData({ field: 'choosenSection', data: nameForBE }))}
-            key={text}
-          >
-            {icon}
-            <span>
-              {text}
-              {nameForBE !== 'activity' && nameForBE !== 'offers' && `(${filtrationOptions[forRedux]})`}
-            </span>
-          </div>
+          <>
+            {nameForBE !== 'offers' ? (
+              <div
+                className={cn(styles.chooseSection, {
+                  [styles.chooseSectionActive]: choosenSection === nameForBE,
+                })}
+                onClick={() => dispatch(setData({ field: 'choosenSection', data: nameForBE }))}
+                key={text}
+              >
+                {icon}
+                <span>
+                  {text}
+                  {nameForBE !== 'activity' && nameForBE !== 'offers' && `(${filtrationOptions[forRedux]})`}
+                </span>
+              </div>
+            ) : (
+              <div
+                className={cn(styles.chooseSection, {
+                  [styles.chooseSectionActive]: choosenSection === nameForBE,
+                })}
+                onClick={() => dispatch(setData({ field: 'choosenSection', data: nameForBE }))}
+                key={text}
+              >
+                {icon}
+                <span>
+                  {text}
+                  {nameForBE !== 'activity' && nameForBE !== 'offers' && `(${filtrationOptions[forRedux]})`}
+                </span>
+              </div>
+            )}
+          </>
         ))}
       </div>
       {chooseSections.map(({ nameForBE }) => (

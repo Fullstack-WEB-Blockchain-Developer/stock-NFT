@@ -30,7 +30,7 @@ export const NormalFilterSection = () => {
 
   const [searchText, setSearchText] = useState(initialFilterText);
 
-  const debouncedSearchText = useDebounce(searchText, 200);
+  const debouncedSearchText = useDebounce(searchText, 350);
 
   const handleChangeRightSelect = (selectValue) => {
     const result = readyFilterOptions.find((elem) => elem.text === selectValue);
@@ -42,6 +42,8 @@ export const NormalFilterSection = () => {
 
   useEffect(() => {
     dispatch(setData({ field: "filterText", data: debouncedSearchText }));
+    dispatch(clearOffsetAndTokens());
+    dispatch(getTokens());
   }, [debouncedSearchText, dispatch]);
 
   return (

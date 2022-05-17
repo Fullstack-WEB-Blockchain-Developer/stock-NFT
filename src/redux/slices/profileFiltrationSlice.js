@@ -36,6 +36,7 @@ export const getTokens = createAsyncThunk('tokens/getTokens', async ({}, { getSt
   const {
     profileFiltration: {
       choosenSection,
+      filterText,
       offset,
       readyFilterOption,
       selectedCategories,
@@ -43,7 +44,7 @@ export const getTokens = createAsyncThunk('tokens/getTokens', async ({}, { getSt
       selectedCollections,
       selectedEventTypes,
       selectedPrice,
-      selectedStatuses
+      selectedStatuses,
     },
   } = getState();
 
@@ -60,6 +61,7 @@ export const getTokens = createAsyncThunk('tokens/getTokens', async ({}, { getSt
       selectedPrice,
       selectedChains,
       selectedCategories,
+      filterText,
       choosenSection
     );
 

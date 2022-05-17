@@ -109,6 +109,7 @@ export const constructUrl = (
   selectedPrice,
   selectedChains,
   selectedCategories,
+  filterText,
   choosenSeltion
 ) => {
   const statuses = selectedStatuses.map(({ name }) => name).join(',');
@@ -121,6 +122,7 @@ export const constructUrl = (
   initialUrl += chains.length > 0 ? `&blockchainId=${chains}` : '';
 
   if (choosenSeltion !== 'activity') {
+    initialUrl += filterText ? `&search=${filterText}` : '';
     initialUrl += statuses.length > 0 ? `&status=${statuses}` : '';
     initialUrl += collections.length > 0 ? `&collectionId=${collections}` : '';
     initialUrl += min ? `&priceFilterType=${currency}&priceFilterMin=${min}&priceFilterMax=${max}` : '';
