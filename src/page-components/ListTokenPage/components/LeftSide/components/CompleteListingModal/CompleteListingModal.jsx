@@ -293,12 +293,15 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            maxHeight: '50wh',
-            overflowY: 'scroll',
             marginBottom: '16px',
           }}
         >
-          <div>
+          <div style={{
+            maxHeight: '25vh',
+            height: '25wh',
+            overflowY: tokens.length > 1 ? 'scroll' : 'hidden',
+            marginBottom: '16px',
+          }}>
             {tokens.map(({ fileName, id, name, collection, price, currency, usdPrice }) => (
               <div
                 key={id}

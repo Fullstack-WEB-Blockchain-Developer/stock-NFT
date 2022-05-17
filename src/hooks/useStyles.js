@@ -7,6 +7,9 @@ export const useStyles = makeStyles(
         backgroundColor: '#212020',
         color: 'white',
       },
+      '& .css-i4bv87-MuiSvgIcon-root': {
+        fill: 'white',
+      },
       '& .css-1w13o7u-MuiTypography-root': {
         color: 'white',
       },
