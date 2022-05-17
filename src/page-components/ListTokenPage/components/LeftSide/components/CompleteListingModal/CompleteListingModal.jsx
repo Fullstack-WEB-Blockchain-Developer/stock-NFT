@@ -178,7 +178,6 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
           // const startTimes = tokens.map((token) => token.duration[0].getTime() / 1000);
           // const endTimes = tokens.map((token) => token.duration[1].getTime() / 1000);
           // const nftAddrs = tokens.map((token, i) => {
-          //   console.log("---fileName", token.fileName);
           //   const startTime = token.duration[0].getTime() / 1000;
           //   const endTime = token.duration[1].getTime() / 1000;
           //   return { tokenIds, prices, startTimes, endTimes, nftAddrs };

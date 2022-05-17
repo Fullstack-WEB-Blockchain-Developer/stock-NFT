@@ -21,8 +21,16 @@ export const TagsWrapper = ({ choosenSection }) => {
   const [isClearAll, setIsClearAll] = useState(false);
   const [displayedSections, setDisplayedSections] = useState(getAvailableSections(choosenSection));
   const dispatch = useDispatch();
-  const { selectedStatuses, selectedPrice, selectedCollections, selectedChains, selectedOnSaleIn, selectedEventTypes } =
-    useSelector((state) => state.profileFiltration);
+  const {
+    selectedCategories,
+    selectedChains,
+    selectedCollections,
+    selectedEventTypes,
+    selectedOnSaleIn,
+    selectedPrice,
+    selectedStatuses,
+  } = useSelector((state) => state.profileFiltration);
+
   useEffect(() => {
     if (
       (displayedSections.includes('status') && selectedStatuses.length > 0) ||
@@ -30,6 +38,7 @@ export const TagsWrapper = ({ choosenSection }) => {
       (displayedSections.includes('price') && selectedPrice.min) ||
       (displayedSections.includes('collections') && selectedCollections.rows.length > 0) ||
       (displayedSections.includes('chains') && selectedChains.length > 0) ||
+      (displayedSections.includes('categories') && selectedCategories.length > 0) ||
       (displayedSections.includes('onSaleIn') && selectedOnSaleIn.rows.length > 0)
     ) {
       setIsClearAll(true);
@@ -38,6 +47,7 @@ export const TagsWrapper = ({ choosenSection }) => {
     }
   }, [
     displayedSections,
+    selectedCategories,
     selectedChains,
     selectedCollections,
     selectedEventTypes,
@@ -49,7 +59,7 @@ export const TagsWrapper = ({ choosenSection }) => {
   const handleClose = (callback) => {
     dispatch(clearOffsetAndItems());
     dispatch(callback());
-    dispatch(getItems());
+    dispatch(getItems(choosenSection === 'offers'));
   };
 
   return (
@@ -86,6 +96,19 @@ export const TagsWrapper = ({ choosenSection }) => {
             icon={icon}
             handleClose={() =>
               handleClose(() => deleteFromArrayOfObjects({ field: 'selectedChains', objectField: 'name', data: name }))
+            }
+          />
+        ))}
+      {displayedSections.includes('categories') &&
+        selectedCategories.map(({ name, icon }, i) => (
+          <Tag
+            key={`${name}-${i}`}
+            text={name}
+            icon={icon}
+            handleClose={() =>
+              handleClose(() =>
+                deleteFromArrayOfObjects({ field: 'selectedCategories', objectField: 'name', data: name })
+              )
             }
           />
         ))}

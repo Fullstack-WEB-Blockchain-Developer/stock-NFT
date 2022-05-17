@@ -280,10 +280,9 @@ export const CreateNFTPage = () => {
       setPreviewFile(undefined);
       return;
     }
-    console.log('---values.file', values.file);
+
     const objectUrl = URL.createObjectURL(values.file);
     setPreviewFile(objectUrl);
-    console.log('---objectUrl', objectUrl);
 
     return () => URL.revokeObjectURL(objectUrl);
   }, [values.file]);
@@ -296,7 +295,6 @@ export const CreateNFTPage = () => {
 
     const objectUrl2 = URL.createObjectURL(values.audioPreviewFile);
     setPreviewAudio(objectUrl2);
-    console.log('---objectUrl2', objectUrl2);
 
     return () => URL.revokeObjectURL(objectUrl2);
   }, [values.audioPreviewFile]);

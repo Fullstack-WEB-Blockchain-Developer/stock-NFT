@@ -38,6 +38,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
   //useSelectors
   const {
+    choosenSection,
     selectedCategories,
     selectedChains,
     selectedCollections,
@@ -62,7 +63,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
   const handleGetNewItems = () => {
     dispatch(clearOffsetAndItems());
-    dispatch(getItems());
+    dispatch(getItems(choosenSection === 'offers'));
   };
   const handleToggleSection = (section) =>
     setOpenedSections({ ...openedSections, [section]: !openedSections[section] });

@@ -51,14 +51,14 @@
 	width: inherit;
 }
 
-.tokensGrid {
+.itemsGrid {
 	display: grid;
 	overflow: visible !important;
 
 	padding: 20px 0;
 }
 
-.tokensGridSmall {
+.itemsGridSmall {
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	gap: 40px;
 
@@ -71,7 +71,7 @@
 	}
 }
 
-.tokensGridLarge {
+.itemsGridLarge {
 	grid-template-columns: 1fr 1fr 1fr;
 	gap: 60px;
 

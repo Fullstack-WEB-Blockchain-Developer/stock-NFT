@@ -37,13 +37,13 @@ export const NormalFilterSection = () => {
     const { text, sortOrder, sortBy } = result;
     dispatch(setData({ field: "readyFilterOption", data: { text, sortBy, sortOrder } }));
     dispatch(clearOffsetAndItems());
-    dispatch(getItems());
+    dispatch(getItems(false));
   };
 
   useEffect(() => {
     dispatch(setData({ field: "filterText", data: debouncedSearchText }));
     dispatch(clearOffsetAndItems());
-    dispatch(getItems());
+    dispatch(getItems(false));
   }, [debouncedSearchText, dispatch]);
 
   return (

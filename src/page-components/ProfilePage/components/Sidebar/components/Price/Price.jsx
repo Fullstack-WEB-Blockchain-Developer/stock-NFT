@@ -4,7 +4,7 @@ import Image from "next/image";
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import {
-  clearOffsetAndTokens,
+  clearOffsetAndItems,
   getItems,
   setData,
 } from "../../../../../../redux/slices/profileFiltrationSlice";
@@ -21,7 +21,7 @@ import styles from "./Price.module.scss";
 
 export const Price = ({ currencies }) => {
   const dispatch = useDispatch();
-  const { selectedPrice } = useSelector((state) => state.profileFiltration);
+  const { selectedPrice, choosenSection } = useSelector((state) => state.profileFiltration);
 
   const [choosenCurrency, setChoosenCurrency] = useState({ name: "none" });
   const [min, setMin] = useState(selectedPrice.min);
@@ -54,7 +54,7 @@ export const Price = ({ currencies }) => {
       })
     );
     dispatch(clearOffsetAndItems());
-    dispatch(getItems());
+    dispatch(getItems(choosenSection === 'offers'));
   };
 
   return (

@@ -32,7 +32,7 @@ const initialState = {
   volumeTraded: 0,
 };
 
-export const getItems = createAsyncThunk('items/getItems', async ({}, { getState, rejectWithValue }) => {
+export const getItems = createAsyncThunk('items/getItems', async (isOffers, { getState, rejectWithValue }) => {
   const {
     profileFiltration: {
       choosenSection,
@@ -70,7 +70,7 @@ export const getItems = createAsyncThunk('items/getItems', async ({}, { getState
         ? `&eventType=${selectedEventTypes.map(({ name }) => name).join(',')}`
         : '';
 
-    const { data } = await axios.get(`${url}`, {
+    const { data } = await axios.get(url, {
       headers: {
         Authorization: 'Bearer ' + accessToken,
       },

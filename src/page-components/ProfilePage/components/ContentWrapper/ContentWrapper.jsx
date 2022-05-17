@@ -18,15 +18,17 @@ import { TagsWrapper } from './components/TagsWrapper/TagsWrapper';
 import { SquareNFTCard } from '../../../../components/SquareNFTCard/SquareNFTCard';
 import { SmallNFTCard } from '../../../../components/SmallNFTCard/SmallNFTCard';
 //utils
-import { chooseSections, adaptActivities } from './ContentWrapper.utils';
+import { chooseSections, adaptActivities, adaptOffers } from './ContentWrapper.utils';
 //styles
 import styles from './ContentWrapper.module.scss';
 
 export const ContentWrapper = () => {
   const dispatch = useDispatch();
+  const [isOffersPopupOpened, setIsOffersPopupOpened] = useState(false);
   const [isSidebarOpened, setIsSidebarOpened] = useState(true);
   const [publicAddress, setPublicAddress] = useState('');
   const [adaptedActivities, setAdaptedActivities] = useState([]);
+  const [adaptedOffers, setAdaptedOffers] = useState([]);
   const {
     choosenSection,
     items,
@@ -56,16 +58,13 @@ export const ContentWrapper = () => {
   }, [error, dispatch]);
 
   const handleGetItems = useCallback(() => {
-    dispatch(getItems(choosenSection));
+    dispatch(getItems(choosenSection === 'offers'));
   }, [choosenSection, dispatch]);
 
   useEffect(() => {
     dispatch(clearOffsetAndItems());
-    handleGetItems();
-
-    if (choosenSection === 'offers') {
-    }
-  }, [choosenSection]);
+    handleGetItems(choosenSection === 'offers');
+  }, [choosenSection, dispatch, handleGetItems]);
 
   useEffect(() => {
     dispatch(getAllCategories());
@@ -77,12 +76,18 @@ export const ContentWrapper = () => {
     }
   }, [items, choosenSection]);
 
+  // useEffect(() => {
+  //   if (choosenSection === 'offers') {
+  //     adaptOffers(items).then((res) => setAdaptedOffers(res));
+  //   }
+  // }, [items, choosenSection]);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.chooseSectionWrapper}>
         {chooseSections.map(({ text, icon, nameForBE, forRedux }) => (
           <>
-            {nameForBE !== 'offers' ? (
+            {nameForBE !== 'offersMade' && nameForBE !== 'offersReceived' ? (
               <div
                 className={cn(styles.chooseSection, {
                   [styles.chooseSectionActive]: choosenSection === nameForBE,
@@ -101,7 +106,7 @@ export const ContentWrapper = () => {
                 className={cn(styles.chooseSection, {
                   [styles.chooseSectionActive]: choosenSection === nameForBE,
                 })}
-                onClick={() => dispatch(setData({ field: 'choosenSection', data: nameForBE }))}
+                onClick={() => setIsOffersPopupOpened(true)}
                 key={text}
               >
                 {icon}

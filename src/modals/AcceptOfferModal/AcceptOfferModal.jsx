@@ -24,7 +24,7 @@ import { ChooseWalletBox } from '../../components/ChooseWalletBox/ChooseWalletBo
 import useAuth from '../../hooks/useAuth';
 //utils
 import { images, videos, audios } from '../../helpers/extentions';
-import { toHex, Offer, switchNetwork } from '../../utils';
+import { toHex, Offer, switchNetwork, getEtherPrice } from '../../utils';
 //styles
 import { styles as jsStyles } from '../modalStyles/modalJsStyles';
 import cssStyles from './AcceptOfferModal.module.css';
@@ -68,6 +68,9 @@ export const AcceptOfferModal = ({
   const [isFileLoading, setIsFileLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
   const [videoSizes, setVideoSizes] = useState();
+  const [usdPrice, setUsdPrice] = useState(0);
+  const [usdFinalPrice, setUsdFinalPrice] = useState(0);
+  const [finalPrice, setFinalPrice] = useState(0);
   const offersData = useSelector((state) => state.offers.offers);
 
   const { stokeFee, creatorRoyalty } = useSelector((state) => state.administration.fees);
@@ -76,6 +79,15 @@ export const AcceptOfferModal = ({
   const videoRef = useRef();
   const audioRef = useRef();
   const router = useRouter();
+
+  useEffect(() => {
+    setFinalPrice(price + price * 0.1 + price * 0.0025);
+
+    getEtherPrice().then((result) => {
+      setUsdPrice((result * price).toFixed(2));
+      setUsdFinalPrice((result * (price + price * 0.1 + price * 0.0025)).toFixed(2));
+    });
+  }, [price]);
 
   useEffect(() => {
     let supportNetwork;
@@ -358,7 +370,7 @@ export const AcceptOfferModal = ({
                   <span className={cssStyles.marginLeft4}>{price}</span>
                 </div>
                 <div className={cn(cssStyles.greySmallText, cssStyles.marginTop4)}>
-                  <span>$ fakeAmount</span>
+                  <span>${usdPrice}</span>
                 </div>
               </div>
             </div>
@@ -392,10 +404,10 @@ export const AcceptOfferModal = ({
               <div className={cssStyles.feeDataWrapper}>
                 <div className={cn(cssStyles.bigWhiteText, cssStyles.marginBottom4)}>
                   <Image src="/view-token/Icon-Weth.svg" height={19} width={19} alt="weth-icon" />
-                  <span className={cssStyles.marginLeft4}>fakeTotal</span>
+                  <span className={cssStyles.marginLeft4}>{finalPrice}</span>
                 </div>
                 <div className={cssStyles.greySmallText}>
-                  <span>$fakeAmount</span>
+                  <span>${usdFinalPrice}</span>
                 </div>
               </div>
             </div>
