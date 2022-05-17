@@ -82,11 +82,9 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
   });
   const muiClasses = useStyles();
 
-  console.log("🚀 ~ file: MakeOfferModal.jsx ~ line 73 ~ MakeOfferModal ~ modalData", modalData.balance)
-
   const loadIcon = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
 
-  const sendOfferToServer = async () => {
+  const sendOfferToServer = async (blockchainHash) => {
     const {
       query: { tokenId },
     } = router;
@@ -105,6 +103,8 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
             expirationDate,
             nftId: Number(tokenId),
             currencyId: modalData.currency.id,
+            // TODO: add blockchainHash
+            blockchainHash
           },
           {
             headers: {
@@ -165,6 +165,8 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
   const getPricePerItem = async () => await getEtherPrice();
 
   const handleMakeOffer = async () => {
+    const { offerExpirationDays, offerExpirationTime, amount } = modalData;
+    const expirationDate = getExpirationDate(offerExpirationDays, offerExpirationTime);
     if (modalData.currency.name === "ETH") {
       dispatch(openError("Offers must use wrapped ETH or an ERC-20 token"));
       return;
@@ -193,21 +195,52 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
       // })()
     } else {
       // await tokenContract.deposit({from: account, value:ethers.utils.parseEther('0.1')})
-      const value = modalData.amount;
       const offerClass = new Offer({ contractAddress: tokenAddr, signer: library?.getSigner(), library });
       const nonce = await tokenContract.nonces(account);
       console.log("modalData", modalData);
       const { offer, signature } = await offerClass.makeOffer(
         account,
         stokeMarketAddr,
-        String(value * 10 ** 18),
+        ethers.utils.parseUnits(modalData.amount, 'ether'),
+        // String(modalData.amount * 10 ** 18),
         ethers.utils.formatUnits(nonce) * 10 ** 18,
-        Date.now("2022-04-20")
-      );
+        Date.parse(new Date(expirationDate)) /1000
+        );
+      console.log("🚀 signature", signature)
 
-      const signData = ethers.utils.splitSignature(signature);
-      const { v, r, s } = signData;
+        // TODO: send signature with offer
 
+      // const signData = ethers.utils.splitSignature(signature);
+      // const { v, r, s } = signData;
+      // const res = await axios.post(`${process.env.BACKEND_URL}/offers/${id}/${signature}`);
+      // if (res.data) {
+      //   // if(res.data.status === "pending") {
+      //   try {
+      //     const accessToken = localStorage.getItem('accessToken');
+
+      //     await axios.post(
+      //       `${process.env.BACKEND_URL}/offers/accept/${id}`,
+      //       {},
+      //       {
+      //         headers: {
+      //           Authorization: 'Bearer ' + accessToken,
+      //         },
+      //       }
+      //     );
+      //     handleClose();
+      //     dispatch(
+      //       openSuccess({
+      //         title: 'Your order was successfully accepted',
+      //         description:
+      //           'To trade this token, you must first complete a free (plus gas) transaction. Confirm it in your wallet and keep this tab open!',
+      //       })
+      //     );
+      //   } catch (e) {
+      //     dispatch(
+      //       openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
+      //     );
+      //   }
+      // }
       try {
         const accessToken = localStorage.getItem("accessToken");
         const {
@@ -221,7 +254,7 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
         if (!isTransferApproved) {
           setIsTransferApprovalModalOpened(true);
         } else {
-          sendOfferToServer();
+          sendOfferToServer(signature);
         }
       } catch (e) {
         dispatch(
@@ -289,7 +322,6 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
         supportNetwork = polygonChain;
       }
       // TODO: add switch network modal
-      console.log("🚀 ~ file: MakeOfferModal.jsx ~ line 268 ~ useEffect ~ chainId === supportNetwork", chainId === supportNetwork)
       if (chainId === supportNetwork) {
         const IToken = new ethers.ContractFactory(
           tokenArtifacts.abi,
