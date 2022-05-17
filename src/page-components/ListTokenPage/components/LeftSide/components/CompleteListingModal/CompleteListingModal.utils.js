@@ -50,8 +50,8 @@ export const sendTimedAuctionToServer = async (token) => {
       method,
       reservePrice: Number(auctionReservePrice),
       nftIds: [],
-      pricePaymentTokenId: Number(auctionStartingCurrency.id),
-      reservedPricePaymentTokenId: Number(auctionReserveCurrency.id),
+      pricePaymentTokenId: Number(auctionStartingCurrency?.id),
+      reservedPricePaymentTokenId: Number(auctionReserveCurrency?.id),
       startDate,
     },
     {
