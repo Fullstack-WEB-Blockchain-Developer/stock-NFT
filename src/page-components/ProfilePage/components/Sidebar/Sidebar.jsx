@@ -7,8 +7,8 @@ import {
   setData,
   deleteFromArray,
   deleteFromArrayOfObjects,
-  getTokens,
-  clearOffsetAndTokens,
+  getItems,
+  clearOffsetAndItems,
 } from '../../../../redux/slices/profileFiltrationSlice';
 import { open as openError } from '../../../../redux/slices/errorSnackbarSlice';
 import {
@@ -60,9 +60,9 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
   const iconLoader = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`;
 
-  const handleGetNewTokens = () => {
-    dispatch(clearOffsetAndTokens());
-    dispatch(getTokens());
+  const handleGetNewItems = () => {
+    dispatch(clearOffsetAndItems());
+    dispatch(getItems());
   };
   const handleToggleSection = (section) =>
     setOpenedSections({ ...openedSections, [section]: !openedSections[section] });
@@ -71,10 +71,10 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     const statusesStringsArray = selectedStatuses.map((elem) => elem.name);
     if (statusesStringsArray.includes(status)) {
       dispatch(deleteFromArrayOfObjects({ field: 'selectedStatuses', objectField: 'name', data: status }));
-      handleGetNewTokens();
+      handleGetNewItems();
     } else {
       dispatch(setData({ field: 'selectedStatuses', data: [...selectedStatuses, { name: status, text }] }));
-      handleGetNewTokens();
+      handleGetNewItems();
     }
   };
 
@@ -82,10 +82,10 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
     const eventTypesStringsArray = selectedEventTypes.map((elem) => elem.name);
     if (eventTypesStringsArray.includes(eventType)) {
       dispatch(deleteFromArrayOfObjects({ field: 'selectedEventTypes', objectField: 'name', data: eventType }));
-      handleGetNewTokens();
+      handleGetNewItems();
     } else {
       dispatch(setData({ field: 'selectedEventTypes', data: [...selectedEventTypes, { name: eventType, text }] }));
-      handleGetNewTokens();
+      handleGetNewItems();
     }
   };
 
@@ -94,10 +94,10 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
     if (collectionsStringsArray.includes(category)) {
       dispatch(deleteFromArrayOfObjects({ field: 'selectedCategories', objectField: 'name', data: category }));
-      handleGetNewTokens();
+      handleGetNewItems();
     } else {
       dispatch(setData({ field: 'selectedCategories', data: [...selectedCategories, { name: category, icon, id }] }));
-      handleGetNewTokens();
+      handleGetNewItems();
     }
   };
 
@@ -106,17 +106,17 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
     if (chainsStringsArray.includes(chain)) {
       dispatch(deleteFromArrayOfObjects({ field: 'selectedChains', objectField: 'name', data: chain }));
-      handleGetNewTokens();
+      handleGetNewItems();
     } else {
       dispatch(setData({ field: 'selectedChains', data: [...selectedChains, { name: chain, icon, id }] }));
-      handleGetNewTokens();
+      handleGetNewItems();
     }
   };
 
   // const handleToggleOnSaleIn = (onSaleIn) => {
   //   if (selectedOnSaleIn.rows.includes(onSaleIn)) {
   //     dispatch(deleteFromArray({ field: 'selectedOnSaleIn', data: { ...selectedOnSaleIn, rows: onSaleIn } }));
-  //     handleGetNewTokens();
+  //     handleGetNewItems();
   //   } else {
   //     dispatch(
   //       setData({
@@ -124,7 +124,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
   //         data: { ...selectedOnSaleIn, rows: [...selectedOnSaleIn.rows, onSaleIn] },
   //       })
   //     );
-  //     handleGetNewTokens();
+  //     handleGetNewItems();
   //   }
   // };
 
@@ -139,7 +139,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
           data: { rows: collection },
         })
       );
-      handleGetNewTokens();
+      handleGetNewItems();
     } else {
       dispatch(
         setData({
@@ -150,7 +150,7 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
           },
         })
       );
-      handleGetNewTokens();
+      handleGetNewItems();
     }
   };
 

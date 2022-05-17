@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setData,
-  clearOffsetAndTokens,
-  getTokens,
+  clearOffsetAndItems,
+  getItems,
 } from "../../../../../../redux/slices/profileFiltrationSlice";
 //classnames
 import cn from "classnames";
@@ -26,7 +26,7 @@ export const NormalFilterSection = () => {
   const muiClasses = useStyles();
 
   const initialFilterText = useSelector((state) => state.profileFiltration.filterText);
-  const { itemsSelect, readyFilterOption, tokensGridScale } = useSelector((state) => state.profileFiltration);
+  const { itemsSelect, readyFilterOption, itemsGridScale } = useSelector((state) => state.profileFiltration);
 
   const [searchText, setSearchText] = useState(initialFilterText);
 
@@ -36,14 +36,14 @@ export const NormalFilterSection = () => {
     const result = readyFilterOptions.find((elem) => elem.text === selectValue);
     const { text, sortOrder, sortBy } = result;
     dispatch(setData({ field: "readyFilterOption", data: { text, sortBy, sortOrder } }));
-    dispatch(clearOffsetAndTokens());
-    dispatch(getTokens());
+    dispatch(clearOffsetAndItems());
+    dispatch(getItems());
   };
 
   useEffect(() => {
     dispatch(setData({ field: "filterText", data: debouncedSearchText }));
-    dispatch(clearOffsetAndTokens());
-    dispatch(getTokens());
+    dispatch(clearOffsetAndItems());
+    dispatch(getItems());
   }, [debouncedSearchText, dispatch]);
 
   return (
@@ -107,17 +107,17 @@ export const NormalFilterSection = () => {
       <div className={styles.styleButtons}>
         <div
           className={cn(styles.styleButton, {
-            [styles.activeButton]: tokensGridScale === "large",
+            [styles.activeButton]: itemsGridScale === "large",
           })}
-          onClick={() => dispatch(setData({ field: "tokensGridScale", data: "large" }))}
+          onClick={() => dispatch(setData({ field: "itemsGridScale", data: "large" }))}
         >
           <Image src="/profile/SquaresFour.svg" width={27} height={27} alt="squares" />
         </div>
         <div
           className={cn(styles.styleButton, {
-            [styles.activeButton]: tokensGridScale === "small",
+            [styles.activeButton]: itemsGridScale === "small",
           })}
-          onClick={() => dispatch(setData({ field: "tokensGridScale", data: "small" }))}
+          onClick={() => dispatch(setData({ field: "itemsGridScale", data: "small" }))}
         >
           <Image src="/profile/SquaresFour-1.svg" width={27} height={27} alt="squares" />
         </div>

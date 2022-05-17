@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearOffsetAndTokens,
-  getTokens,
+  getItems,
   setData,
 } from "../../../../../../redux/slices/profileFiltrationSlice";
 //mui
@@ -53,8 +53,8 @@ export const Price = ({ currencies }) => {
         },
       })
     );
-    dispatch(clearOffsetAndTokens());
-    dispatch(getTokens());
+    dispatch(clearOffsetAndItems());
+    dispatch(getItems());
   };
 
   return (

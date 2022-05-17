@@ -26,13 +26,13 @@ const initialState = {
   selectedStatuses: [],
   selectedCategories: [],
   selectedPrice: { min: undefined, max: undefined, currency: undefined },
-  tokens: [],
-  tokensGridScale: 'large',
+  items: [],
+  itemsGridScale: 'large',
   totalValue: 0,
   volumeTraded: 0,
 };
 
-export const getTokens = createAsyncThunk('tokens/getTokens', async ({}, { getState, rejectWithValue }) => {
+export const getItems = createAsyncThunk('items/getItems', async ({}, { getState, rejectWithValue }) => {
   const {
     profileFiltration: {
       choosenSection,
@@ -125,27 +125,27 @@ export const profileFiltration = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-    clearOffsetAndTokens: (state) => {
+    clearOffsetAndItems: (state) => {
       state.offset = 0;
-      state.tokens = [];
+      state.items = [];
     },
   },
   extraReducers: (builder) => {
     builder.addCase(
-      getTokens.fulfilled,
+      getItems.fulfilled,
       (state, { payload: { data, ownedNfts, totalValue, maxValue, createdNfts, favoritedNfts } }) => {
         if (data) {
           state.createdNfts = createdNfts;
           state.favoritedNfts = favoritedNfts;
           state.maxValue = maxValue;
-          state.offset = state.tokens.length + data.length;
+          state.offset = state.items.length + data.length;
           state.ownedNfts = ownedNfts;
-          state.tokens = [...state.tokens, ...data];
+          state.items = [...state.items, ...data];
           state.totalValue = totalValue;
         }
       }
     );
-    builder.addCase(getTokens.rejected, (state, { payload }) => {
+    builder.addCase(getItems.rejected, (state, { payload }) => {
       state.error = payload;
     });
   },
@@ -153,7 +153,7 @@ export const profileFiltration = createSlice({
 
 export const {
   clearError,
-  clearOffsetAndTokens,
+  clearOffsetAndItems,
   deleteAll,
   deleteFromArray,
   deleteFromArrayOfObjects,

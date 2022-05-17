@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 //redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getTokens, setData, clearOffsetAndTokens, clearError } from '../../../../redux/slices/profileFiltrationSlice';
+import { getItems, setData, clearOffsetAndItems, clearError } from '../../../../redux/slices/profileFiltrationSlice';
 import { open as openError } from '../../../../redux/slices/errorSnackbarSlice';
 import { getAllCategories } from 'src/redux/slices/generalDataSlice';
 //classnames
@@ -29,9 +29,9 @@ export const ContentWrapper = () => {
   const [adaptedActivities, setAdaptedActivities] = useState([]);
   const {
     choosenSection,
-    tokens,
+    items,
     readyFilterOption,
-    tokensGridScale,
+    itemsGridScale,
     selectedStatuses,
     selectedCollections,
     selectedPrice,
@@ -55,13 +55,16 @@ export const ContentWrapper = () => {
     }
   }, [error, dispatch]);
 
-  const handleGetTokens = useCallback(() => {
-    dispatch(getTokens(choosenSection));
+  const handleGetItems = useCallback(() => {
+    dispatch(getItems(choosenSection));
   }, [choosenSection, dispatch]);
 
   useEffect(() => {
-    dispatch(clearOffsetAndTokens());
-    handleGetTokens();
+    dispatch(clearOffsetAndItems());
+    handleGetItems();
+
+    if (choosenSection === 'offers') {
+    }
   }, [choosenSection]);
 
   useEffect(() => {
@@ -70,9 +73,9 @@ export const ContentWrapper = () => {
 
   useEffect(() => {
     if (choosenSection === 'activity') {
-      adaptActivities(tokens).then((res) => setAdaptedActivities(res));
+      adaptActivities(items).then((res) => setAdaptedActivities(res));
     }
-  }, [tokens, choosenSection]);
+  }, [items, choosenSection]);
 
   return (
     <div className={styles.wrapper}>
@@ -124,20 +127,20 @@ export const ContentWrapper = () => {
                 {choosenSection !== 'activity' && choosenSection !== 'offers' && <NormalFilterSection />}
                 {choosenSection === 'offers' && <OffersFilterSection />}
                 <TagsWrapper choosenSection={choosenSection} />
-                {tokens && tokens.length > 0 && (
+                {items && items.length > 0 && (
                   <div>
                     {choosenSection !== 'activity' && choosenSection !== 'offers' && (
                       <InfiniteScroll
-                        className={cn(styles.tokensGrid, {
-                          [styles.tokensGridSmall]: tokensGridScale === 'small',
-                          [styles.tokensGridLarge]: tokensGridScale === 'large',
+                        className={cn(styles.itemsGrid, {
+                          [styles.itemsGridSmall]: itemsGridScale === 'small',
+                          [styles.itemsGridLarge]: itemsGridScale === 'large',
                         })}
                         dataLength={30}
-                        next={handleGetTokens}
+                        next={handleGetItems}
                         hasMore={true}
                       >
-                        {tokensGridScale === 'large' &&
-                          tokens.map(
+                        {itemsGridScale === 'large' &&
+                          items.map(
                             ({ name, category, blockchainType, status, price, collection, owner, fileName, id }) => (
                               <SquareNFTCard
                                 blockchainType={blockchainType}
@@ -153,8 +156,8 @@ export const ContentWrapper = () => {
                               />
                             )
                           )}
-                        {tokensGridScale === 'small' &&
-                          tokens.map(
+                        {itemsGridScale === 'small' &&
+                          items.map(
                             ({ name, category, blockchainType, status, price, collection, owner, fileName, id }) => (
                               <SmallNFTCard
                                 blockchainType={blockchainType}
@@ -173,7 +176,7 @@ export const ContentWrapper = () => {
                       </InfiniteScroll>
                     )}
                     {choosenSection === 'activity' && (
-                      <InfiniteScroll dataLength={30} next={handleGetTokens} hasMore={true}>
+                      <InfiniteScroll dataLength={30} next={handleGetItems} hasMore={true}>
                         <div className={styles.activitiesHead}>
                           <div className={styles.eventType} />
                           <div className={styles.itemInfo}>
@@ -275,9 +278,9 @@ export const ContentWrapper = () => {
                     )}
                   </div>
                 )}
-                {!tokens ||
-                  (tokens.length === 0 && (
-                    <div className={styles.emptyTokens}>
+                {!items ||
+                  (items.length === 0 && (
+                    <div className={styles.emptyItems}>
                       <Image src="/profile/Icon-Empty.svg" height={156} width={160} alt="no-items" />
                       <span>No Items to display</span>
                     </div>

@@ -6,8 +6,8 @@ import {
   deleteFromArrayOfObjects,
   deletePrice,
   deleteAll,
-  clearOffsetAndTokens,
-  getTokens,
+  clearOffsetAndItems,
+  getItems,
 } from '../../../../../../redux/slices/profileFiltrationSlice';
 //components
 import { Tag } from './components/Tag';
@@ -47,9 +47,9 @@ export const TagsWrapper = ({ choosenSection }) => {
   ]);
 
   const handleClose = (callback) => {
-    dispatch(clearOffsetAndTokens());
+    dispatch(clearOffsetAndItems());
     dispatch(callback());
-    dispatch(getTokens());
+    dispatch(getItems());
   };
 
   return (
