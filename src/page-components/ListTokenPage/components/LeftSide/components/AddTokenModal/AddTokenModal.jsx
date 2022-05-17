@@ -62,6 +62,7 @@ export const AddTokenModal = ({ isOpened, handleClose, tokens }) => {
         specificBuyerAddress: '',
       })
     );
+    setChoosenToken('none');
     handleClose();
   };
 

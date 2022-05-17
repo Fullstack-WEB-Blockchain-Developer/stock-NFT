@@ -1,15 +1,15 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from 'react';
 //redux
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 //classnames
-import cn from "classnames";
+import cn from 'classnames';
 //components
-import { CustButton } from "src/components/CustButton/CustButton.jsx";
-import { AddTokenModal } from "./components/AddTokenModal/AddTokenModal";
-import { CompleteListingModal } from "./components/CompleteListingModal/CompleteListingModal";
-import { ListedToken } from "./components/ListedToken/ListedToken";
+import { CustButton } from 'src/components/CustButton/CustButton.jsx';
+import { AddTokenModal } from './components/AddTokenModal/AddTokenModal';
+import { CompleteListingModal } from './components/CompleteListingModal/CompleteListingModal';
+import { ListedToken } from './components/ListedToken/ListedToken';
 //styles
-import styles from "./LeftSide.module.scss";
+import styles from './LeftSide.module.scss';
 
 export const LeftSide = ({ className }) => {
   const [isAddModalOpened, setIsAddModalOpened] = useState(false);
@@ -20,22 +20,24 @@ export const LeftSide = ({ className }) => {
   const { currencies } = useSelector((state) => state.generalData);
 
   useEffect(() => {
-    tokens.length === 10 && setDisabledAdd(true);
+    tokens.length >= 10 ? setDisabledAdd(true) : setDisabledAdd(false);
   }, [tokens]);
 
   useEffect(() => {
     const flag = tokens.every((token) => {
       if (
-        (token.listingType === "fixedPrice" && (!token.price || !token.duration[0] || !token.duration[1])) ||
-        (token.listingType === "timeAuction" &&
+        (token.listingType === 'fixedPrice' && (!token.price || !token.duration[0] || !token.duration[1])) ||
+        (token.listingType === 'timeAuction' &&
           (!token.auctionStartingPrice ||
             !token.duration[0] ||
             !token.duration[1] ||
-            (token.auctionMethod === "Sell with declining price" && !token.auctionEndPrice)))
+            (token.auctionMethod === 'Sell with declining price' && !token.auctionEndPrice)))
       )
         return false;
       else return true;
     });
+
+    if (tokens.length === 0) flag = false;
 
     setDisabledComplete(!flag);
   }, [tokens]);
@@ -60,16 +62,12 @@ export const LeftSide = ({ className }) => {
         <CustButton
           text="Complete Listing"
           color="primary"
-          style={{width: 'fit-content'}}
+          style={{ width: 'fit-content' }}
           disabled={disabledComplete}
           onClick={() => setIsCompleteModalOpened(true)}
         />
       </div>
-      <AddTokenModal
-        handleClose={() => setIsAddModalOpened(false)}
-        isOpened={isAddModalOpened}
-        tokens={tokens}
-      />
+      <AddTokenModal handleClose={() => setIsAddModalOpened(false)} isOpened={isAddModalOpened} tokens={tokens} />
       <CompleteListingModal
         handleClose={() => setIsCompleteModalOpened(false)}
         isOpened={isCompleteModalOpened}
