@@ -38,16 +38,15 @@ export const CreateNFTPage = () => {
   const { active, library, chainId } = useWeb3React();
   const dispatch = useDispatch();
   const { account, error, isAuthorized } = useAuth();
+
+  const audioPreviewRef = useRef();
   const inputRef = useRef();
   const videoRef = useRef();
   const router = useRouter();
 
-  if (error) {
-    dispatch(openError(`${error.statusCode + ' ' + error.message}`));
-  }
-
   const [values, setValues] = useState({
     file: undefined,
+    audioPreviewFile: undefined,
     name: '',
     externalLink: '',
     description: '',
@@ -64,6 +63,7 @@ export const CreateNFTPage = () => {
   });
 
   const [previewFile, setPreviewFile] = useState();
+  const [previewAudio, setPreviewAudio] = useState();
   const [ratio, setRatio] = useState(16 / 9);
   const [videoSizes, setVideoSizes] = useState({});
   const [disabledButton, setDisabledButton] = useState(true);
@@ -88,14 +88,13 @@ export const CreateNFTPage = () => {
         break;
       case 'file':
         if (!e.target.files || e.target.files.length === 0) {
-          setValues({ ...values, file: undefined });
+          setValues({ ...values, [value]: undefined });
           return;
         }
-
         const file = e.target.files[0];
 
         if (file.size < 100000000) {
-          setValues({ ...values, file: file });
+          setValues({ ...values, [value]: file });
         } else {
           dispatch(openError(`The uploaded file must be smaller than 100 mb`));
         }
@@ -129,7 +128,7 @@ export const CreateNFTPage = () => {
     //code here.
     const blockchainTypeId = blockchainTypes.find((type) => type.name === values.blockchainType)?.id || 0;
     const collectionId = collections.find((elem) => elem.name === values.collection)?.id || 0;
-    
+
     try {
       const accessToken = localStorage.getItem('accessToken');
       const form = new FormData();
@@ -179,18 +178,23 @@ export const CreateNFTPage = () => {
     }
   };
 
-  const handleLoadImage = (width, height) => {
-    setRatio(width / height);
-  };
+  const handleLoadImage = (width, height) => setRatio(width / height);
 
-  const handleUploadButton = () => {
-    inputRef.current.click();
-  };
+  const handleUploadFile = () => inputRef.current.click();
 
-  const handleDeleteButton = () => {
+  const handleUploadAudioPreview = () => audioPreviewRef.current.click();
+
+  const handleDeleteFile = () => {
     inputRef.current.value = null;
+    audioPreviewRef.current?.value === null;
     setPreviewFile(undefined);
-    setValues({ ...values, file: undefined });
+    setPreviewAudio(undefined);
+    setValues({ ...values, file: undefined, audioPreviewFile: undefined });
+  };
+
+  const handleDeleteAudioPreview = () => {
+    audioPreviewRef.current?.value === null;
+    setPreviewAudio(undefined);
   };
 
   const pinFileToIPFS = async (file) => {
@@ -249,6 +253,12 @@ export const CreateNFTPage = () => {
   // useEffects
 
   useEffect(() => {
+    if (error) {
+      dispatch(openError(`${error.statusCode + ' ' + error.message}`));
+    }
+  }, [error, dispatch]);
+
+  useEffect(() => {
     isAuthorized && !error && fetchCollections();
     !error && fetchBlockchainTypes();
   }, []);
@@ -270,12 +280,26 @@ export const CreateNFTPage = () => {
       setPreviewFile(undefined);
       return;
     }
-
+    console.log('---values.file', values.file);
     const objectUrl = URL.createObjectURL(values.file);
     setPreviewFile(objectUrl);
+    console.log('---objectUrl', objectUrl);
 
     return () => URL.revokeObjectURL(objectUrl);
   }, [values.file]);
+
+  useEffect(() => {
+    if (!values.audioPreviewFile) {
+      setPreviewAudio(undefined);
+      return;
+    }
+
+    const objectUrl2 = URL.createObjectURL(values.audioPreviewFile);
+    setPreviewAudio(objectUrl2);
+    console.log('---objectUrl2', objectUrl2);
+
+    return () => URL.revokeObjectURL(objectUrl2);
+  }, [values.audioPreviewFile]);
 
   useEffect(() => {
     if (previewFile && values.file?.type.startsWith('video') && videoRef.current?.src) {
@@ -353,14 +377,73 @@ export const CreateNFTPage = () => {
               <CustButton
                 color="primary"
                 text={previewFile ? 'Change File' : 'Upload File'}
-                onClick={handleUploadButton}
+                onClick={handleUploadFile}
                 className={styles.uploadButton}
                 fullWidth
               />
-              <CustButton color="red" text="Delete File" onClick={handleDeleteButton} fullWidth />
+              <CustButton color="red" text="Delete File" onClick={handleDeleteFile} fullWidth />
             </div>
           </div>
         </div>
+        {values.file?.type.startsWith('audio') ? (
+          <>
+            <div className={styles.title}>
+              <span>Image as audio preview file {star}</span>
+            </div>
+            <div className={styles.description}>
+              <span>File types supported: JPG, PNG, GIF, SVG. Max size: 100 MB</span>
+            </div>
+            <div className={styles.uploadFileWrapper}>
+              <div
+                className={styles.dragPlaceholder}
+                style={{
+                  height: previewAudio ? 'auto' : '200px',
+                }}
+              >
+                <div
+                  className={styles.imageWrapper}
+                  style={{
+                    background: previewAudio ? 'none' : 'url("/create-nft/Icon-Image.png") no-repeat center',
+                    height: !previewAudio && '100%',
+                  }}
+                >
+                  {previewAudio && (
+                    <Image
+                      src={previewAudio}
+                      alt="audio-preview"
+                      width={400}
+                      height={400 / ratio}
+                      layout="responsive"
+                      objectFit="contain"
+                      onLoadingComplete={({ naturalWidth, naturalHeight }) =>
+                        handleLoadImage(naturalWidth, naturalHeight)
+                      }
+                    />
+                  )}
+                </div>
+                <input
+                  className={styles.uploadFileInput}
+                  type="file"
+                  ref={audioPreviewRef}
+                  onChange={(e) => handleChange(e, 'audioPreviewFile', 'file')}
+                  accept=".png, .jpg, .gif, .svg"
+                />
+              </div>
+              <div className={styles.uploadButtonsWrapper}>
+                <CustButton
+                  color="primary"
+                  text={previewAudio ? 'Change File' : 'Upload File'}
+                  onClick={handleUploadAudioPreview}
+                  className={styles.uploadButton}
+                  fullWidth
+                />
+                <CustButton color="red" text="Delete File" onClick={handleDeleteAudioPreview} fullWidth />
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
         {textFields.map(({ title, description, required, label, multiline, id, maxLength }) => (
           <div key={id} className={styles.section}>
             <div
