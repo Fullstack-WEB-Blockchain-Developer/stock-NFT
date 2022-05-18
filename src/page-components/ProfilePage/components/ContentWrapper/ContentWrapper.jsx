@@ -22,31 +22,47 @@ import { chooseSections, adaptActivities, adaptOffers } from './ContentWrapper.u
 //styles
 import styles from './ContentWrapper.module.scss';
 import { OffersPopup } from './components/OffersPopup/OffersPopup';
+import { CustButton } from 'src/components/CustButton/CustButton';
+import { AcceptOfferModal } from 'src/modals/AcceptOfferModal/AcceptOfferModal';
 
 export const ContentWrapper = () => {
   const dispatch = useDispatch();
   const [isOffersPopupOpened, setIsOffersPopupOpened] = useState(false);
+  const [acceptOfferInfo, setAcceptOfferInfo] = useState({
+    collection: '',
+    id: 0,
+    isOpened: false,
+    price: 0,
+    tokenFileName: '',
+  });
+  const [account, setAccount] = useState('');
   const [isSidebarOpened, setIsSidebarOpened] = useState(true);
   const [publicAddress, setPublicAddress] = useState('');
   const [adaptedActivities, setAdaptedActivities] = useState([]);
   const [adaptedOffers, setAdaptedOffers] = useState([]);
-  const {
-    choosenSection,
-    items,
-    readyFilterOption,
-    itemsGridScale,
-    selectedStatuses,
-    selectedCollections,
-    selectedPrice,
-    error,
-  } = useSelector((state) => state.profileFiltration);
+
+  const { choosenSection, items, itemsGridScale, error } = useSelector((state) => state.profileFiltration);
   const filtrationOptions = useSelector((state) => state.profileFiltration);
 
   useEffect(() => {
     const address = localStorage.getItem('account');
     setPublicAddress(address);
   }, []);
-  console.log('---items', items)
+  console.log('---items', items);
+
+  const handleGetItems = useCallback(() => {
+    dispatch(getItems());
+    setIsOffersPopupOpened(false);
+  }, [dispatch]);
+
+  const handleOpenAccept = ({collection, id, tokenFileName, price}) => {
+    setAcceptOfferInfo({ collection, id, tokenFileName, price, isOpened: true });
+  };
+
+  useEffect(() => {
+    const account = localStorage.getItem('account');
+    setAccount(account);
+  }, []);
 
   useEffect(() => {
     if (error) {
@@ -59,15 +75,11 @@ export const ContentWrapper = () => {
     }
   }, [error, dispatch]);
 
-  const handleGetItems = useCallback(() => {
-    dispatch(getItems());
-  }, [dispatch]);
-
   useEffect(() => {
     dispatch(clearOffsetAndItems());
     handleGetItems();
   }, [choosenSection, dispatch, handleGetItems]);
-
+console.log('---acceptOfferInfo', acceptOfferInfo)
   useEffect(() => {
     dispatch(getAllCategories());
   }, [dispatch]);
@@ -83,7 +95,6 @@ export const ContentWrapper = () => {
       adaptOffers(items).then((res) => setAdaptedOffers(res));
     }
   }, [items, choosenSection]);
-  console.log('---adaptedOffers', adaptedOffers);
 
   return (
     <div className={styles.wrapper}>
@@ -125,9 +136,9 @@ export const ContentWrapper = () => {
           </>
         ))}
       </div>
-      {chooseSections.map(({ nameForBE }) => (
+      {chooseSections.map(({ nameForBE, isOffers }) => (
         <>
-          {(choosenSection === 'offersMade' || choosenSection === 'offersReceived') && (
+          {isOffers && (choosenSection === 'offersMade' || choosenSection === 'offersReceived') && (
             <div key={nameForBE} className={styles.bottomSideWrapper}>
               <Sidebar
                 choosenTopSection={choosenSection}
@@ -136,6 +147,7 @@ export const ContentWrapper = () => {
               />
               <div className={styles.rightBottomSide}>
                 <OffersFilterSection />
+                <TagsWrapper choosenSection={choosenSection} />
                 {items && adaptedOffers.length > 0 && adaptedOffers[0].nft && (
                   <div className={styles.offersWrapper}>
                     <div className={styles.offersTitle}>
@@ -146,39 +158,101 @@ export const ContentWrapper = () => {
                       <div className={styles.offerItemColumn}>
                         <span>Items</span>
                       </div>
-                      {['Price', 'USD Price', 'Expiration', 'From'].map((elem) => (
+                      {['Price', 'USD Price', 'Expiration'].map((elem) => (
                         <div key={elem} className={styles.offer9PercentColumn}>
                           <span>{elem}</span>
                         </div>
                       ))}
+                      <div className={styles.offer9PercentColumn}>
+                        <span>{choosenSection === 'offersMade' ? 'To' : 'From'}</span>
+                      </div>
                       <div className={styles.offerButtonColumn} />
                     </div>
-                    {adaptedOffers.map(
-                      ({ blockchainHash, buyer, expirationDate, id, nft, price, seller, usdPrice }) => (
+                    {adaptedOffers.length > 0 &&
+                      adaptedOffers.map(({ buyer, expirationDate, id, nft, price, seller, usdPrice }) => (
                         <div key={id} className={styles.offerWrapper}>
-                          <div className={styles.offetItemColumn}>
+                          <div className={styles.offerItemColumn}>
                             <div className={styles.offerItemImageWrapper}>
                               <Image
                                 src={nft.fileName}
                                 loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
-                                width={63}
-                                height={63}
+                                layout="fill"
                                 alt={nft.name}
                               />
                             </div>
+                            <div className={styles.offerItemInfoWrapper}>
+                              <span className={styles.nftCollection}>{nft.collection.name}</span>
+                              <span className={styles.nftName}>{nft.name}</span>
+                            </div>
+                          </div>
+                          <div className={cn(styles.offer9PercentColumn, styles.offerPrice)}>
+                            <span>{price}</span>
+                          </div>
+                          <div className={cn(styles.offer9PercentColumn, styles.offerPrice)}>
+                            <span>${usdPrice}</span>
+                          </div>
+                          <div className={cn(styles.offer9PercentColumn, styles.offerExpiration)}>
+                            <span>{expirationDate}</span>
+                          </div>
+                          <div className={cn(styles.offer9PercentColumn, styles.offerUser)}>
+                            {choosenSection === 'offersMade' && (
+                              <span>
+                                {buyer?.username
+                                  ? buyer?.publicAddress === account
+                                    ? 'you'
+                                    : buyer.username
+                                  : `${buyer?.publicAddress.substring(0, 6)}...${buyer?.publicAddress.substring(
+                                      buyer?.publicAddress.length - 6
+                                    )}`}
+                              </span>
+                            )}
+                            {choosenSection === 'offersReceived' && (
+                              <span>
+                                {seller?.username
+                                  ? seller?.publicAddress === account
+                                    ? 'you'
+                                    : seller.username
+                                  : `${seller?.publicAddress.substring(0, 6)}...${seller?.publicAddress.substring(
+                                      seller?.publicAddress.length - 6
+                                    )}`}
+                              </span>
+                            )}
+                          </div>
+                          <div className={styles.offerButtonColumn}>
+                            {choosenSection === 'offersReceived' && (
+                              <CustButton
+                                color="ghost"
+                                text="Accept"
+                                onClick={() =>
+                                  handleOpenAccept({
+                                    collection: nft.collection.name,
+                                    id,
+                                    price,
+                                    tokenFileName: nft.fileName,
+                                  })
+                                }
+                                className={styles.offerButton}
+                              />
+                            )}
+                            {choosenSection === 'offersMade' && (
+                              <CustButton
+                                color="ghost"
+                                text="Cancel"
+                                onClick={() => {}}
+                                className={styles.offerButton}
+                              />
+                            )}
                           </div>
                         </div>
-                      )
+                      ))}
+                    {(!items || items.length === 0) && (
+                      <div className={styles.emptyItems}>
+                        <Image src="/profile/Icon-Empty.svg" height={156} width={160} alt="no-items" />
+                        <span>No Items to display</span>
+                      </div>
                     )}
                   </div>
                 )}
-                {!items ||
-                  (items.length === 0 && (
-                    <div className={styles.emptyItems}>
-                      <Image src="/profile/Icon-Empty.svg" height={156} width={160} alt="no-items" />
-                      <span>No Items to display</span>
-                    </div>
-                  ))}
               </div>
             </div>
           )}
@@ -355,6 +429,10 @@ export const ContentWrapper = () => {
           )}
         </>
       ))}
+      <AcceptOfferModal
+        {...acceptOfferInfo}
+        handleClose={() => setAcceptOfferInfo({ ...acceptOfferInfo, isOpened: false })}
+      />
     </div>
   );
 };

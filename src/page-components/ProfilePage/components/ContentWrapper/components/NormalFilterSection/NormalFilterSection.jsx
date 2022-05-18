@@ -16,7 +16,7 @@ import { readyFilterOptions } from './NormalFilterSection.utils';
 import styles from './NormalFilterSection.module.scss';
 import Image from 'next/image';
 
-export const NormalFilterSection = () => {
+export const NormalFilterSection = ({isOffers}) => {
   const dispatch = useDispatch();
   const muiClasses = useStyles();
 

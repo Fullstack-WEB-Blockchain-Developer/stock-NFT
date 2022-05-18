@@ -37,6 +37,7 @@ export const chooseSections = [
     text: 'Offers',
     icon: <OfferIcon />,
     nameForBE: 'offers',
+    isOffers: true,
   },
 ];
 
@@ -96,7 +97,6 @@ export const constructUrl = (
   if (choosenSeltion !== 'activity') {
     initialUrl += filterText ? `&search=${filterText}` : '';
     initialUrl += statuses.length > 0 ? `&status=${statuses}` : '';
-    initialUrl += collections.length > 0 ? `&collectionId=${collections}` : '';
     initialUrl += min ? `&priceFilterType=${currency}&priceFilterMin=${min}&priceFilterMax=${max}` : '';
     initialUrl += categories.length > 0 ? `&categoryId=${categories}` : '';
   }

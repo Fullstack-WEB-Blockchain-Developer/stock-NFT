@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 //redux
 import { useSelector, useDispatch } from 'react-redux';
 import { setData } from 'src/redux/slices/profileFiltrationSlice';
@@ -6,36 +6,28 @@ import { setData } from 'src/redux/slices/profileFiltrationSlice';
 import cn from 'classnames';
 //styles
 import styles from './OffersPopup.module.scss';
+import { useOnClickOutside } from 'src/hooks/useOnClickOutside';
 
 export const OffersPopup = ({ className, setIsOffersPopupOpened }) => {
+  const ref = useRef();
   const dispatch = useDispatch();
   const { choosenSection } = useSelector((state) => state.profileFiltration);
 
   const close = () => setIsOffersPopupOpened(false);
 
-  useEffect(() => {
-    const handleMouseUp = () => {
-      if (!e.path.includes(ref?.current)) {
-        callback();
-      }
-    };
-
-    document.addEventListener('mouseup', handleMouseUp);
-
-    return () => document.removeEventListener('mouseup', handleMouseUp);
-  });
+  useOnClickOutside(ref, close);
 
   return (
-    <div className={cn(className, styles.wrapper)}>
+    <div ref={ref} className={cn(className, styles.wrapper)}>
       <div
         className={cn({ [styles.active]: choosenSection === 'offersReceived' })}
-        onClick={() => handleToggle(() => dispatch(setData({ field: 'choosenSection', data: 'offersReceived' })))}
+        onClick={() => dispatch(setData({ field: 'choosenSection', data: 'offersReceived' }))}
       >
         <span>Received</span>
       </div>
       <div
         className={cn({ [styles.active]: choosenSection === 'offersMade' })}
-        onClick={() => handleToggle(() => dispatch(setData({ field: 'choosenSection', data: 'offersMade' })))}
+        onClick={() => dispatch(setData({ field: 'choosenSection', data: 'offersMade' }))}
       >
         <span>Made</span>
       </div>

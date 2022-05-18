@@ -276,33 +276,99 @@
   }
 }
 
-.offersTitle {
+.offersTitle,
+.offersLegend {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 27px;
   font: normal normal 600 18px/33px Poppins;
   letter-spacing: 0.01px;
   color: var(--white);
+}
+.offersTitle {
+  justify-content: flex-start;
 
   span:last-child {
     margin-left: 8px;
   }
 }
 
-.offersLegend {
-  display: flex;
-  justify-content: space-between;
-  padding: 27px;
-}
-
 .offerItemColumn {
   width: 26.1%;
+  display: flex;
+  align-items: center;
 }
 
 .offer9PercentColumn {
-	width: 9%;
+  width: 9%;
 }
 
 .offerButtonColumn {
-	width: 137px;
+  width: 137px;
+}
+
+.offerWrapper {
+  padding: 9px 27px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  div,
+  span {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+.offerItemImageWrapper {
+  height: 63px;
+  width: 63px;
+  position: relative;
+  border: 1px solid #707070;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.offerItemInfoWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 16px;
+
+  span:first-child {
+    font: normal normal normal 16px Poppins;
+    letter-spacing: 0.01px;
+    color: var(--light-grey);
+  }
+
+  span:last-child {
+    font: normal normal 600 18px Poppins;
+    letter-spacing: 0.02px;
+    color: var(--white);
+  }
+}
+
+.offerPrice {
+  font: normal normal 600 18px/33px Poppins;
+  letter-spacing: 0.02px;
+  color: var(--white);
+}
+
+.offerExpiration {
+  font: normal normal medium 18px/33px Poppins;
+  letter-spacing: 0.02px;
+  color: var(--light-grey);
+}
+
+.offerUser {
+  cursor: pointer;
+  font: normal normal medium 18px/33px Poppins;
+  letter-spacing: 0.02px;
+  color: var(--primary);
+}
+
+.offerButton {
+  width: 100%;
 }
