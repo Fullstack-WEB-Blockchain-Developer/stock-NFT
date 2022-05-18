@@ -95,6 +95,7 @@ export const ContentWrapper = () => {
       adaptOffers(items).then((res) => setAdaptedOffers(res));
     }
   }, [items, choosenSection]);
+  console.log('---adaptedOffers', adaptedOffers);
 
   return (
     <div className={styles.wrapper}>
@@ -148,7 +149,7 @@ export const ContentWrapper = () => {
               <div className={styles.rightBottomSide}>
                 <OffersFilterSection />
                 <TagsWrapper choosenSection={choosenSection} />
-                {items && adaptedOffers.length > 0 && adaptedOffers[0].nft && (
+                {items && items.length > 0 && adaptedOffers.length > 0 && adaptedOffers[0].nft && (
                   <div className={styles.offersWrapper}>
                     <div className={styles.offersTitle}>
                       <Image src="/view-token/Icon-Offers.svg" alt="offers-icon" width={19} height={19} />
@@ -195,17 +196,6 @@ export const ContentWrapper = () => {
                             <span>{expirationDate}</span>
                           </div>
                           <div className={cn(styles.offer9PercentColumn, styles.offerUser)}>
-                            {choosenSection === 'offersMade' && (
-                              <span>
-                                {buyer?.username
-                                  ? buyer?.publicAddress === account
-                                    ? 'you'
-                                    : buyer.username
-                                  : `${buyer?.publicAddress.substring(0, 6)}...${buyer?.publicAddress.substring(
-                                      buyer?.publicAddress.length - 6
-                                    )}`}
-                              </span>
-                            )}
                             {choosenSection === 'offersReceived' && (
                               <span>
                                 {seller?.username
@@ -214,6 +204,17 @@ export const ContentWrapper = () => {
                                     : seller.username
                                   : `${seller?.publicAddress.substring(0, 6)}...${seller?.publicAddress.substring(
                                       seller?.publicAddress.length - 6
+                                    )}`}
+                              </span>
+                            )}
+                            {choosenSection === 'offersMade' && (
+                              <span>
+                                {buyer?.username
+                                  ? buyer?.publicAddress === account
+                                    ? 'you'
+                                    : buyer.username
+                                  : `${buyer?.publicAddress.substring(0, 6)}...${buyer?.publicAddress.substring(
+                                      buyer?.publicAddress.length - 6
                                     )}`}
                               </span>
                             )}
@@ -245,6 +246,12 @@ export const ContentWrapper = () => {
                           </div>
                         </div>
                       ))}
+                    {(!items || items.length === 0) && (
+                      <div className={styles.emptyItems}>
+                        <Image src="/profile/Icon-Empty.svg" height={156} width={160} alt="no-items" />
+                        <span>No Items to display</span>
+                      </div>
+                    )}
                   </div>
                 )}
                 {(!items || items.length === 0) && (
