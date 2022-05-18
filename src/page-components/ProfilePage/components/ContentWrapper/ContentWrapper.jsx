@@ -55,7 +55,7 @@ export const ContentWrapper = () => {
     setIsOffersPopupOpened(false);
   }, [dispatch]);
 
-  const handleOpenAccept = ({collection, id, tokenFileName, price}) => {
+  const handleOpenAccept = ({ collection, id, tokenFileName, price }) => {
     setAcceptOfferInfo({ collection, id, tokenFileName, price, isOpened: true });
   };
 
@@ -79,7 +79,7 @@ export const ContentWrapper = () => {
     dispatch(clearOffsetAndItems());
     handleGetItems();
   }, [choosenSection, dispatch, handleGetItems]);
-console.log('---acceptOfferInfo', acceptOfferInfo)
+  console.log('---acceptOfferInfo', acceptOfferInfo);
   useEffect(() => {
     dispatch(getAllCategories());
   }, [dispatch]);
@@ -245,12 +245,12 @@ console.log('---acceptOfferInfo', acceptOfferInfo)
                           </div>
                         </div>
                       ))}
-                    {(!items || items.length === 0) && (
-                      <div className={styles.emptyItems}>
-                        <Image src="/profile/Icon-Empty.svg" height={156} width={160} alt="no-items" />
-                        <span>No Items to display</span>
-                      </div>
-                    )}
+                  </div>
+                )}
+                {(!items || items.length === 0) && (
+                  <div className={styles.emptyItems}>
+                    <Image src="/profile/Icon-Empty.svg" height={156} width={160} alt="no-items" />
+                    <span>No Items to display</span>
                   </div>
                 )}
               </div>
