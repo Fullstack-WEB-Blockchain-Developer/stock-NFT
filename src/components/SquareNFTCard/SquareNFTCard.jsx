@@ -25,6 +25,7 @@ export const SquareNFTCard = ({
   status,
   blockchainType,
 }) => {
+  console.log('---id', id)
   const [tokenFileError, setTokenFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();

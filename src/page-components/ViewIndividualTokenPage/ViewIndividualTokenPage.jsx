@@ -1,30 +1,30 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 //next
-import Image from "next/image";
-import { useRouter } from "next/router";
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 //redux
-import { open as openError } from "../../redux/slices/errorSnackbarSlice";
-import { open as openSuccess } from "../../redux/slices/successfulOrderSlice";
-import { useDispatch } from "react-redux";
+import { open as openError } from '../../redux/slices/errorSnackbarSlice';
+import { open as openSuccess } from '../../redux/slices/successfulOrderSlice';
+import { useDispatch } from 'react-redux';
 //classnames
-import cn from "classnames";
+import cn from 'classnames';
 //components
-import { CustButton } from "../../components/CustButton/CustButton";
-import { LeftSideInfoWrapper } from "./components/LeftSideInfoWrapper/LeftSideInfoWraper";
-import { RightSideInfoWrapper } from "./components/RightSideInfoWrapper/RightSideInfoWrapper";
-import { BottomInfoWrapper } from "./components/BottomInfoWrapper/BottomInfoWrapper";
-import { SuccessfulOrderModal } from "../../modals/SuccessfulOrderModal/SuccessfulOrderModal";
+import { CustButton } from '../../components/CustButton/CustButton';
+import { LeftSideInfoWrapper } from './components/LeftSideInfoWrapper/LeftSideInfoWraper';
+import { RightSideInfoWrapper } from './components/RightSideInfoWrapper/RightSideInfoWrapper';
+import { BottomInfoWrapper } from './components/BottomInfoWrapper/BottomInfoWrapper';
+import { SuccessfulOrderModal } from '../../modals/SuccessfulOrderModal/SuccessfulOrderModal';
 //spinner
-import { Oval } from "react-loader-spinner";
+import { Oval } from 'react-loader-spinner';
 //utils
-import { videos, audios, images } from "../../helpers/extentions";
-import { fakeLikes, fakeListing, fakePrice } from "./ViewIndividualToken.utils";
+import { videos, audios, images } from '../../helpers/extentions';
+import { fakeLikes, fakeListing, fakePrice } from './ViewIndividualToken.utils';
 //styles
-import styles from "./ViewIndividualTokenPage.module.css";
+import styles from './ViewIndividualTokenPage.module.css';
 
-import { useWeb3React } from "@web3-react/core";
-import axios from "axios";
-import { toHex, Offer, switchNetwork } from "../../utils";
+import { useWeb3React } from '@web3-react/core';
+import axios from 'axios';
+import { toHex, Offer, switchNetwork } from '../../utils';
 
 const etherChain = process.env.ETHER_CHAIN;
 const polygonChain = process.env.POLYGON_CHAIN;
@@ -60,10 +60,10 @@ export const ViewIndividualTokenPage = ({
   });
   const [isLoading, setIsLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
-  const [tokenFileLink, setTokenFileLink] = useState("/");
-  const [userAccount, setUserAccount] = useState("");
+  const [tokenFileLink, setTokenFileLink] = useState('/');
+  const [userAccount, setUserAccount] = useState('');
 
-  const [tokenNetwork, setTokenNetwork] = useState("");
+  const [tokenNetwork, setTokenNetwork] = useState('');
   const [ratio, setRatio] = useState(16 / 9);
 
   const { account, library, chainId } = useWeb3React();
@@ -86,9 +86,9 @@ export const ViewIndividualTokenPage = ({
 
   const sellHandle = async () => {
     let supportNetwork;
-    if (tokenNetwork === "ethereum") {
+    if (tokenNetwork === 'ethereum') {
       supportNetwork = etherChain;
-    } else if (tokenNetwork === "polygon") {
+    } else if (tokenNetwork === 'polygon') {
       supportNetwork = polygonChain;
     }
 
@@ -97,11 +97,11 @@ export const ViewIndividualTokenPage = ({
       await switchNetwork(supportNetwork, library);
       dispatch(
         openSuccess({
-          title: "The network has been changed successfully.",
+          title: 'The network has been changed successfully.',
         })
       );
     } else {
-      router.push(`/token/${router.query.tokenId}/list`)
+      router.push(`/token/${router.query.tokenId}/list`);
     }
   };
 
@@ -157,7 +157,6 @@ export const ViewIndividualTokenPage = ({
 
   //   if (library) {
   //     setShow(true)
-
 
   //     let userwalletaddresss = account;
   //     let swaping = new web3main.eth.Contract(nft, addrs)
@@ -284,7 +283,6 @@ export const ViewIndividualTokenPage = ({
   //   if (library) {
   //     setShow(true)
 
-
   //     let userwalletaddresss = account;
   //     let swaping = new web3main.eth.Contract(nft, addrs)
   //     let amountIn = web3main.utils.toBN(fromExponential((amount) * Math.pow(10, 18)));
@@ -322,7 +320,6 @@ export const ViewIndividualTokenPage = ({
   // // const fixedsale = async (collectionid, tokenId, price) => {
   // //   setShow(true)
   // //   if (library) {
-
 
   // //     let userwalletaddresss = account;
   // //     let swaping = new web3main.eth.Contract(nft, addrs)
@@ -364,7 +361,6 @@ export const ViewIndividualTokenPage = ({
   // }
   // const tokenIdone = async (id) => {
   //   if (library) {
-
 
   //     let userwalletaddresss = account;
   //     let swaping = new web3main.eth.Contract(nft, addrs)
@@ -453,14 +449,14 @@ export const ViewIndividualTokenPage = ({
   // }
 
   useEffect(() => {
-    const end = fileName.substring(fileName.indexOf(".") + 1).toLowerCase();
+    const end = fileName.substring(fileName.indexOf('.') + 1).toLowerCase();
     if (images.includes(end)) {
-      setTypeOfTokenFile("image");
+      setTypeOfTokenFile('image');
     } else if (videos.includes(end)) {
-      setTypeOfTokenFile("video");
+      setTypeOfTokenFile('video');
       setTokenFileLink(`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`);
     } else if (audios.includes(end)) {
-      setTypeOfTokenFile("audio");
+      setTypeOfTokenFile('audio');
       setTokenFileLink(`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`);
     }
   }, [fileName]);
@@ -472,7 +468,7 @@ export const ViewIndividualTokenPage = ({
   }, [typeOfTokenFile]);
 
   useEffect(() => {
-    const account = localStorage.getItem("account");
+    const account = localStorage.getItem('account');
     setUserAccount(account);
   }, []);
 
@@ -481,7 +477,7 @@ export const ViewIndividualTokenPage = ({
       const response = await axios.get(`${process.env.BACKEND_URL}/nfts/${tokenId}`);
       const { blockchainType } = response.data;
       setTokenNetwork(String(blockchainType.name).toLowerCase());
-    })()
+    })();
   }, [tokenId]);
 
   return (
@@ -489,11 +485,7 @@ export const ViewIndividualTokenPage = ({
       {userAccount === user.publicAddress && (
         <div className={styles.headBar}>
           <CustButton text="Edit" color="ghost" />
-          <CustButton
-            color="primary"
-            onClick={sellHandle}
-            text="Sell"
-          />
+          <CustButton color="primary" onClick={sellHandle} text="Sell" />
         </div>
       )}
       <div className={styles.wrapper}>
@@ -505,14 +497,12 @@ export const ViewIndividualTokenPage = ({
                   <Image src="/noImage.png" layout="fill" alt="token-image" />
                 ) : (
                   <Image
-                    src={
-                      blockchainName === "Ethereum" ? "/view-token/Icon-Eth.svg" : "/view-token/Polygon.svg"
-                    }
+                    src={blockchainName === 'Ethereum' ? '/view-token/Icon-Eth.svg' : '/view-token/Polygon.svg'}
                     width={19}
                     height={19}
                     alt="blockchain-type"
                     onError={(e) =>
-                      handleError("Something went wrong with blockchain type", () =>
+                      handleError('Something went wrong with blockchain type', () =>
                         setImageErrors({ ...imageErrors, blockchainTypeIcon: true })
                       )
                     }
@@ -525,14 +515,14 @@ export const ViewIndividualTokenPage = ({
               </div>
               <div
                 className={cn(styles.tokenImageContainer, {
-                  [styles.videoContainer]: typeOfTokenFile === "video",
-                  [styles.audioContainer]: typeOfTokenFile === "audio",
+                  [styles.videoContainer]: typeOfTokenFile === 'video',
+                  [styles.audioContainer]: typeOfTokenFile === 'audio',
                 })}
               >
                 <div
                   className={cn(styles.tokenImage, {
-                    [styles.videoContainer]: typeOfTokenFile === "video",
-                    [styles.audioContainer]: typeOfTokenFile === "audio",
+                    [styles.videoContainer]: typeOfTokenFile === 'video',
+                    [styles.audioContainer]: typeOfTokenFile === 'audio',
                   })}
                 >
                   {isLoading && (
@@ -547,7 +537,7 @@ export const ViewIndividualTokenPage = ({
                       />
                     </div>
                   )}
-                  {typeOfTokenFile === "image" &&
+                  {typeOfTokenFile === 'image' &&
                     (imageErrors.tokenImage ? (
                       <div className={styles.emptySection}>
                         <span>No file</span>
@@ -562,7 +552,7 @@ export const ViewIndividualTokenPage = ({
                         width="100%"
                         height={`${ratio}%`}
                         onError={() =>
-                          handleError("404 Token file is not found", () =>
+                          handleError('404 Token file is not found', () =>
                             setImageErrors({ ...imageErrors, tokenImage: true })
                           )
                         }
@@ -571,7 +561,7 @@ export const ViewIndividualTokenPage = ({
                         }
                       />
                     ))}
-                  {typeOfTokenFile === "video" && (
+                  {typeOfTokenFile === 'video' && (
                     <video
                       src={tokenFileLink}
                       controls="controls"
@@ -581,7 +571,7 @@ export const ViewIndividualTokenPage = ({
                       className={styles.video}
                     />
                   )}
-                  {typeOfTokenFile === "audio" && (
+                  {typeOfTokenFile === 'audio' && (
                     <audio
                       src={tokenFileLink}
                       controls="controls"

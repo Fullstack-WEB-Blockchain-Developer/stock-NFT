@@ -152,7 +152,22 @@ export const CreateNFTPage = () => {
         collectionId,
       };
 
-      if (values.stats.length > 0) body.stats = values.stats;
+      let audioPreviewResponse;
+
+      if (values.audioPreviewFile) {
+        const form = new FormData();
+        form.append('content', values.audioPreviewFile);
+
+        audioPreviewResponse = await axios.post(`${process.env.BACKEND_URL}/nfts/upload/media`, form, {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+            'Content-type': 'multipart/form-data; boundary=MyBoundary',
+          },
+        });
+      }
+      console.log('---audioPreviewResponse', audioPreviewResponse);
+      if (audioPreviewResponse) body.coverName === audioPreviewResponse;
+      if (values.audioPreviewFile) if (values.stats.length > 0) body.stats = values.stats;
       if (values.properties.length > 0) body.properties = values.properties;
       if (values.levels.length > 0) body.levels = values.levels;
 
@@ -194,6 +209,7 @@ export const CreateNFTPage = () => {
 
   const handleDeleteAudioPreview = () => {
     audioPreviewRef.current?.value === null;
+    setValues({ ...values, audioPreviewFile: undefined });
     setPreviewAudio(undefined);
   };
 
