@@ -1,7 +1,21 @@
 .wrapper {
-	background: #1D1D1D 0% 0% no-repeat padding-box;
+  background: #1d1d1d 0% 0% no-repeat padding-box;
+  top: 75%;
+  left: 16%;
+  width: 105px;
+  z-index: 2;
+  border-radius: 8px;
+  color: var(--light-grey);
 
-    div:first-child {
-        border-bottom: 1px solid var(--dark-grey);
-    }
+  div:first-child {
+    border-bottom: 1px solid var(--dark-grey);
+  }
+
+  div {
+    padding: 8px;
+  }
+}
+
+.active {
+    color: var(--purple);
 }

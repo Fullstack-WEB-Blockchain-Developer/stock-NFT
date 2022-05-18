@@ -121,6 +121,7 @@ export const profileFiltration = createSlice({
       state.selectedChains = [];
       state.selectedOnSaleIn = { filter: '', rows: [] };
       state.selectedEventTypes = [];
+      state.selectedCategories = [];
     },
     clearError: (state) => {
       state.error = null;

@@ -1,50 +1,54 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from 'react';
 //redux
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setData,
-  clearOffsetAndItems,
-  getItems,
-} from "../../../../../../redux/slices/profileFiltrationSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { setData, clearOffsetAndItems, getItems } from '../../../../../../redux/slices/profileFiltrationSlice';
 //classnames
-import cn from "classnames";
+import cn from 'classnames';
 //mui
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 //hooks
-import { useDebounce } from "../../../../../../hooks/useDebounce";
-import { useStyles } from "../../../../../../hooks/useStyles";
+import { useStyles } from '../../../../../../hooks/useStyles';
 //utils
-import { readyFilterOptions } from "./NormalFilterSection.utils";
+import { readyFilterOptions } from './NormalFilterSection.utils';
 //styles
-import styles from "./NormalFilterSection.module.scss";
-import Image from "next/image";
+import styles from './NormalFilterSection.module.scss';
+import Image from 'next/image';
 
 export const NormalFilterSection = () => {
   const dispatch = useDispatch();
   const muiClasses = useStyles();
 
-  const initialFilterText = useSelector((state) => state.profileFiltration.filterText);
-  const { itemsSelect, readyFilterOption, itemsGridScale } = useSelector((state) => state.profileFiltration);
+  const { itemsSelect, readyFilterOption, itemsGridScale, items } = useSelector((state) => state.profileFiltration);
 
-  const [searchText, setSearchText] = useState(initialFilterText);
+  const [searchText, setSearchText] = useState(undefined);
+  const [debouncedValue, setDebouncedValue] = useState(undefined);
 
-  const debouncedSearchText = useDebounce(searchText, 350);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(searchText);
+    }, 350);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchText]);
 
   const handleChangeRightSelect = (selectValue) => {
     const result = readyFilterOptions.find((elem) => elem.text === selectValue);
     const { text, sortOrder, sortBy } = result;
-    dispatch(setData({ field: "readyFilterOption", data: { text, sortBy, sortOrder } }));
+    dispatch(setData({ field: 'readyFilterOption', data: { text, sortBy, sortOrder } }));
     dispatch(clearOffsetAndItems());
-    dispatch(getItems(false));
+    dispatch(getItems());
   };
 
   useEffect(() => {
-    dispatch(setData({ field: "filterText", data: debouncedSearchText }));
-    dispatch(clearOffsetAndItems());
-    dispatch(getItems(false));
-  }, [debouncedSearchText, dispatch]);
+    if (debouncedValue !== undefined) {
+      dispatch(clearOffsetAndItems());
+      dispatch(setData({ field: 'filterText', data: debouncedValue }));
+      dispatch(getItems());
+    }
+  }, [debouncedValue]);
 
   return (
     <div className={styles.wrapper}>
@@ -52,9 +56,9 @@ export const NormalFilterSection = () => {
         className={muiClasses.textField}
         id="search"
         InputProps={{
-          style: { color: "white" },
+          style: { color: 'white' },
           startAdornment: (
-            <span style={{ marginRight: "8px", display: "flex", alignItems: "center" }}>
+            <span style={{ marginRight: '8px', display: 'flex', alignItems: 'center' }}>
               <Image src="/search-icon.svg" width={19} height={19} alt="search" />
             </span>
           ),
@@ -62,7 +66,7 @@ export const NormalFilterSection = () => {
         placeholder="Search"
         onChange={({ target: { value } }) => setSearchText(value)}
         type="text"
-        sx={{ width: "39%" }}
+        sx={{ width: '39%' }}
         value={searchText}
         variant="outlined"
       />
@@ -71,9 +75,9 @@ export const NormalFilterSection = () => {
           fullWidth
           id="filter-items"
           style={{
-            color: "white",
+            color: 'white',
           }}
-          onChange={({ target: { value } }) => dispatch(setData({ field: "itemsSelect", data: value }))}
+          onChange={({ target: { value } }) => dispatch(setData({ field: 'itemsSelect', data: value }))}
           value={itemsSelect}
           className={muiClasses.select}
         >
@@ -92,7 +96,7 @@ export const NormalFilterSection = () => {
         fullWidth
         id="filter-items"
         style={{
-          color: "white",
+          color: 'white',
         }}
         onChange={({ target: { value } }) => handleChangeRightSelect(value)}
         value={readyFilterOption.text}
@@ -107,17 +111,17 @@ export const NormalFilterSection = () => {
       <div className={styles.styleButtons}>
         <div
           className={cn(styles.styleButton, {
-            [styles.activeButton]: itemsGridScale === "large",
+            [styles.activeButton]: itemsGridScale === 'large',
           })}
-          onClick={() => dispatch(setData({ field: "itemsGridScale", data: "large" }))}
+          onClick={() => dispatch(setData({ field: 'itemsGridScale', data: 'large' }))}
         >
           <Image src="/profile/SquaresFour.svg" width={27} height={27} alt="squares" />
         </div>
         <div
           className={cn(styles.styleButton, {
-            [styles.activeButton]: itemsGridScale === "small",
+            [styles.activeButton]: itemsGridScale === 'small',
           })}
-          onClick={() => dispatch(setData({ field: "itemsGridScale", data: "small" }))}
+          onClick={() => dispatch(setData({ field: 'itemsGridScale', data: 'small' }))}
         >
           <Image src="/profile/SquaresFour-1.svg" width={27} height={27} alt="squares" />
         </div>

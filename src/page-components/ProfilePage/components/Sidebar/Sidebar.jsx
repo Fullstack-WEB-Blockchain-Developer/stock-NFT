@@ -63,8 +63,9 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
   const handleGetNewItems = () => {
     dispatch(clearOffsetAndItems());
-    dispatch(getItems(choosenSection === 'offers'));
+    dispatch(getItems());
   };
+  
   const handleToggleSection = (section) =>
     setOpenedSections({ ...openedSections, [section]: !openedSections[section] });
 

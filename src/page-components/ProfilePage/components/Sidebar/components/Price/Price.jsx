@@ -54,7 +54,7 @@ export const Price = ({ currencies }) => {
       })
     );
     dispatch(clearOffsetAndItems());
-    dispatch(getItems(choosenSection === 'offers'));
+    dispatch(getItems());
   };
 
   return (

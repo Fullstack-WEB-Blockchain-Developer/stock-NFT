@@ -13,7 +13,7 @@ export const getExpirationDate = (days, time) => {
     inDays = Number(days.substring(0, days.indexOf(" ")));
   }
 
-  if (time === "") {
+  if (!time || time === "") {
     hours = 0;
     minutes = 0;
   } else {

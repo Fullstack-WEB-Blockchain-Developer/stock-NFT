@@ -21,6 +21,7 @@ import { SmallNFTCard } from '../../../../components/SmallNFTCard/SmallNFTCard';
 import { chooseSections, adaptActivities, adaptOffers } from './ContentWrapper.utils';
 //styles
 import styles from './ContentWrapper.module.scss';
+import { OffersPopup } from './components/OffersPopup/OffersPopup';
 
 export const ContentWrapper = () => {
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ export const ContentWrapper = () => {
     const address = localStorage.getItem('account');
     setPublicAddress(address);
   }, []);
+  console.log('---items', items)
 
   useEffect(() => {
     if (error) {
@@ -58,12 +60,12 @@ export const ContentWrapper = () => {
   }, [error, dispatch]);
 
   const handleGetItems = useCallback(() => {
-    dispatch(getItems(choosenSection === 'offers'));
-  }, [choosenSection, dispatch]);
+    dispatch(getItems());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(clearOffsetAndItems());
-    handleGetItems(choosenSection === 'offers');
+    handleGetItems();
   }, [choosenSection, dispatch, handleGetItems]);
 
   useEffect(() => {
@@ -76,18 +78,19 @@ export const ContentWrapper = () => {
     }
   }, [items, choosenSection]);
 
-  // useEffect(() => {
-  //   if (choosenSection === 'offers') {
-  //     adaptOffers(items).then((res) => setAdaptedOffers(res));
-  //   }
-  // }, [items, choosenSection]);
+  useEffect(() => {
+    if (choosenSection === 'offersReceived' || choosenSection === 'offersMade') {
+      adaptOffers(items).then((res) => setAdaptedOffers(res));
+    }
+  }, [items, choosenSection]);
+  console.log('---adaptedOffers', adaptedOffers);
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.chooseSectionWrapper}>
         {chooseSections.map(({ text, icon, nameForBE, forRedux }) => (
           <>
-            {nameForBE !== 'offersMade' && nameForBE !== 'offersReceived' ? (
+            {nameForBE !== 'offers' ? (
               <div
                 className={cn(styles.chooseSection, {
                   [styles.chooseSectionActive]: choosenSection === nameForBE,
@@ -98,29 +101,87 @@ export const ContentWrapper = () => {
                 {icon}
                 <span>
                   {text}
-                  {nameForBE !== 'activity' && nameForBE !== 'offers' && `(${filtrationOptions[forRedux]})`}
+                  {nameForBE !== 'activity' && `(${filtrationOptions[forRedux]})`}
                 </span>
               </div>
             ) : (
-              <div
-                className={cn(styles.chooseSection, {
-                  [styles.chooseSectionActive]: choosenSection === nameForBE,
-                })}
-                onClick={() => setIsOffersPopupOpened(true)}
-                key={text}
-              >
-                {icon}
-                <span>
-                  {text}
-                  {nameForBE !== 'activity' && nameForBE !== 'offers' && `(${filtrationOptions[forRedux]})`}
-                </span>
-              </div>
+              <>
+                <div
+                  className={cn(styles.chooseSection, {
+                    [styles.chooseSectionActive]:
+                      choosenSection === 'offersReceived' || choosenSection === 'offersMade',
+                  })}
+                  onClick={() => setIsOffersPopupOpened(true)}
+                  key={text}
+                >
+                  {icon}
+                  <span>{text}</span>
+                  {isOffersPopupOpened && (
+                    <OffersPopup className={styles.offersPopup} setIsOffersPopupOpened={setIsOffersPopupOpened} />
+                  )}
+                </div>
+              </>
             )}
           </>
         ))}
       </div>
       {chooseSections.map(({ nameForBE }) => (
         <>
+          {(choosenSection === 'offersMade' || choosenSection === 'offersReceived') && (
+            <div key={nameForBE} className={styles.bottomSideWrapper}>
+              <Sidebar
+                choosenTopSection={choosenSection}
+                handleToggleSidebar={() => setIsSidebarOpened(!isSidebarOpened)}
+                isOpened={isSidebarOpened}
+              />
+              <div className={styles.rightBottomSide}>
+                <OffersFilterSection />
+                {items && adaptedOffers.length > 0 && adaptedOffers[0].nft && (
+                  <div className={styles.offersWrapper}>
+                    <div className={styles.offersTitle}>
+                      <Image src="/view-token/Icon-Offers.svg" alt="offers-icon" width={19} height={19} />
+                      <span>{choosenSection === 'offersReceived' ? 'Offers received' : 'Offers made'}</span>
+                    </div>
+                    <div className={styles.offersLegend}>
+                      <div className={styles.offerItemColumn}>
+                        <span>Items</span>
+                      </div>
+                      {['Price', 'USD Price', 'Expiration', 'From'].map((elem) => (
+                        <div key={elem} className={styles.offer9PercentColumn}>
+                          <span>{elem}</span>
+                        </div>
+                      ))}
+                      <div className={styles.offerButtonColumn} />
+                    </div>
+                    {adaptedOffers.map(
+                      ({ blockchainHash, buyer, expirationDate, id, nft, price, seller, usdPrice }) => (
+                        <div key={id} className={styles.offerWrapper}>
+                          <div className={styles.offetItemColumn}>
+                            <div className={styles.offerItemImageWrapper}>
+                              <Image
+                                src={nft.fileName}
+                                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
+                                width={63}
+                                height={63}
+                                alt={nft.name}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
+                {!items ||
+                  (items.length === 0 && (
+                    <div className={styles.emptyItems}>
+                      <Image src="/profile/Icon-Empty.svg" height={156} width={160} alt="no-items" />
+                      <span>No Items to display</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
           {choosenSection === nameForBE && (
             <div key={nameForBE} className={styles.bottomSideWrapper}>
               <Sidebar
@@ -130,7 +191,6 @@ export const ContentWrapper = () => {
               />
               <div className={styles.rightBottomSide}>
                 {choosenSection !== 'activity' && choosenSection !== 'offers' && <NormalFilterSection />}
-                {choosenSection === 'offers' && <OffersFilterSection />}
                 <TagsWrapper choosenSection={choosenSection} />
                 {items && items.length > 0 && (
                   <div>

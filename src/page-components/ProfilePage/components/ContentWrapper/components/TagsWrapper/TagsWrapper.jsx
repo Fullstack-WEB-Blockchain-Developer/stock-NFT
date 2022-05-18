@@ -59,7 +59,7 @@ export const TagsWrapper = ({ choosenSection }) => {
   const handleClose = (callback) => {
     dispatch(clearOffsetAndItems());
     dispatch(callback());
-    dispatch(getItems(choosenSection === 'offers'));
+    dispatch(getItems());
   };
 
   return (

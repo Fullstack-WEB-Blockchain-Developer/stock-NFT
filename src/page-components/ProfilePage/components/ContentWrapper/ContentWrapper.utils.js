@@ -7,7 +7,7 @@ import OfferIcon from './icons/Icon-Offers.svg';
 //utils
 import { getEtherPrice } from '../../../../utils';
 import { getDateAgo } from '../../../../helpers/getDateAgo';
-import { getExpirationDate } from 'src/modals/MakeOfferModal/MakeOfferModal.utils';
+import { getExpirationString } from 'src/helpers/getExpirationString';
 
 export const chooseSections = [
   {
@@ -66,9 +66,9 @@ export const adaptOffers = async (offers) => {
             ? {
                 ...elem,
                 usdPrice: (result * elem.price).toFixed(2),
-                expirationDate: getExpirationDate(elem.updatedAt),
+                expirationDate: getExpirationString(elem.expirationDate),
               }
-            : { ...elem, usdPrice: 0, date: getExpirationDate(elem.updatedAt) }
+            : { ...elem, usdPrice: 0, date: getExpirationString(elem.expirationDate) }
         )
     )
   );
