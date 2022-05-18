@@ -12,7 +12,7 @@ const initialState = {
   error: null,
   favoritedNfts: 0,
   filterText: '',
-  isShownAllOffers: true,
+  isShownAllOffers: false,
   itemsSelect: 'Single Items',
   maxValue: 0,
   mostCompleteCollection: 0,

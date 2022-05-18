@@ -198,23 +198,23 @@ export const ContentWrapper = () => {
                           <div className={cn(styles.offer9PercentColumn, styles.offerUser)}>
                             {choosenSection === 'offersReceived' && (
                               <span>
-                                {seller?.username
-                                  ? seller?.publicAddress === account
-                                    ? 'you'
-                                    : seller.username
-                                  : `${seller?.publicAddress.substring(0, 6)}...${seller?.publicAddress.substring(
-                                      seller?.publicAddress.length - 6
-                                    )}`}
-                              </span>
-                            )}
-                            {choosenSection === 'offersMade' && (
-                              <span>
                                 {buyer?.username
                                   ? buyer?.publicAddress === account
                                     ? 'you'
                                     : buyer.username
                                   : `${buyer?.publicAddress.substring(0, 6)}...${buyer?.publicAddress.substring(
-                                      buyer?.publicAddress.length - 6
+                                    buyer?.publicAddress.length - 6
+                                    )}`}
+                              </span>
+                            )}
+                            {choosenSection === 'offersMade' && (
+                              <span>
+                                {seller?.username
+                                  ? seller?.publicAddress === account
+                                    ? 'you'
+                                    : seller.username
+                                  : `${seller?.publicAddress.substring(0, 6)}...${seller?.publicAddress.substring(
+                                    seller?.publicAddress.length - 6
                                     )}`}
                               </span>
                             )}
