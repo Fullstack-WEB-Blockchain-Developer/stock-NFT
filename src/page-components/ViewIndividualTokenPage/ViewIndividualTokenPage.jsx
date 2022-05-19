@@ -600,6 +600,7 @@ export const ViewIndividualTokenPage = ({
             <RightSideInfoWrapper
               collection={collectionName}
               tokenFileName={fileName}
+              id={id}
               name={name}
               owner={user}
               userId={user.userId}

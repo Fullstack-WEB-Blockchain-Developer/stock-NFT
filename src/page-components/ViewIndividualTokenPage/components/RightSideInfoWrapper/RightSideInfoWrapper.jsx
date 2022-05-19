@@ -34,6 +34,7 @@ export const RightSideInfoWrapper = ({
   tokenFileName,
   usdPrice,
   tokenNetwork,
+  id
 }) => {
   const dispatch = useDispatch();
   // const { account, activate, library, chainId } = useWeb3React();
@@ -355,7 +356,7 @@ export const RightSideInfoWrapper = ({
           </div>
         </div>
         <div>
-          <PriceHistory isPriceHistoryOpened={isPriceHistoryOpened} />
+          <PriceHistory isPriceHistoryOpened={isPriceHistoryOpened} id={id} />
         </div>
       </div>
       <MakeOfferModal

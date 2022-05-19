@@ -14,7 +14,7 @@ import { priceHistorySelectOptions, fakePriceData } from "./RightSideInfoWrapper
 //styles
 import styles from "./RightSideInfoWrapper.module.css";
 
-export const PriceHistory = ({ isPriceHistoryOpened }) => {
+export const PriceHistory = ({ isPriceHistoryOpened, id }) => {
   const [selectedPeriod, setSelectedPeriod] = useState(priceHistorySelectOptions[0].text);
   const [average, setAverage] = useState(0);
   const [data, setData] = useState(undefined);
