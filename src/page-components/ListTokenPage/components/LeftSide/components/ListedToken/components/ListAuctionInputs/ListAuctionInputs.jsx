@@ -126,6 +126,8 @@ export const ListAuctionInputs = ({ id }) => {
         <span>
           Method <span className={styles.star}>*</span>
         </span>
+      </div>
+      <div className={styles.methodSelect}>
         <Select
           fullWidth
           id=""

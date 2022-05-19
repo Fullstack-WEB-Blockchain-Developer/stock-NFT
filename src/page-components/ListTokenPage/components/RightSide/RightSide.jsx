@@ -112,11 +112,11 @@ export const RightSide = ({ className }) => {
                   </MenuItem>
                   {allUserTokens
                     .filter((elem) => token.bundle.every((bundToken) => bundToken.id !== elem.id))
-                    .map(({ name, fileName, id }) => (
+                    .map(({ name, fileName, id, coverName }) => (
                       <MenuItem key={id} value={name}>
                         <span className={styles.menuItem}>
                           {fileName && (
-                            <span style={{position: 'relative'}}>
+                            <span style={{ position: 'relative' }}>
                               {images.includes(fileName.substring(fileName.indexOf('.') + 1).toLowerCase()) && (
                                 <Image
                                   alt={`${name}-image`}
@@ -134,9 +134,17 @@ export const RightSide = ({ className }) => {
                                 />
                               )}
                               {audios.includes(fileName.substring(fileName.indexOf('.') + 1).toLowerCase()) && (
-                                <div className={styles.audio} style={{color:'var(--white)'}}>
-                                <span>{fileName.substring(fileName.indexOf('.') + 1).toLowerCase()}</span>
-                              </div>
+                                <>
+                                  {coverName && (
+                                    <Image
+                                      alt={`${name}-image`}
+                                      height={'25px'}
+                                      loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
+                                      src={coverName}
+                                      width={'25px'}
+                                    />
+                                  )}
+                                </>
                               )}
                             </span>
                           )}
@@ -157,7 +165,7 @@ export const RightSide = ({ className }) => {
                                 loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
                                 src={elem.fileName}
                                 layout="fill"
-                                objectFit='cover'
+                                objectFit="cover"
                               />
                             )}
                             {videos.includes(elem.fileName.substring(elem.fileName.indexOf('.') + 1).toLowerCase()) && (
@@ -168,9 +176,17 @@ export const RightSide = ({ className }) => {
                               />
                             )}
                             {audios.includes(elem.fileName.substring(elem.fileName.indexOf('.') + 1).toLowerCase()) && (
-                              <div className={styles.audio}>
-                                <span>{elem.fileName.substring(elem.fileName.indexOf('.') + 1).toLowerCase()}</span>
-                              </div>
+                              <>
+                                {elem.coverName && (
+                                  <Image
+                                    alt={`${name}-image`}
+                                    loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
+                                    src={elem.coverName}
+                                    layout="fill"
+                                    objectFit="cover"
+                                  />
+                                )}
+                              </>
                             )}
                           </>
                         )}

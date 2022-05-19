@@ -52,6 +52,7 @@ export const AddTokenModal = ({ isOpened, handleClose, tokens }) => {
         bundle: [],
         bundleDescription: '',
         bundleName: '',
+        coverName: token.coverName,
         currency: 'none',
         duration: [new Date(), Date.parse(new Date()) + 1000 * 60 * 60 * 24 * 7],
         initialPrice: token.price,
@@ -113,7 +114,7 @@ export const AddTokenModal = ({ isOpened, handleClose, tokens }) => {
               <MenuItem disabled value="none">
                 <span style={{ color: 'rgb(77, 77, 77)' }}>Select Items</span>
               </MenuItem>
-              {availableTokens.map(({ name, fileName, id }) => (
+              {availableTokens.map(({ name, fileName, id, coverName }) => (
                 <MenuItem key={id} value={id}>
                   <div className={cssStyles.menuItem}>
                     {fileName && (
@@ -134,9 +135,16 @@ export const AddTokenModal = ({ isOpened, handleClose, tokens }) => {
                           />
                         )}
                         {audios.includes(fileName.substring(fileName.indexOf('.') + 1).toLowerCase()) && (
-                          <div className={cssStyles.audio} style={{ color: 'var(--white)' }}>
-                            <span>{fileName.substring(fileName.indexOf('.') + 1).toLowerCase()}</span>
-                          </div>
+                          <>
+                            {coverName && (
+                              <Image
+                                alt={`${name}-image`}
+                                layout="fill"
+                                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
+                                src={coverName}
+                              />
+                            )}
+                          </>
                         )}
                       </span>
                     )}

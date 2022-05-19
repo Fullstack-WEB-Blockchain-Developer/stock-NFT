@@ -1,21 +1,23 @@
 .wrapper {
-  background: #1d1d1d 0% 0% no-repeat padding-box;
-  top: 75%;
-  left: 16%;
-  width: 105px;
-  z-index: 2;
-  border-radius: 8px;
-  color: var(--light-grey);
+	z-index: 2;
+	top: 75%;
+	left: 16%;
 
-  div:first-child {
-    border-bottom: 1px solid var(--dark-grey);
-  }
+	width: 105px;
 
-  div {
-    padding: 8px;
-  }
+	color: var(--light-grey);
+	border-radius: 8px;
+	background: #1D1D1D 0% 0% no-repeat padding-box;
+
+	div:first-child {
+		border-bottom: 1px solid var(--dark-grey);
+	}
+
+	div {
+		padding: 8px;
+	}
 }
 
 .active {
-    color: var(--purple);
+	color: var(--purple);
 }
