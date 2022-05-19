@@ -1,5 +1,5 @@
 import { LazyMinter } from "./lazyMinter";
-import { Offer } from "./offer";
+import { Offer } from "./signature";
 import axios from "axios";
 
 export const toHex = (num) => {

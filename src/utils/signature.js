@@ -1,6 +1,6 @@
 const { TypedDataUtils } = require('ethers-eip712')
 
-const SIGNING_DOMAIN_NAME = "Stoke Offer System"
+const SIGNING_DOMAIN_NAME = "OfferSystem"
 const SIGNING_DOMAIN_VERSION = "1"
 
 class Offer {
