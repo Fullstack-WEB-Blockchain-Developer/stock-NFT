@@ -127,28 +127,30 @@ export const ListAuctionInputs = ({ id }) => {
           Method <span className={styles.star}>*</span>
         </span>
       </div>
-      <Select
-        fullWidth
-        id=""
-        type="number"
-        variant="outlined"
-        IconComponent={() => (
-          <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
-            <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
-          </div>
-        )}
-        sx={{ color: 'white' }}
-        className={muiClasses.select}
-        value={auctionMethod}
-        InputProps={{ style: { color: 'white' } }}
-        onChange={({ target: { value } }) => dispatch(changeToken({ id, field: 'auctionMethod', newValue: value }))}
-      >
-        {methods.map(({ text }) => (
-          <MenuItem value={text} key={text}>
-            <span>{text}</span>
-          </MenuItem>
-        ))}
-      </Select>
+      <div className={styles.methodSelect}>
+        <Select
+          fullWidth
+          id=""
+          type="number"
+          variant="outlined"
+          IconComponent={() => (
+            <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
+              <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
+            </div>
+          )}
+          sx={{ color: 'white' }}
+          className={muiClasses.select}
+          value={auctionMethod}
+          InputProps={{ style: { color: 'white' } }}
+          onChange={({ target: { value } }) => dispatch(changeToken({ id, field: 'auctionMethod', newValue: value }))}
+        >
+          {methods.map(({ text }) => (
+            <MenuItem value={text} key={text}>
+              <span>{text}</span>
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
       <div className={styles.title} style={{ marginTop: '16px' }}>
         <span>
           Starting Price <span className={styles.star}>*</span>

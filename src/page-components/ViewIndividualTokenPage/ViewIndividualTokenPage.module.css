@@ -141,8 +141,8 @@
 
 .audioContainer {
 	display: flex;
-	flex-direction: column;
 	align-items: center;
+	flex-direction: column;
 	justify-content: center;
 
 	min-height: 100px;

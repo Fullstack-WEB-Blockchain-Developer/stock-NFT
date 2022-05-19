@@ -1,146 +1,147 @@
 .wrapper {
-  font-family: 'Poppins', sans-serif;
+	font-family: 'Poppins', sans-serif;
 }
 
 .chooseSectionWrapper {
-  display: flex;
+	display: flex;
 
-  border-bottom: 1px solid var(--dark-grey);
+	border-bottom: 1px solid var(--dark-grey);
 }
 
 .chooseSection {
-  display: flex;
-  align-items: center;
-  position: relative;
+	position: relative;
 
-  padding: 40px;
+	display: flex;
+	align-items: center;
 
-  cursor: pointer;
-  letter-spacing: 0.01px;
+	padding: 40px;
 
-  color: var(--light-grey);
+	cursor: pointer;
+	letter-spacing: 0.01px;
 
-  font-size: 16px;
+	color: var(--light-grey);
 
-  span {
-    margin-left: 8px;
-  }
+	font-size: 16px;
+
+	span {
+		margin-left: 8px;
+	}
 }
 
 .chooseSectionActive {
-  color: var(--purple);
-  box-shadow: 0px -8px 0px -4px var(--purple) inset;
+	color: var(--purple);
+	box-shadow: 0px -8px 0px -4px var(--purple) inset;
 
-  svg {
-    fill: var(--purple);
-    stroke: var(--purple);
-  }
+	svg {
+		fill: var(--purple);
+		stroke: var(--purple);
+	}
 }
 
 .bottomSideWrapper {
-  display: flex;
+	display: flex;
 }
 
 .rightBottomSide {
-  overflow: visible;
+	overflow: visible;
 
-  width: 100%;
-  padding: 2%;
+	width: 100%;
+	padding: 2%;
 }
 
 .topFiltrationSection {
-  width: inherit;
+	width: inherit;
 }
 
 .itemsGrid {
-  display: grid;
-  overflow: visible !important;
+	display: grid;
+	overflow: visible !important;
 
-  padding: 20px 0;
+	padding: 20px 0;
 }
 
 .itemsGridSmall {
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  gap: 40px;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	gap: 40px;
 
-  @media screen and (max-width: 1550px) {
-    gap: 40px;
-  }
+	@media screen and (max-width: 1550px) {
+		gap: 40px;
+	}
 
-  @media screen and (max-width: 1400px) {
-    gap: 35px;
-  }
+	@media screen and (max-width: 1400px) {
+		gap: 35px;
+	}
 }
 
 .itemsGridLarge {
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 60px;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 60px;
 
-  @media screen and (max-width: 1550px) {
-    gap: 40px;
-  }
+	@media screen and (max-width: 1550px) {
+		gap: 40px;
+	}
 
-  @media screen and (max-width: 1400px) {
-    gap: 35px;
-  }
+	@media screen and (max-width: 1400px) {
+		gap: 35px;
+	}
 }
 
 .emptyItems {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
 
-  width: 100%;
-  height: 337px;
+	width: 100%;
+	height: 337px;
 
-  letter-spacing: 0.02px;
+	letter-spacing: 0.02px;
 
-  color: var(--white);
-  border: 1px solid var(--dark-grey);
-  border-radius: 30px;
+	color: var(--white);
+	border: 1px solid var(--dark-grey);
+	border-radius: 30px;
 
-  font-size: 24px;
+	font-size: 24px;
 }
 
 .activitiesHead {
-  display: flex;
-  justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 
-  padding: 18px;
-  padding-top: 0px;
+	padding: 18px;
+	padding-top: 0px;
 
-  color: white;
-  border-bottom: 1px solid var(--dark-grey);
+	color: white;
+	border-bottom: 1px solid var(--dark-grey);
 
-  div {
-    letter-spacing: 0.02px;
+	div {
+		letter-spacing: 0.02px;
 
-    color: #ffffff;
+		color: #FFFFFF;
 
-    font: normal normal 600 18px/33px Poppins;
-  }
+		font: normal normal 600 18px/33px Poppins;
+	}
 }
 
 .activityRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 
-  padding: 18px;
+	padding: 18px;
 
-  color: var(--white);
+	color: var(--white);
 
-  span {
-    overflow: hidden;
+	span {
+		overflow: hidden;
 
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
 }
 
 .activityRow:hover {
-  background-color: var(--dark-grey);
+	background-color: var(--dark-grey);
 }
 
 .eventType,
@@ -149,226 +150,247 @@
 .from,
 .to,
 .time {
-  width: 85px;
+	width: 85px;
 
-  text-align: center;
-  letter-spacing: 0.01px;
+	text-align: center;
+	letter-spacing: 0.01px;
 
-  font: normal normal 600 16px Poppins;
+	font: normal normal 600 16px Poppins;
 }
 
 .from,
 .to,
 .time {
-  cursor: pointer;
-  letter-spacing: 0.02px;
+	cursor: pointer;
+	letter-spacing: 0.02px;
 
-  color: var(--primary);
+	color: var(--primary);
 
-  font: normal normal medium 18px Poppins;
+	font: normal normal medium 18px Poppins;
 }
 
 .eventType {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 
-  width: 90px;
+	width: 90px;
 
-  text-align: left;
+	text-align: left;
 
-  span:last-child {
-    margin-left: 8px;
-  }
+	span:last-child {
+		margin-left: 8px;
+	}
 }
 
 .time {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 
-  width: 9.8%;
+	width: 9.8%;
 }
 
 .from,
 .to {
-  width: 8%;
+	width: 8%;
 }
 
 .itemInfo {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
 
-  width: 26%;
+	width: 26%;
 
-  text-align: left;
+	text-align: left;
 
-  div:last-child {
-    display: flex;
-    overflow: hidden;
-    flex-direction: column;
+	div:last-child {
+		display: flex;
+		overflow: hidden;
+		flex-direction: column;
 
-    margin-left: 16px;
+		margin-left: 16px;
 
-    span:first-child {
-      letter-spacing: 0.01px;
+		span:first-child {
+			letter-spacing: 0.01px;
 
-      color: var(--light-grey);
+			color: var(--light-grey);
 
-      font: normal normal normal 16px Poppins;
-    }
+			font: normal normal normal 16px Poppins;
+		}
 
-    span:last-child {
-      letter-spacing: 0.02px;
+		span:last-child {
+			letter-spacing: 0.02px;
 
-      color: var(--white);
+			color: var(--white);
 
-      font: normal normal 600 18px Poppins;
-    }
-  }
+			font: normal normal 600 18px Poppins;
+		}
+	}
 }
 
 .priceInfo {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-  text-align: right;
+	text-align: right;
 
-  .usdPrice {
-    letter-spacing: 0.01px;
+	.usdPrice {
+		letter-spacing: 0.01px;
 
-    color: var(--light-grey);
+		color: var(--light-grey);
 
-    font: normal normal normal 16px Poppins;
-  }
+		font: normal normal normal 16px Poppins;
+	}
 }
 
 .activityImageWrapper {
-  position: relative;
+	position: relative;
 
-  min-width: 63px;
-  height: 63px;
+	min-width: 63px;
+	height: 63px;
 
-  border: 1px solid #707070;
-  border-radius: 8px;
+	border: 1px solid #707070;
+	border-radius: 8px;
 }
 
 .currency {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
 }
 
 .offersPopup {
-  position: absolute;
+	position: absolute;
 }
 
 .offersWrapper {
-  background: var(--dark-grey) 0% 0% no-repeat padding-box;
-  border: 1px solid #ffffff33;
-  border-radius: 24px;
+	border: 1px solid #FFFFFF33;
+	border-radius: 24px;
+	background: var(--dark-grey) 0% 0% no-repeat padding-box;
 
-  > div {
-    border-bottom: 1px solid #ffffff33;
-  }
+	> div {
+		border-bottom: 1px solid #FFFFFF33;
+	}
 
-  div:last-child {
-    border: none;
-  }
+	div:last-child {
+		border: none;
+	}
 }
 
 .offersTitle,
 .offersLegend {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 27px;
-  font: normal normal 600 18px/33px Poppins;
-  letter-spacing: 0.01px;
-  color: var(--white);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	padding: 27px;
+
+	letter-spacing: 0.01px;
+
+	color: var(--white);
+
+	font: normal normal 600 18px/33px Poppins;
 }
 .offersTitle {
-  justify-content: flex-start;
+	justify-content: flex-start;
 
-  span:last-child {
-    margin-left: 8px;
-  }
+	span:last-child {
+		margin-left: 8px;
+	}
 }
 
 .offerItemColumn {
-  width: 26.1%;
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
+
+	width: 26.1%;
 }
 
 .offer9PercentColumn {
-  width: 9%;
+	width: 9%;
 }
 
 .offerButtonColumn {
-  width: 137px;
+	width: 137px;
 }
 
 .offerWrapper {
-  padding: 9px 27px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 
-  div,
-  span {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
+	padding: 9px 27px;
+
+	div,
+	span {
+		overflow: hidden;
+
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
 }
 
 .offerItemImageWrapper {
-  height: 63px;
-  width: 63px;
-  position: relative;
-  border: 1px solid #707070;
-  border-radius: 8px;
-  overflow: hidden;
+	position: relative;
+
+	overflow: hidden;
+
+	width: 63px;
+	height: 63px;
+
+	border: 1px solid #707070;
+	border-radius: 8px;
 }
 
 .offerItemInfoWrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 16px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 
-  span:first-child {
-    font: normal normal normal 16px Poppins;
-    letter-spacing: 0.01px;
-    color: var(--light-grey);
-  }
+	margin-left: 16px;
 
-  span:last-child {
-    font: normal normal 600 18px Poppins;
-    letter-spacing: 0.02px;
-    color: var(--white);
-  }
+	span:first-child {
+		letter-spacing: 0.01px;
+
+		color: var(--light-grey);
+
+		font: normal normal normal 16px Poppins;
+	}
+
+	span:last-child {
+		letter-spacing: 0.02px;
+
+		color: var(--white);
+
+		font: normal normal 600 18px Poppins;
+	}
 }
 
 .offerPrice {
-  font: normal normal 600 18px/33px Poppins;
-  letter-spacing: 0.02px;
-  color: var(--white);
+	letter-spacing: 0.02px;
+
+	color: var(--white);
+
+	font: normal normal 600 18px/33px Poppins;
 }
 
 .offerExpiration {
-  font: normal normal medium 18px/33px Poppins;
-  letter-spacing: 0.02px;
-  color: var(--light-grey);
+	letter-spacing: 0.02px;
+
+	color: var(--light-grey);
+
+	font: normal normal medium 18px/33px Poppins;
 }
 
 .offerUser {
-  cursor: pointer;
-  font: normal normal medium 18px/33px Poppins;
-  letter-spacing: 0.02px;
-  color: var(--primary);
+	cursor: pointer;
+	letter-spacing: 0.02px;
+
+	color: var(--primary);
+
+	font: normal normal medium 18px/33px Poppins;
 }
 
 .offerButton {
-  width: 100%;
+	width: 100%;
 }
