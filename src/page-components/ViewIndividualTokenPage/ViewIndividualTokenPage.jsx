@@ -39,6 +39,7 @@ export const ViewIndividualTokenPage = ({
   about,
   blockchainName,
   collectionName,
+  coverName,
   description,
   externalLink,
   fileName,
@@ -82,7 +83,7 @@ export const ViewIndividualTokenPage = ({
     setIsLoading(false);
   };
 
-  const tokenImageLoader = () => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`;
+  const tokenImageLoader = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
 
   const sellHandle = async () => {
     let supportNetwork;
@@ -452,11 +453,12 @@ export const ViewIndividualTokenPage = ({
     const end = fileName.substring(fileName.indexOf('.') + 1).toLowerCase();
     if (images.includes(end)) {
       setTypeOfTokenFile('image');
-    } else if (videos.includes(end)) {
-      setTypeOfTokenFile('video');
-      setTokenFileLink(`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`);
-    } else if (audios.includes(end)) {
-      setTypeOfTokenFile('audio');
+    } else {
+      if (videos.includes(end)) {
+        setTypeOfTokenFile('video');
+      } else if (audios.includes(end)) {
+        setTypeOfTokenFile('audio');
+      }
       setTokenFileLink(`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`);
     }
   }, [fileName]);
@@ -516,13 +518,11 @@ export const ViewIndividualTokenPage = ({
               <div
                 className={cn(styles.tokenImageContainer, {
                   [styles.videoContainer]: typeOfTokenFile === 'video',
-                  [styles.audioContainer]: typeOfTokenFile === 'audio',
                 })}
               >
                 <div
                   className={cn(styles.tokenImage, {
                     [styles.videoContainer]: typeOfTokenFile === 'video',
-                    [styles.audioContainer]: typeOfTokenFile === 'audio',
                   })}
                 >
                   {isLoading && (
@@ -544,7 +544,7 @@ export const ViewIndividualTokenPage = ({
                       </div>
                     ) : (
                       <Image
-                        src={tokenFileLink}
+                        src={fileName}
                         loader={tokenImageLoader}
                         alt="token-image"
                         objectFit="contain"
@@ -572,14 +572,35 @@ export const ViewIndividualTokenPage = ({
                     />
                   )}
                   {typeOfTokenFile === 'audio' && (
-                    <audio
-                      src={tokenFileLink}
-                      controls="controls"
-                      autoPlay={true}
-                      alt="token-audio"
-                      ref={audioRef}
-                      className={styles.audio}
-                    />
+                    <>
+                      <Image
+                        src={coverName}
+                        loader={tokenImageLoader}
+                        alt="cover-image"
+                        objectFit="contain"
+                        layout="responsive"
+                        width="100%"
+                        height={`${ratio}%`}
+                        onError={() =>
+                          handleError('404 Token file is not found', () =>
+                            setImageErrors({ ...imageErrors, tokenImage: true })
+                          )
+                        }
+                        onLoadingComplete={({ naturalWidth, naturalHeight }) =>
+                          handleLoadImage(naturalWidth, naturalHeight)
+                        }
+                      />
+                      <div className={styles.audioContainer}>
+                        <audio
+                          src={tokenFileLink}
+                          controls="controls"
+                          autoPlay={true}
+                          alt="token-audio"
+                          ref={audioRef}
+                          className={styles.audio}
+                        />
+                      </div>
+                    </>
                   )}
                 </div>
               </div>

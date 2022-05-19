@@ -165,12 +165,12 @@ export const CreateNFTPage = () => {
           },
         });
       }
-      console.log('---audioPreviewResponse', audioPreviewResponse);
-      if (audioPreviewResponse) body.coverName === audioPreviewResponse;
+
+      if (audioPreviewResponse.data) body.coverName = audioPreviewResponse.data;
       if (values.audioPreviewFile) if (values.stats.length > 0) body.stats = values.stats;
       if (values.properties.length > 0) body.properties = values.properties;
       if (values.levels.length > 0) body.levels = values.levels;
-
+      
       const {
         data: { id },
       } = await axios.post(`${process.env.BACKEND_URL}/nfts`, body, {

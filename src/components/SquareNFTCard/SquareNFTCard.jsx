@@ -17,6 +17,7 @@ export const SquareNFTCard = ({
   category,
   className,
   collection,
+  coverName,
   fileName,
   id,
   name,
@@ -25,12 +26,11 @@ export const SquareNFTCard = ({
   status,
   blockchainType,
 }) => {
-  console.log('---id', id)
   const [tokenFileError, setTokenFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
   const router = useRouter();
-  
+
   useEffect(() => {
     const end = fileName?.substring(fileName.indexOf('.') + 1).toLowerCase();
 
@@ -105,14 +105,19 @@ export const SquareNFTCard = ({
                 />
               )}
               {typeOfTokenFile === 'audio' && (
-                <audio
-                  alt="token-audio"
-                  autoPlay={false}
-                  className={styles.audio}
-                  controls="controls"
-                  ref={audioRef}
-                  src={`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`}
-                />
+                <>
+                  {coverName && (
+                    <Image
+                      alt="token-image"
+                      layout="fill"
+                      objectFit="cover"
+                      loader={imageLoader}
+                      onError={() => setTokenFileError(true)}
+                      onLoadingComplete={() => setIsLoading(false)}
+                      src={coverName}
+                    />
+                  )}
+                </>
               )}
             </>
           )}

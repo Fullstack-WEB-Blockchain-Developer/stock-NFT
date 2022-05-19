@@ -12,7 +12,7 @@ import { RightSide } from './components/RightSide/RightSide';
 import styles from './ListTokenPage.module.scss';
 
 export const UserContext = createContext();
-export const ListTokenPage = ({ id, name, price, owner, fileName, category, collection, status }) => {
+export const ListTokenPage = ({ id, name, price, owner, fileName, category, collection, status, coverName }) => {
   const router = useRouter();
   const { tokenId } = router.query;
   const dispatch = useDispatch();
@@ -39,6 +39,7 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
         bundleName: '',
         category,
         collection,
+        coverName,
         currency: 'none',
         duration: [Date.parse(new Date()), Date.parse(new Date()) + 1000 * 60 * 60 * 24 * 7],
         fileName,
@@ -53,7 +54,7 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
         status,
       })
     );
-  }, [dispatch, id, name, owner, fileName, category, price, collection, status]);
+  }, [dispatch, id, name, owner, fileName, category, price, collection, status, coverName]);
 
   useEffect(() => {
     dispatch(getAllUserTokens());

@@ -203,7 +203,7 @@ export const ContentWrapper = () => {
                                     ? 'you'
                                     : buyer.username
                                   : `${buyer?.publicAddress.substring(0, 6)}...${buyer?.publicAddress.substring(
-                                    buyer?.publicAddress.length - 6
+                                      buyer?.publicAddress.length - 6
                                     )}`}
                               </span>
                             )}
@@ -214,7 +214,7 @@ export const ContentWrapper = () => {
                                     ? 'you'
                                     : seller.username
                                   : `${seller?.publicAddress.substring(0, 6)}...${seller?.publicAddress.substring(
-                                    seller?.publicAddress.length - 6
+                                      seller?.publicAddress.length - 6
                                     )}`}
                               </span>
                             )}
@@ -286,39 +286,9 @@ export const ContentWrapper = () => {
                         hasMore={true}
                       >
                         {itemsGridScale === 'large' &&
-                          items.map(
-                            ({ name, category, blockchainType, status, price, collection, owner, fileName, id }) => (
-                              <SquareNFTCard
-                                blockchainType={blockchainType}
-                                category={category}
-                                collection={collection}
-                                fileName={fileName}
-                                id={id}
-                                key={id}
-                                name={name}
-                                owner={owner}
-                                price={price}
-                                status={status}
-                              />
-                            )
-                          )}
+                          items.map((fields) => <SquareNFTCard key={fields.id} {...fields} />)}
                         {itemsGridScale === 'small' &&
-                          items.map(
-                            ({ name, category, blockchainType, status, price, collection, owner, fileName, id }) => (
-                              <SmallNFTCard
-                                blockchainType={blockchainType}
-                                category={category}
-                                collection={collection}
-                                fileName={fileName}
-                                id={id}
-                                key={id}
-                                name={name}
-                                owner={owner}
-                                price={price}
-                                status={status}
-                              />
-                            )
-                          )}
+                          items.map((fields) => <SmallNFTCard {...fields} key={fields.id} />)}
                       </InfiniteScroll>
                     )}
                     {choosenSection === 'activity' && (

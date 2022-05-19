@@ -15,12 +15,11 @@ export const getAllUserTokens = createAsyncThunk('tokens/getAllUserTokens', asyn
 
     const {
       data: { data },
-    } = await axios.get(`${process.env.BACKEND_URL}/users/account/assets`, {
+    } = await axios.get(`${process.env.BACKEND_URL}/users/account/assets?limit=9999&offset=0`, {
       headers: {
         Authorization: 'Bearer ' + accessToken,
       },
     });
-
     return data;
   } catch (e) {
     return rejectWithValue(e);

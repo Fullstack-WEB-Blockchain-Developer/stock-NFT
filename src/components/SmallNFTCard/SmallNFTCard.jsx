@@ -15,7 +15,18 @@ import { videos, audios, images } from '../../helpers/extentions';
 //styles
 import styles from './SmallNFTCard.module.scss';
 
-export const SmallNFTCard = ({ id, name, category, status, price, owner, fileName, collection, blockchainType }) => {
+export const SmallNFTCard = ({
+  blockchainType,
+  category,
+  collection,
+  coverName,
+  fileName,
+  id,
+  name,
+  owner,
+  price,
+  status,
+}) => {
   const [tokenFileError, setTokenFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
@@ -95,14 +106,19 @@ export const SmallNFTCard = ({ id, name, category, status, price, owner, fileNam
                 />
               )}
               {typeOfTokenFile === 'audio' && (
-                <audio
-                  alt="token-audio"
-                  autoPlay={false}
-                  className={styles.audio}
-                  controls="controls"
-                  ref={audioRef}
-                  src={`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`}
-                />
+                <>
+                  {coverName && (
+                    <Image
+                      alt="token-image"
+                      layout="fill"
+                      objectFit="cover"
+                      loader={imageLoader}
+                      onError={() => setTokenFileError(true)}
+                      onLoadingComplete={() => setIsLoading(false)}
+                      src={coverName}
+                    />
+                  )}
+                </>
               )}
             </>
           )}
