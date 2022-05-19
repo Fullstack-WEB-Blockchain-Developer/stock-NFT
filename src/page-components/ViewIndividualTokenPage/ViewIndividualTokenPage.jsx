@@ -40,8 +40,8 @@ export const ViewIndividualTokenPage = ({
   blockchainName,
   collectionName,
   description,
-  externalLink,
   fileName,
+  id,
   levels,
   name,
   offers,
@@ -416,7 +416,6 @@ export const ViewIndividualTokenPage = ({
   // //       })
   // //   }
   // // }
-
   // const timer = async (id) => {
   //   if (library) {
   //     marketContract.timing(id).call({ from: account })
@@ -606,8 +605,8 @@ export const ViewIndividualTokenPage = ({
               userId={user.userId}
               offers={offers}
               tokenNetwork={tokenNetwork}
-              /// fake data
               likes={fakeLikes}
+              /// fake data
               usdPrice={fakePrice.usd}
               ethPrice={fakePrice.eth}
               listing={[]}

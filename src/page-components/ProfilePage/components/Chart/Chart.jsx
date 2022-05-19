@@ -10,6 +10,7 @@ import styles from "./Chart.module.css";
 
 export const Chart = ({ data }) => {
   const [selectedPeriod, setSelectedPeriod] = useState("All");
+  
   return (
     <>
       {data && data.length > 0 ? (

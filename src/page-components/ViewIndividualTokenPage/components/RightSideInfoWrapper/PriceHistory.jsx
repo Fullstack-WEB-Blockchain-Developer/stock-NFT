@@ -1,33 +1,46 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 //next
-import Image from "next/image";
+import Image from 'next/image';
+//axios
+import axios from 'axios';
 //recharts
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 //classnames
-import cn from "classnames";
+import cn from 'classnames';
 //mui
-import { Select, MenuItem } from "@mui/material";
+import { Select, MenuItem } from '@mui/material';
 //hooks
-import { useStyles } from "../../../../hooks/useStyles";
+import { useStyles } from '../../../../hooks/useStyles';
 //utils
-import { priceHistorySelectOptions, fakePriceData } from "./RightSideInfoWrapper.utils";
+import { priceHistorySelectOptions, adaptChartData, getInterval } from './RightSideInfoWrapper.utils';
 //styles
-import styles from "./RightSideInfoWrapper.module.css";
+import styles from './RightSideInfoWrapper.module.css';
 
 export const PriceHistory = ({ isPriceHistoryOpened, id }) => {
-  const [selectedPeriod, setSelectedPeriod] = useState(priceHistorySelectOptions[0].text);
-  const [average, setAverage] = useState(0);
-  const [data, setData] = useState(undefined);
-
   const muiClasses = useStyles();
 
+  const [average, setAverage] = useState(0);
+  const [data, setData] = useState([]);
+  const [interval, setInterval] = useState(0);
+  const [selectedPeriod, setSelectedPeriod] = useState(priceHistorySelectOptions[0].text);
+
+  const getPriceFromServer = useCallback(async () => {
+    const daysOffset = priceHistorySelectOptions.find(({ text }) => text === selectedPeriod).daysOffset;
+
+    const { data } = await axios.get(`${process.env.BACKEND_URL}/nfts/${id}/priceHistory?daysOffset=${daysOffset}`);
+
+    setData(adaptChartData(data));
+    setInterval(getInterval(data.length));
+  }, [id, selectedPeriod]);
+
   useEffect(() => {
-    const avg =
-      Math.ceil((fakePriceData.reduce((acc, curr) => (acc += curr.price), 0) / fakePriceData.length) * 100) /
-      100;
+    getPriceFromServer();
+  }, [getPriceFromServer]);
+
+  useEffect(() => {
+    const avg = Math.ceil((data.reduce((acc, curr) => (acc += curr.price), 0) / data.length) * 100) / 100;
     setAverage(avg);
-    setData([...fakePriceData]);
-  }, []);
+  }, [data]);
 
   return (
     <>
@@ -43,12 +56,12 @@ export const PriceHistory = ({ isPriceHistoryOpened, id }) => {
               labelId="demo-simple-select-filled-label"
               id="demo-simple-select-filled"
               style={{
-                color: "white",
-                width: "308px",
-                height: "49px",
+                color: 'white',
+                width: '308px',
+                height: '49px',
               }}
               IconComponent={() => (
-                <div style={{ right: "16px", position: "absolute", pointerEvents: "none" }}>
+                <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
                   <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
                 </div>
               )}
@@ -57,7 +70,7 @@ export const PriceHistory = ({ isPriceHistoryOpened, id }) => {
               className={muiClasses.select}
             >
               <MenuItem disabled value="none">
-                <span style={{ color: "rgb(77, 77, 77)" }}>Select period</span>
+                <span style={{ color: 'rgb(77, 77, 77)' }}>Select period</span>
               </MenuItem>
               {priceHistorySelectOptions.map(({ id, text }) => (
                 <MenuItem key={id} value={text}>
@@ -82,18 +95,12 @@ export const PriceHistory = ({ isPriceHistoryOpened, id }) => {
           >
             {data && (
               <ResponsiveContainer width="100%" height={167}>
-                <LineChart data={fakePriceData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                  <CartesianGrid stroke="#535354" />
-                  <XAxis dataKey="date" />
+                <LineChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 5 }}>
+                  <CartesianGrid stroke="#535354" vertical={true} sx={{marginBottom: '10px'}}/>
+                  <XAxis interval={interval} dataKey="date" />
                   <YAxis />
-                  <Line
-                    type="basis"
-                    dataKey="price"
-                    stroke="var(--primary)"
-                    dot={false}
-                    strokeWidth={4}
-                    zIndex={20}
-                  />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="price" stroke="var(--primary)" strokeWidth={4} />
                 </LineChart>
               </ResponsiveContainer>
             )}

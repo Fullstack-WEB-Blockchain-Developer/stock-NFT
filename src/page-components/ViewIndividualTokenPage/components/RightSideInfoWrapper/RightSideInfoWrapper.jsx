@@ -1,25 +1,25 @@
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState, createContext } from 'react';
 //next
-import Image from "next/image";
+import Image from 'next/image';
 //redux
-import { useDispatch, useSelector } from "react-redux";
-import { setOffers } from "../../../../redux/slices/offersSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { setOffers } from '../../../../redux/slices/offersSlice';
 //classnames
-import cn from "classnames";
+import cn from 'classnames';
 //components
-import { LeftTimeContainer } from "./LeftTimeContainer";
-import { CustButton } from "../../../../components/CustButton/CustButton";
-import { PriceHistory } from "./PriceHistory";
-import { MakeOfferModal } from "../../../../modals/MakeOfferModal/MakeOfferModal";
-import { TransferApprovalModal } from "../../../../modals/TransferApprovalModal/TransferApprovalModal";
+import { LeftTimeContainer } from './LeftTimeContainer';
+import { CustButton } from '../../../../components/CustButton/CustButton';
+import { PriceHistory } from './PriceHistory';
+import { MakeOfferModal } from '../../../../modals/MakeOfferModal/MakeOfferModal';
+import { TransferApprovalModal } from '../../../../modals/TransferApprovalModal/TransferApprovalModal';
 //utils
-import { getCorrectDateString } from "./RightSideInfoWrapper.utils";
-import { getExpirationString } from "../../../../helpers/getExpirationString";
+import { getCorrectDateString } from './RightSideInfoWrapper.utils';
+import { getExpirationString } from '../../../../helpers/getExpirationString';
 //styles
-import styles from "./RightSideInfoWrapper.module.css";
-import { AcceptOfferModal } from "../../../../modals/AcceptOfferModal/AcceptOfferModal";
+import styles from './RightSideInfoWrapper.module.css';
+import { AcceptOfferModal } from '../../../../modals/AcceptOfferModal/AcceptOfferModal';
 //next
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
 
 const fakeDate = new Date(2022, 6, 1, 2, 3, 4, 567);
 
@@ -34,13 +34,13 @@ export const RightSideInfoWrapper = ({
   tokenFileName,
   usdPrice,
   tokenNetwork,
-  id
+  id,
 }) => {
   const dispatch = useDispatch();
   // const { account, activate, library, chainId } = useWeb3React();
-  const [userAccount, setUserAccount] = useState("");
+  const [userAccount, setUserAccount] = useState('');
   const [saleEnds, setSaleEnds] = useState(undefined);
-  const [saleEndsStringified, setSaleEndsStringified] = useState("");
+  const [saleEndsStringified, setSaleEndsStringified] = useState('');
   const [tokenOwner, setTokenOwner] = useState();
 
   const offersData = useSelector((state) => state.offers.offers);
@@ -67,19 +67,17 @@ export const RightSideInfoWrapper = ({
   };
 
   useEffect(() => {
-    const account = localStorage.getItem("account");
+    const account = localStorage.getItem('account');
     setUserAccount(account);
   }, []);
 
   useEffect(() => {
-    const account = localStorage.getItem("account");
+    const account = localStorage.getItem('account');
     if (owner?.publicAddress === account) {
-      setTokenOwner("you");
+      setTokenOwner('you');
     } else if (!owner?.username) {
       const { publicAddress } = owner;
-      setTokenOwner(
-        `${publicAddress.substring(0, 6)}...${publicAddress.substring(publicAddress.length - 6)}`
-      );
+      setTokenOwner(`${publicAddress.substring(0, 6)}...${publicAddress.substring(publicAddress.length - 6)}`);
     } else {
       setTokenOwner(owner?.username);
     }
@@ -201,33 +199,29 @@ export const RightSideInfoWrapper = ({
                 [styles.closed]: !isListingOpened,
               })}
             >
-              {listingData.map(
-                ({ price, usdPrice, buyer: { username, publicAddress }, expirationDate, id }) => (
-                  <div key={id} className={styles.tableRow}>
-                    <div>
-                      <Image src="/view-token/Icon-Weth.svg" height={19} width={19} alt="eth-icon" />
-                      <span className={cn(styles.priceText, styles.marginLeft4)}>{price} ETH</span>
-                    </div>
-                    <div>
-                      <span className={styles.priceText}>${usdPrice}</span>
-                    </div>
-                    <div>
-                      <span className={styles.greySmallText}>{expirationDate}</span>
-                    </div>
-                    <div>
-                      <span className={styles.link}>
-                        {username ||
-                          `${publicAddress.substring(0, 6)}...${publicAddress.substring(
-                            publicAddress.length - 6
-                          )}`}
-                      </span>
-                    </div>
-                    <div className={styles.buttonWrapper}>
-                      <CustButton text="buy" color="ghost" />
-                    </div>
+              {listingData.map(({ price, usdPrice, buyer: { username, publicAddress }, expirationDate, id }) => (
+                <div key={id} className={styles.tableRow}>
+                  <div>
+                    <Image src="/view-token/Icon-Weth.svg" height={19} width={19} alt="eth-icon" />
+                    <span className={cn(styles.priceText, styles.marginLeft4)}>{price} ETH</span>
                   </div>
-                )
-              )}
+                  <div>
+                    <span className={styles.priceText}>${usdPrice}</span>
+                  </div>
+                  <div>
+                    <span className={styles.greySmallText}>{expirationDate}</span>
+                  </div>
+                  <div>
+                    <span className={styles.link}>
+                      {username ||
+                        `${publicAddress.substring(0, 6)}...${publicAddress.substring(publicAddress.length - 6)}`}
+                    </span>
+                  </div>
+                  <div className={styles.buttonWrapper}>
+                    <CustButton text="buy" color="ghost" />
+                  </div>
+                </div>
+              ))}
             </div>
           </>
         ) : (
@@ -290,35 +284,31 @@ export const RightSideInfoWrapper = ({
                 [styles.closed]: !isOffersOpened,
               })}
             >
-              {offersData.map(
-                ({ price, buyer: { username, publicAddress }, expirationDate, id, usdPrice }) => (
-                  <div key={id} className={styles.tableRow}>
-                    <div>
-                      <Image src="/view-token/Icon-Weth.svg" height={19} width={19} alt="eth-icon" />
-                      <span className={cn(styles.priceText, styles.marginLeft4)}>{price} ETH</span>
-                    </div>
-                    <div>
-                      <span className={styles.priceText}>{usdPrice}</span>
-                    </div>
-                    <div>
-                      <span className={styles.greySmallText}>{expirationDate}</span>
-                    </div>
-                    <div>
-                      <span className={styles.link}>
-                        {username ||
-                          `${publicAddress.substring(0, 6)}...${publicAddress.substring(
-                            publicAddress.length - 6
-                          )}`}
-                      </span>
-                    </div>
-                    {owner.publicAddress === userAccount && (
-                      <div className={styles.buttonWrapper}>
-                        <CustButton text="Accept" color="ghost" onClick={() => handleAccept(price, id)} />
-                      </div>
-                    )}
+              {offersData.map(({ price, buyer: { username, publicAddress }, expirationDate, id, usdPrice }) => (
+                <div key={id} className={styles.tableRow}>
+                  <div>
+                    <Image src="/view-token/Icon-Weth.svg" height={19} width={19} alt="eth-icon" />
+                    <span className={cn(styles.priceText, styles.marginLeft4)}>{price} ETH</span>
                   </div>
-                )
-              )}
+                  <div>
+                    <span className={styles.priceText}>{usdPrice}</span>
+                  </div>
+                  <div>
+                    <span className={styles.greySmallText}>{expirationDate}</span>
+                  </div>
+                  <div>
+                    <span className={styles.link}>
+                      {username ||
+                        `${publicAddress.substring(0, 6)}...${publicAddress.substring(publicAddress.length - 6)}`}
+                    </span>
+                  </div>
+                  {owner.publicAddress === userAccount && (
+                    <div className={styles.buttonWrapper}>
+                      <CustButton text="Accept" color="ghost" onClick={() => handleAccept(price, id)} />
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </>
         ) : (
@@ -362,7 +352,7 @@ export const RightSideInfoWrapper = ({
       <MakeOfferModal
         isOpened={isMakeOfferModalOpened}
         handleClose={() => {
-          console.log("MakeOfferModal_close");
+          console.log('MakeOfferModal_close');
           setIsMakeOfferModalOpened(false);
         }}
         tokenNetwork={tokenNetwork}
