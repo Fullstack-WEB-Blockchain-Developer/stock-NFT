@@ -199,7 +199,7 @@ export const RightSideInfoWrapper = ({
                 [styles.closed]: !isListingOpened,
               })}
             >
-              {listingData.map(({ price, usdPrice, buyer: { username, publicAddress }, expirationDate, id }) => (
+              {listingData.map(({ price, usdPrice, user: { username, publicAddress }, expirationDate, id }) => (
                 <div key={id} className={styles.tableRow}>
                   <div>
                     <Image src="/view-token/Icon-Weth.svg" height={19} width={19} alt="eth-icon" />

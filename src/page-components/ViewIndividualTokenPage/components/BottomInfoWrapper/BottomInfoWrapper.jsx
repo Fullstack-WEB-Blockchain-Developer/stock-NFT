@@ -1,22 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 //next
-import Image from "next/image";
+import Image from 'next/image';
 //classnames
-import cn from "classnames";
+import cn from 'classnames';
 //mui
-import { Select, MenuItem } from "@mui/material";
+import { Select, MenuItem } from '@mui/material';
 //hooks
-import { useStyles } from "../../../../hooks/useStyles";
+import { useStyles } from '../../../../hooks/useStyles';
 //utils
-import { filterOptions } from "./BottomInfoWrapper.utils";
-import { getDateAgo } from "../../../../helpers/getDateAgo";
-import { getEtherPrice } from "../../../../utils";
+import { filterOptions } from './BottomInfoWrapper.utils';
+import { getDateAgo } from '../../../../helpers/getDateAgo';
 //styles
-import styles from "../RightSideInfoWrapper/RightSideInfoWrapper.module.css";
+import styles from '../RightSideInfoWrapper/RightSideInfoWrapper.module.css';
 
 export const BottomInfoWrapper = ({ activity }) => {
   const [isActivityOpened, setIsActivityOpened] = useState(true);
-  const [selectedFilter, setSelectedFilter] = useState("none");
+  const [selectedFilter, setSelectedFilter] = useState('none');
   const [activityData, setActivityData] = useState(undefined);
 
   const muiClasses = useStyles();
@@ -25,7 +24,7 @@ export const BottomInfoWrapper = ({ activity }) => {
     const newArray = [...initial].map((elem) => {
       return {
         ...elem,
-        date: getDateAgo(elem.updatedAt),
+        date: getDateAgo(elem.endDate || elem.updatedAt),
       };
     });
 
@@ -33,7 +32,9 @@ export const BottomInfoWrapper = ({ activity }) => {
   };
 
   useEffect(() => {
-    const adapted = adapterFunction(activity);
+    const adapted = adapterFunction(activity).sort(
+      (prev, curr) => Date.parse(new Date(prev.updatedAt)) - Date.parse(new Date(curr.updatedAt))
+    );
     setActivityData([...adapted]);
   }, [activity]);
 
@@ -74,12 +75,12 @@ export const BottomInfoWrapper = ({ activity }) => {
               labelId="demo-simple-select-filled-label"
               id="demo-simple-select-filled"
               style={{
-                color: "white",
-                width: "308px",
-                height: "49px",
+                color: 'white',
+                width: '308px',
+                height: '49px',
               }}
               IconComponent={() => (
-                <div style={{ right: "16px", position: "absolute", pointerEvents: "none" }}>
+                <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
                   <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
                 </div>
               )}
@@ -88,7 +89,7 @@ export const BottomInfoWrapper = ({ activity }) => {
               className={muiClasses.select}
             >
               <MenuItem disabled value="none">
-                <span style={{ color: "rgb(77, 77, 77)" }}>Filter</span>
+                <span style={{ color: 'rgb(77, 77, 77)' }}>Filter</span>
               </MenuItem>
               {filterOptions.map(({ id, text }) => (
                 <MenuItem key={id} value={text}>
@@ -127,14 +128,7 @@ export const BottomInfoWrapper = ({ activity }) => {
                   {<Image src="/view-token/Icon-Offers.svg" height={19} width={19} alt="eth-icon" />}
                   <span className={styles.marginLeft12}>{type}</span>
                 </div>
-                <div
-                  className={cn(
-                    styles.column,
-                    styles.maxWidth150,
-                    styles.marginRight10percent,
-                    styles.alignRight
-                  )}
-                >
+                <div className={cn(styles.column, styles.maxWidth150, styles.marginRight10percent, styles.alignRight)}>
                   <span className={styles.priceText}>
                     <Image src="/view-token/Icon-Weth.svg" height={19} width={19} alt="eth-icon" />
                     <span className={cn(styles.marginLeft4, styles.marginBottom4)}>{price}</span>
@@ -142,16 +136,20 @@ export const BottomInfoWrapper = ({ activity }) => {
                   <span className={styles.greySmallText}>{usdPrice}</span>
                 </div>
                 <div>
-                  <span className={styles.link}>{buyer.username ||
-                          `${buyer.publicAddress.substring(0, 6)}...${buyer.publicAddress.substring(
-                            buyer.publicAddress.length - 6
-                          )}`}</span>
+                  <span className={styles.link}>
+                    {buyer.username ||
+                      `${buyer.publicAddress.substring(0, 6)}...${buyer.publicAddress.substring(
+                        buyer.publicAddress.length - 6
+                      )}`}
+                  </span>
                 </div>
                 <div>
-                  <span className={styles.link}>{seller.username ||
-                          `${seller.publicAddress.substring(0, 6)}...${seller.publicAddress.substring(
-                            seller.publicAddress.length - 6
-                          )}`}</span>
+                  <span className={styles.link}>
+                    {seller.username ||
+                      `${seller.publicAddress.substring(0, 6)}...${seller.publicAddress.substring(
+                        seller.publicAddress.length - 6
+                      )}`}
+                  </span>
                 </div>
                 <div className={styles.maxWidth150}>
                   <span className={styles.activityDateText}>{date}</span>

@@ -28,7 +28,7 @@ export const getServerSideProps = async ({ params }) => {
       array.map(
         async (elem) =>
           await getEtherPrice().then((result) => {
-            return { ...elem, usdPrice: `$${(elem.price * result).toFixed(3)}`, type };
+            return { ...elem, usdPrice: `$${(elem.price * result).toFixed(2)}`, type };
           })
       )
     );
@@ -36,6 +36,9 @@ export const getServerSideProps = async ({ params }) => {
   };
 
   const adaptedOffers = await adaptPriceAndType(data.offers, 'Offers');
+  const adatpedFixedPriceListings = await adaptPriceAndType(data.fixedPriceListings, 'Listings');
+  const adaptedTimeAuctionListings = await adaptPriceAndType(data.timeAuctionListings, 'Listings');
+  const adaptedAllListings = [...adatpedFixedPriceListings, ...adaptedTimeAuctionListings];
 
   return {
     props: {
@@ -43,6 +46,7 @@ export const getServerSideProps = async ({ params }) => {
       about: data.collection?.description,
       blockchainName: data.blockchainType?.name || null,
       collectionName: data.collection?.name || null,
+      listings: adaptedAllListings,
       offers: adaptedOffers,
       user: data.owner,
     },

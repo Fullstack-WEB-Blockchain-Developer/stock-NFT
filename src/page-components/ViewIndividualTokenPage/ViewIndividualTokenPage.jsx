@@ -44,6 +44,7 @@ export const ViewIndividualTokenPage = ({
   fileName,
   id,
   levels,
+  listings,
   name,
   offers,
   properties,
@@ -630,13 +631,13 @@ export const ViewIndividualTokenPage = ({
               /// fake data
               usdPrice={fakePrice.usd}
               ethPrice={fakePrice.eth}
-              listing={[]}
+              listing={listings}
               ///
             />
           </div>
         </div>
         <div className={styles.bottomSection}>
-          <BottomInfoWrapper activity={offers.concat(fakeListing)} />
+          <BottomInfoWrapper activity={offers.concat(listings)} />
         </div>
         <SuccessfulOrderModal />
       </div>
