@@ -21,17 +21,18 @@ export const getUserCollections = createAsyncThunk(
 const initialState = {
   banner: undefined,
   bio: '',
-  userCollections: [],
+  createdNfts: 0,
   error: null,
+  favoritedNfts: 0,
   imageUrl: undefined,
-  username: 'Profile',
+  maxValue: 0,
+  mostCompleteCollection: 0,
   ownedNfts: 0,
   totalValue: 0,
-  maxValue: 0,
-  createdNfts: 0,
-  favoritedNfts: 0,
-  mostCompleteCollection: 0,
-  volumeTraded: 0,
+  userCollections: [],
+  userId: 0,
+  username: 'Profile',
+  volumeTraded: 0
 };
 
 export const userData = createSlice({

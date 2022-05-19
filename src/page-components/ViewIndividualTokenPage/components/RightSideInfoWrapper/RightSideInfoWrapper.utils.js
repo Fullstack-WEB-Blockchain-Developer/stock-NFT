@@ -1,3 +1,5 @@
+import { getDaysOffset } from 'src/helpers/getDaysOffset';
+
 const monthDayYearOptions = { year: 'numeric', month: 'long', day: 'numeric' };
 
 const hourMinuteOptions = { hour: 'numeric', minute: 'numeric' };
@@ -23,19 +25,19 @@ export const priceHistorySelectOptions = [
   },
   {
     text: 'Last 30 days',
-    daysOffset: 30,
+    daysOffset: getDaysOffset(1),
   },
   {
     text: 'Last 60 days',
-    daysOffset: 60,
+    daysOffset: getDaysOffset(2),
   },
   {
     text: 'Last 90 days',
-    daysOffset: 90,
+    daysOffset: getDaysOffset(3),
   },
   {
     text: 'Last year',
-    daysOffset: 365,
+    daysOffset: getDaysOffset(12),
   },
 ];
 
@@ -49,8 +51,4 @@ export const adaptChartData = (data) => {
   return result;
 };
 
-export const getInterval = (days) => {
-  if (days < 14) return 0
-  if (days >= 14 && days < 30) return 1
-  else return Math.ceil(days / 15)
-};
+
