@@ -13,7 +13,7 @@ pipelines:
             - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
             - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
             - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${AWS_USERNAME}"
-            - export IMAGE_NAME="${AWS_USERNAME}/${IMAGE_NAME}:latest"
+            - export IMAGE_NAME="${AWS_USERNAME}/${IMAGE_NAME_DEV}:latest"
             - docker build -t $IMAGE_NAME .
             - docker push $IMAGE_NAME
       - step:
@@ -24,11 +24,34 @@ pipelines:
                 AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
                 AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
                 AWS_DEFAULT_REGION: 'us-east-1'
-                CLUSTER_NAME: '${CLUSTER_ECS}'
+                CLUSTER_NAME: '${CLUSTER_ECS_DEV}'
                 SERVICE_NAME: '${SERVICE_ECS}'
                 FORCE_NEW_DEPLOYMENT: 'true'
+    prod:
+      - step:
+          name: Build and publish docker image.
+          services:
+            - docker
+          script:
+            - apt-get update && apt-get install -y awscli
+            - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
+            - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
+            - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${AWS_USERNAME}"
+            - export IMAGE_NAME="${AWS_USERNAME}/${IMAGE_NAME_PROD}:latest"
+            - docker build -t $IMAGE_NAME .
+            - docker push $IMAGE_NAME
+      - step:
+          name: Deploy to ECS
+          script:
+            - pipe: atlassian/aws-ecs-deploy:1.6.2
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: 'us-east-1'
+                CLUSTER_NAME: '${CLUSTER_ECS_PROD}'
+                SERVICE_NAME: '${SERVICE_ECS}'
+                FORCE_NEW_DEPLOYMENT: 'false'
 definitions:
   services:
     docker:
       memory: 2048
-
