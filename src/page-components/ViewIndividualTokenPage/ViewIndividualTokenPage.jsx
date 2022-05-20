@@ -18,7 +18,7 @@ import { SuccessfulOrderModal } from '../../modals/SuccessfulOrderModal/Successf
 import { Oval } from 'react-loader-spinner';
 //utils
 import { videos, audios, images } from '../../helpers/extentions';
-import { fakeLikes, fakeListing, fakePrice } from './ViewIndividualToken.utils';
+import { fakeLikes, fakePrice } from './ViewIndividualToken.utils';
 //styles
 import styles from './ViewIndividualTokenPage.module.css';
 
@@ -38,6 +38,7 @@ const pol_nftAddr = process.env.POL_NFT;
 export const ViewIndividualTokenPage = ({
   about,
   blockchainName,
+  bundle,
   collectionName,
   coverName,
   description,
@@ -64,6 +65,7 @@ export const ViewIndividualTokenPage = ({
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
   const [tokenFileLink, setTokenFileLink] = useState('/');
   const [userAccount, setUserAccount] = useState('');
+  const [tokenCoverName, setTokenCoverName] = useState(coverName);
 
   const [tokenNetwork, setTokenNetwork] = useState('');
   const [ratio, setRatio] = useState(16 / 9);
@@ -84,7 +86,8 @@ export const ViewIndividualTokenPage = ({
     setIsLoading(false);
   };
 
-  const tokenImageLoader = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
+  const tokenImageLoader = ({ src }) =>
+    `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
 
   const sellHandle = async () => {
     let supportNetwork;
@@ -449,18 +452,32 @@ export const ViewIndividualTokenPage = ({
   //   }
   // }
 
+  const handleChooseTokenInBundle = (fileName, coverName) => {
+    setTokenFileLink(`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`);
+    const end = fileName.substring(fileName.indexOf('.') + 1).toLowerCase();
+    if (images.includes(end)) {
+      setTypeOfTokenFile('image');
+    } else if (videos.includes(end)) {
+      setTypeOfTokenFile('video');
+    } else if (audios.includes(end)) {
+      setTypeOfTokenFile('audio');
+    }
+    coverName &&
+      setTokenCoverName(
+        `${process.env.BACKEND_ASSETS_URL}/nftMedia/${coverName}`
+      );
+  };
+
   useEffect(() => {
     const end = fileName.substring(fileName.indexOf('.') + 1).toLowerCase();
     if (images.includes(end)) {
       setTypeOfTokenFile('image');
-    } else {
-      if (videos.includes(end)) {
-        setTypeOfTokenFile('video');
-      } else if (audios.includes(end)) {
-        setTypeOfTokenFile('audio');
-      }
-      setTokenFileLink(`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`);
+    } else if (videos.includes(end)) {
+      setTypeOfTokenFile('video');
+    } else if (audios.includes(end)) {
+      setTypeOfTokenFile('audio');
     }
+    setTokenFileLink(`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`);
   }, [fileName]);
 
   useEffect(() => {
@@ -476,7 +493,9 @@ export const ViewIndividualTokenPage = ({
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get(`${process.env.BACKEND_URL}/nfts/${tokenId}`);
+      const response = await axios.get(
+        `${process.env.BACKEND_URL}/nfts/${tokenId}`
+      );
       const { blockchainType } = response.data;
       setTokenNetwork(String(blockchainType.name).toLowerCase());
     })();
@@ -499,19 +518,33 @@ export const ViewIndividualTokenPage = ({
                   <Image src="/noImage.png" layout="fill" alt="token-image" />
                 ) : (
                   <Image
-                    src={blockchainName === 'Ethereum' ? '/view-token/Icon-Eth.svg' : '/view-token/Polygon.svg'}
+                    src={
+                      blockchainName === 'Ethereum'
+                        ? '/view-token/Icon-Eth.svg'
+                        : '/view-token/Polygon.svg'
+                    }
                     width={19}
                     height={19}
                     alt="blockchain-type"
-                    onError={(e) =>
-                      handleError('Something went wrong with blockchain type', () =>
-                        setImageErrors({ ...imageErrors, blockchainTypeIcon: true })
+                    onError={() =>
+                      handleError(
+                        'Something went wrong with blockchain type',
+                        () =>
+                          setImageErrors({
+                            ...imageErrors,
+                            blockchainTypeIcon: true,
+                          })
                       )
                     }
                   />
                 )}
                 <div className={styles.likesWrapper}>
-                  <Image src="/view-token/Icon-Heart.svg" width={19} height={19} alt="likes" />
+                  <Image
+                    src="/view-token/Icon-Heart.svg"
+                    width={19}
+                    height={19}
+                    alt="likes"
+                  />
                   <span>{fakeLikes}</span>
                 </div>
               </div>
@@ -544,8 +577,8 @@ export const ViewIndividualTokenPage = ({
                       </div>
                     ) : (
                       <Image
-                        src={fileName}
-                        loader={tokenImageLoader}
+                        src={tokenFileLink}
+                        loader={({ src }) => src}
                         alt="token-image"
                         objectFit="contain"
                         layout="responsive"
@@ -574,7 +607,7 @@ export const ViewIndividualTokenPage = ({
                   {typeOfTokenFile === 'audio' && (
                     <>
                       <Image
-                        src={coverName}
+                        src={tokenCoverName}
                         loader={tokenImageLoader}
                         alt="cover-image"
                         objectFit="contain"
@@ -605,6 +638,49 @@ export const ViewIndividualTokenPage = ({
                 </div>
               </div>
             </div>
+            {bundle.length > 0 && (
+              <div className={styles.bundlesWrapper}>
+                {bundle.map(({ fileName, id, coverName, name }) => (
+                  <>
+                    {images
+                      .concat(audios)
+                      .includes(
+                        fileName.toLowerCase().substring(fileName.indexOf('.'))
+                      ) ? (
+                      <Image
+                        alt={name}
+                        key={id}
+                        layout="fill"
+                        loader={({ src }) =>
+                          `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`
+                        }
+                        src={
+                          images.includes(
+                            fileName
+                              .toLowerCase()
+                              .substring(fileName.indexOf('.'))
+                          )
+                            ? fileName
+                            : coverName
+                        }
+                        objectFit="cover"
+                        onClick={() => {
+                          handleChooseTokenInBundle(fileName, coverName);
+                        }}
+                      />
+                    ) : (
+                      <video
+                        alt="token-video"
+                        className={styles.video}
+                        controls="controls"
+                        objectFit="cover"
+                        src={tokenFileLink}
+                      />
+                    )}
+                  </>
+                ))}
+              </div>
+            )}
             <div className={styles.leftSideInfoWrapper}>
               <LeftSideInfoWrapper
                 owner={user}

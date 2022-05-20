@@ -12,7 +12,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { open as openProfilePopupReducer } from '../../src/redux/slices/profilePopupSlice';
 import { open as openWalletPopupReducer } from '../../src/redux/slices/walletPopupSlice';
 import { open as openError } from '../../src/redux/slices/errorSnackbarSlice';
-import { setImage, setUsername, setBanner, setUserBio, setField } from '../../src/redux/slices/userDataSlice';
+import {
+  setImage,
+  setUsername,
+  setBanner,
+  setUserBio,
+  setField,
+} from '../../src/redux/slices/userDataSlice';
 // these are components for the second variant of header. I don't know exactly which one to implement
 // import { Username } from "../../src/components/Username/Username";
 // import { AmountWithIcon } from "../../src/components/AmountWithIcon/AmountWithIcon";
@@ -35,12 +41,16 @@ export const Header = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { isAuthorized, error } = useAuth();
-  const pagesForUnauthorized = useSelector((state) => state.administration.pagesForUnauthorized);
+  const pagesForUnauthorized = useSelector(
+    (state) => state.administration.pagesForUnauthorized
+  );
 
   if (error && !pagesForUnauthorized.includes(router.pathname)) {
     dispatch(
       openError(
-        error.response?.data ? `${error.response.data.statusCode} ${error.response.data.message}` : error.message
+        error.response?.data
+          ? `${error.response.data.statusCode} ${error.response.data.message}`
+          : error.message
       )
     );
   }
@@ -49,9 +59,12 @@ export const Header = () => {
     const accessToken = localStorage.getItem('accessToken');
     const publicAddress = localStorage.getItem('account');
     try {
-      const { data } = await axios.get(`${process.env.BACKEND_URL}/users/${publicAddress}`, {
-        headers: { Authorization: 'Bearer ' + accessToken },
-      });
+      const { data } = await axios.get(
+        `${process.env.BACKEND_URL}/users/${publicAddress}`,
+        {
+          headers: { Authorization: 'Bearer ' + accessToken },
+        }
+      );
       dispatch(setField({ field: 'userId', value: data.id }));
       dispatch(setImage(data.profileImage));
       dispatch(setBanner(data.profileBanner));
@@ -59,7 +72,13 @@ export const Header = () => {
       dispatch(setUserBio(data.bio));
     } catch (e) {
       !pagesForUnauthorized.includes(router.pathname) &&
-        dispatch(openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message));
+        dispatch(
+          openError(
+            e.response?.data
+              ? `${e.response.data.statusCode} ${e.response.data.message}`
+              : e.message
+          )
+        );
     }
   };
 
@@ -67,7 +86,9 @@ export const Header = () => {
     !error && fetchUserData();
   }, [isAuthorized]);
 
-  const isProfilePopupOpened = useSelector((state) => state.profilePopup.profilePopup.isOpened);
+  const isProfilePopupOpened = useSelector(
+    (state) => state.profilePopup.profilePopup.isOpened
+  );
   const avatar = useSelector((state) => state.userData.imageUrl);
   const username = useSelector((state) => state.userData.username);
   const openProfilePopup = () => {
@@ -98,7 +119,12 @@ export const Header = () => {
         </div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div className={styles.searchButton}>
-            <Image src="/search-icon.svg" height={18} width={16} alt="search-icon" />
+            <Image
+              src="/search-icon.svg"
+              height={18}
+              width={16}
+              alt="search-icon"
+            />
             <div>Search All NFTs</div>
           </div>
           <div className={styles.createButton}>
@@ -110,14 +136,34 @@ export const Header = () => {
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         <div className={styles.userData}>
           <div className={styles.profile} onClick={openProfilePopup}>
-            <div className={isAuthorized ? styles.authorisedIcon : styles.profileIcon}>
-              <img src={isAuthorized ? avatar : '/profile-icon.svg'} style={{ width: '100%', height: '100%' }} />
+            <div
+              className={
+                isAuthorized ? styles.authorisedIcon : styles.profileIcon
+              }
+            >
+              <Image
+                src={isAuthorized ? avatar : '/profile-icon.svg'}
+                loader={({src}) => src}
+                objectFit="cover"
+                alt="profileImage"
+                layout="fill"
+              />
             </div>
             <div className={styles.profileText}>
-              {isAuthorized ? (username && username !== '' ? username : 'Profile') : 'Profile'}
+              {isAuthorized
+                ? username && username !== ''
+                  ? username
+                  : 'Profile'
+                : 'Profile'}
             </div>
           </div>
           <ProfilePopup
