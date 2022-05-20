@@ -16,6 +16,11 @@ module.exports = {
     domains: ['dev.api.stokenft.com '],
   },
   nextConfig,
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
   env: {
     INFURA_ID: 'a5b51678f5c248c5af6c10dc7c5501ea',
     BACKEND_URL: 'https://dev.api.stokenft.com /api',
@@ -50,9 +55,4 @@ module.exports = {
   //   POL_MARKET: "0x4054e158C0D7B11c79176535F2Be96e9255c73C0",
   //   POL_NFT: "0xa59E67c493bcCA3eFdeF46436b2FCCA1DF49754F"
   // },
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  },
 }
