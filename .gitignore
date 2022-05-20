@@ -51,7 +51,16 @@ Thumbs.db
 # next.js
 /.next/
 /out/
-node_modules
-
 
 package-lock.json
+
+# contracts
+contracts
+scripts
+tests
+.mocharc.json
+.solhint.json
+.solhintignore
+hardhat.config.js
+
+# cache
