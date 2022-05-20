@@ -50,4 +50,9 @@ module.exports = {
   //   POL_MARKET: "0x4054e158C0D7B11c79176535F2Be96e9255c73C0",
   //   POL_NFT: "0xa59E67c493bcCA3eFdeF46436b2FCCA1DF49754F"
   // },
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
 }
