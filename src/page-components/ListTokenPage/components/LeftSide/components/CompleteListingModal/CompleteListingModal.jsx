@@ -357,8 +357,11 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
   }) => {
     if (library) {
       await marketContract
-        .fixedSales(tokenIds, prices, startTimes, endTimes, nftAddrs)
+        .fixedSales(tokenIds, prices, startTimes, endTimes, nftAddrs, {
+          gasLimit: 50000,
+        })
         .then((result) => {
+          console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 364 ~ .then ~ result", result)
           if (result.status === true) {
             dispatch(
               openSuccess({
@@ -392,7 +395,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
   }) => {
     console.log(
       '🚀 ~ file: CompleteListingModal.jsx ~ line 180 ~ auctionSale ~ {tokenIds, prices, startTimes, endTimes, nftAddrs}',
-      { tokenIds, startPrices, endPrices, startTimes, endTimes, nftAddrs }
+      { tokenIds, startPrices, endPrices, startTimes, endTimes, nftAddrs}
     );
     if (library) {
       await marketContract
@@ -402,7 +405,8 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
           endPrices,
           startTimes,
           endTimes,
-          nftAddrs
+          nftAddrs,
+          { gasLimit: 50000 }
         )
         .then((recipt) => {
           if (recipt.status === true) {
