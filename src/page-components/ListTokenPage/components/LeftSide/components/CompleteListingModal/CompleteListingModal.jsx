@@ -241,8 +241,9 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                   } else {
                     fixedSaleData.tokenIds.push(token.id);
                     fixedSaleData.prices.push(
-                      ethers.utils.parseUnits(token.price)
+                      ethers.utils.parseEther(token.price)
                     );
+                      console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 245 ~ ethers.utils.parseUnits(token.price)", ethers.utils.parseEther(token.price))
                     fixedSaleData.startTimes.push(startTime);
                     fixedSaleData.endTimes.push(endTime);
                     fixedSaleData.nftAddrs.push(nftAddr);
@@ -250,6 +251,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                       '🚀 ~ file: CompleteListingModal.jsx ~ line 249 ~ fixedSaleData',
                       fixedSaleData
                     );
+                    await sendFixedPriceToServer({ ...token, currency: currencies.find(({ name }) => name === token.currency) });
                     // TODO: add support for multiple tokens ERC721 permit
                     // const { offer, signature } = await offerClass.makeOffer(
                     //   account,
