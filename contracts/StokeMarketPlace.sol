@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
+import "./StokeNFT.sol";
 
 contract StokeMarketplace is ReentrancyGuard, Ownable {
     using Counters for Counters.Counter;
@@ -54,8 +55,7 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
     }
 
     uint256 public tokenIdMint;
-    uint256 public fixedFee = 2;
-    uint256 public auctionFee = 2;
+    uint8 public marketFee = 250;
 
     mapping(uint256 => fixedSale) nftPrice;
     mapping(uint256 => uint256[]) public collectionStored;
@@ -92,19 +92,15 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         Offer memory offer,
         address WETH,
         address _nftContract,
-        Token memory token
+        Token memory token,
+        bytes memory signature
     ) public {
         require(
             offer.expiresAt >= block.timestamp,
             "MarketPlace: the offer expired"
         );
-
         //calc service fee -2.5%
-        uint marketFeePercentage = 25;
-        uint commissionDenominator = 1000;
-        uint serviceFee = (offer.amount * marketFeePercentage) /
-            commissionDenominator;
-
+        uint256 serviceFee = (offer.amount * marketFee) / 10000;
         uint256 balance = IERC20(WETH).balanceOf(offer.sender);
         require(
             balance >= offer.amount,
@@ -119,19 +115,37 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
                 offer.amount
             )
         );
-        console.log(success);
-
+        require(success, "_approve encodeWithSignature");
         //transfer nft
-        (bool success1, ) = _nftContract.call(
-            abi.encodeWithSignature(
-                "createToken(uint256,address,string)",
-                token.tokenId,
-                offer.sender,
-                token.tokenURI
-            )
+        StokeNFT(_nftContract).safeTransferFromWithPermit(
+            msg.sender,
+            offer.sender,
+            token.tokenId,
+            "",
+            offer.expiresAt,
+            signature
         );
-        console.log(success1);
+        // (bool success1, ) = _nftContract.call(
+        //     abi.encodeWithSignature(
+        //         "safeTransferFromWithPermit(address,address,uint256,bytes,uint256,bytes)",
+        //         msg.sender,
+        //         offer.sender,
+        //         token.tokenId,
+        //         "",
+        //         offer.expiresAt,
+        //         signature
+        //     )
+        // );
 
+        // (bool success1, ) = _nftContract.call(
+        //     abi.encodeWithSignature(
+        //         "createToken(uint256,address,string)",
+        //         token.tokenId,
+        //         offer.sender,
+        //         token.tokenURI
+        //     )
+        // );
+        // require(success1, "createToken encodeWithSignature");
         require(
             IERC20(WETH).allowance(offer.sender, address(this)) == offer.amount,
             "insufficient amount"
@@ -169,7 +183,7 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         uint256[] memory _endTimes,
         address[] memory _nftContracts
     ) public {
-        for (uint i = 0; i < _tokenIds.length; i++) {
+        for (uint8 i = 0; i < _tokenIds.length; i++) {
             uint256 _tokenId = _tokenIds[i];
             require(!timeForAuction[_tokenId].inList, "already in sale");
             require(!nftPrice[_tokenId].inList, "already in sale");
@@ -211,16 +225,18 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         require(timeForFixed[_tokenId].inList, "input duration time");
         require(nftPrice[_tokenId].inList, "nft not in sale");
         require(
-            timeForFixed[_tokenId].startTime <= block.timestamp &&
-                timeForFixed[_tokenId].endTime >= block.timestamp,
-            "fixed sale not started or ended"
+            timeForFixed[_tokenId].startTime <= block.timestamp,
+            "fixed sale not started"
         );
-        uint256 val = uint256(100) - fixedFee;
-
+        require(
+            timeForFixed[_tokenId].endTime >= block.timestamp,
+            "fixed sale ended"
+        );
+        uint16 val = 10000 - marketFee;
         uint256 values = msg.value;
         require(values >= nftPrice[_tokenId].price, "price should be greater");
-        uint256 amount = ((values * uint256(val)) / uint256(100));
-        uint256 ownerinterest = ((values * uint256(fixedFee)) / uint256(100));
+        uint256 amount = ((values * val) / 10000);
+        uint256 ownerinterest = ((values * marketFee) / 10000);
         address firstowner = originalOwner[_tokenId];
         (bool success, ) = firstowner.call{value: amount}("");
         require(success, "refund failed");
@@ -235,13 +251,13 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
     function startAuction(
         uint256[] memory _tokenIds,
         bool[] memory _methods,
-        uint256[] memory _startPrices,
-        uint256[] memory _endPrices,
+        uint256[] memory _minPrices,
+        uint256[] memory _maxPrices,
         uint256[] memory _startTimes,
         uint256[] memory _endTimes,
         address[] memory _nftContracts
     ) external {
-        for (uint i = 0; i < _tokenIds.length; i++) {
+        for (uint8 i = 0; i < _tokenIds.length; i++) {
             uint256 _tokenId = _tokenIds[i];
             require(!nftStakeState[_tokenId], "nft is stake");
             require(!timeForAuction[_tokenId].inList, "already in sale");
@@ -252,12 +268,17 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
             );
             timeForAuction[_tokenId].method = _methods[i];
             timeForAuction[_tokenId].startTime = _startTimes[i];
-            timeForAuction[_tokenId].endTime = _endPrices[i];
             timeForAuction[_tokenId].endTime = _endTimes[i];
-            timeForAuction[_tokenId].minPrice = _startPrices[i];
             timeForAuction[_tokenId].inList = true;
             auctionSaleNftList[_tokenId] = auctionSaleNft.length;
             auctionSaleNft.push(_tokenId);
+            // for method
+            if (timeForAuction[_tokenId].method) {
+                timeForAuction[_tokenId].minPrice = _minPrices[i];
+            } else {
+                timeForAuction[_tokenId].maxPrice = _maxPrices[i];
+                timeForAuction[_tokenId].minPrice = _minPrices[i];
+            }
             address firstowner = IERC721(_nftContracts[i]).ownerOf(_tokenId);
             IERC721(_nftContracts[i]).transferFrom(
                 firstowner,
@@ -270,41 +291,38 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
     function buyAuction(uint256 _tokenId) external payable {
         require(timeForAuction[_tokenId].inList, "nft not in sale");
         require(
-            timeForAuction[_tokenId].startTime <= block.timestamp &&
-                timeForAuction[_tokenId].endTime >= block.timestamp,
-            "auction sale not started or ended"
+            timeForAuction[_tokenId].startTime <= block.timestamp,
+            "auction sale not started"
+        );
+        require(
+            timeForAuction[_tokenId].endTime >= block.timestamp,
+            "auction sale not ended"
+        );
+        require(
+            msg.value >= timeForAuction[_tokenId].minPrice,
+            "amount should be greater"
         );
         if (timeForAuction[_tokenId].method) {
-            require(
-                msg.value >= timeForAuction[_tokenId].minPrice,
-                "amount should be greater"
-            );
             require(
                 msg.value > timeForAuction[_tokenId].bidAmount,
                 "previous bidding amount"
             );
-            timeForAuction[_tokenId].bidAmount = msg.value;
-            amountForAuction[_tokenId][msg.sender] = msg.value;
-            finalOwner[_tokenId] = msg.sender;
-            uint256 values = msg.value;
-            (bool success, ) = address(this).call{value: values}("");
-            require(success, "refund failed");
         } else {
             require(
-                msg.value <= timeForAuction[_tokenId].minPrice,
+                msg.value <= timeForAuction[_tokenId].maxPrice,
                 "amount should be less"
             );
             require(
                 msg.value < timeForAuction[_tokenId].bidAmount,
                 "previous bidding amount"
             );
-            timeForAuction[_tokenId].bidAmount = msg.value;
-            amountForAuction[_tokenId][msg.sender] = msg.value;
-            finalOwner[_tokenId] = msg.sender;
-            uint256 values = msg.value;
-            (bool success, ) = address(this).call{value: values}("");
-            require(success, "refund failed");
         }
+        timeForAuction[_tokenId].bidAmount = msg.value;
+        amountForAuction[_tokenId][msg.sender] = msg.value;
+        finalOwner[_tokenId] = msg.sender;
+        uint256 values = msg.value;
+        (bool success, ) = address(this).call{value: values}("");
+        require(success, "refund failed");
     }
 
     function upgradeAuction(uint256 _tokenId, bool choice) external payable {
@@ -313,7 +331,7 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
                 timeForAuction[_tokenId].endTime >= block.timestamp,
             "auction sale not started or ended"
         );
-        uint256 val = uint256(100) - auctionFee;
+        uint16 val = 10000 - marketFee;
         if (choice) {
             amountForAuction[_tokenId][msg.sender] += msg.value;
             if (
@@ -333,9 +351,9 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
                     "You dont allow"
                 );
                 uint256 totalamount = amountForAuction[_tokenId][msg.sender];
-                uint256 amount = ((totalamount * uint256(val)) / uint256(100));
-                uint256 ownerinterest = ((totalamount * uint256(auctionFee)) /
-                    uint256(100));
+                uint256 amount = ((totalamount * val) / 10000);
+                uint256 ownerinterest = ((totalamount * marketFee) /
+                    10000);
                 (bool success, ) = msg.sender.call{value: amount}("");
                 require(success, "refund failed");
                 (bool result, ) = marketOwner.call{value: ownerinterest}("");
@@ -373,17 +391,12 @@ contract StokeMarketplace is ReentrancyGuard, Ownable {
         if (timeForAuction[_tokenId].endTime >= block.timestamp) {
             return (timeForAuction[_tokenId].endTime - block.timestamp);
         } else {
-            return uint256(0);
+            return 0;
         }
     }
 
-    function setFixedFee(uint256 _fixedFee) external {
-        fixedFee = _fixedFee;
-    }
-
-    function setAuctionFee(uint256 _auctionFee) external returns (uint256) {
-        auctionFee = _auctionFee;
-        return auctionFee;
+    function setMarketFee(uint8 _marketFee) external {
+        marketFee = _marketFee;
     }
 
     function listfixedSaleNfts(uint256 _tokenId)

@@ -1,22 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 //next
-import Image from "next/image";
-import { useRouter } from "next/router";
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 //redux
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
 //spinner
-import { Oval } from "react-loader-spinner";
+import { Oval } from 'react-loader-spinner';
 //components
-import { CustButton } from "../../../../components/CustButton/CustButton";
-//utils
-import { fakeChartData } from "../../ProfilePage.utils";
+import { CustButton } from '../../../../components/CustButton/CustButton';
 //styles
-import styles from "./ProfileDataWrapper.module.css";
-import { Chart } from "../Chart/Chart";
+import styles from './ProfileDataWrapper.module.css';
+import { Chart } from '../Chart/Chart';
 
 export const ProfileDataWrapper = () => {
   const [isImageLoading, setIsImageLoading] = useState(true);
-  const [account, setAccount] = useState("");
+  const [account, setAccount] = useState('');
   const [imageErrors, setImageErrors] = useState({
     image: false,
     banner: false,
@@ -24,7 +22,7 @@ export const ProfileDataWrapper = () => {
 
   const router = useRouter();
 
-  const { imageUrl, banner, username, bio } = useSelector((state) => state.userData);
+  const { imageUrl, banner, username, bio, userId } = useSelector((state) => state.userData);
 
   const { ownedNfts, totalValue, highestValue, mostCompleteCollection, volumeTraded } = useSelector(
     (state) => state.profileFiltration
@@ -32,10 +30,10 @@ export const ProfileDataWrapper = () => {
 
   const imageLoader = ({ src }) => src;
 
-  const handleEditProfile = () => router.push("/settings");
+  const handleEditProfile = () => router.push('/settings');
 
   useEffect(() => {
-    setAccount(localStorage.getItem("account"));
+    setAccount(localStorage.getItem('account'));
   }, []);
 
   return (
@@ -93,7 +91,7 @@ export const ProfileDataWrapper = () => {
           </span>
         </div>
         <div className={styles.username}>
-          <span>{username ? username : "Profile"}</span>
+          <span>{username ? username : 'Profile'}</span>
         </div>
         <div className={styles.bio}>
           <span>{bio}</span>
@@ -142,7 +140,7 @@ export const ProfileDataWrapper = () => {
           <CustButton color="primary" text="Share Profile" />
         </div>
         <div className={styles.chart}>
-          <Chart data={fakeChartData} />
+          <Chart userId={userId} />
         </div>
       </div>
     </div>

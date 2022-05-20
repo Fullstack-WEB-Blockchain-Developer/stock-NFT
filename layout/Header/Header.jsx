@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { open as openProfilePopupReducer } from '../../src/redux/slices/profilePopupSlice';
 import { open as openWalletPopupReducer } from '../../src/redux/slices/walletPopupSlice';
 import { open as openError } from '../../src/redux/slices/errorSnackbarSlice';
-import { setImage, setUsername, setBanner, setUserBio } from '../../src/redux/slices/userDataSlice';
+import { setImage, setUsername, setBanner, setUserBio, setField } from '../../src/redux/slices/userDataSlice';
 // these are components for the second variant of header. I don't know exactly which one to implement
 // import { Username } from "../../src/components/Username/Username";
 // import { AmountWithIcon } from "../../src/components/AmountWithIcon/AmountWithIcon";
@@ -52,6 +52,7 @@ export const Header = () => {
       const { data } = await axios.get(`${process.env.BACKEND_URL}/users/${publicAddress}`, {
         headers: { Authorization: 'Bearer ' + accessToken },
       });
+      dispatch(setField({ field: 'userId', value: data.id }));
       dispatch(setImage(data.profileImage));
       dispatch(setBanner(data.profileBanner));
       dispatch(setUsername(data.username));

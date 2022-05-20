@@ -230,53 +230,24 @@ export const AcceptOfferModal = ({
       // })()
     } else {
       const offer = offersData.find((offer) => offer.id == id);
-      const sender = offer.buyer.publicAddress;
-      const wei = await tokenContract?.balanceOf(sender);
+      // const sender = offer.seller.publicAddress;
+      const wei = await tokenContract?.balanceOf(account);
       const balance = ethers.utils.formatUnits(wei);
       if (Number(balance) >= price) {
         const offerC = {
-          sender,
+          account,
           amount: ethers.utils.parseEther(String(price)),
-          expiresAt: offer.expirationDateParsed,
+          expiresAt: Math.floor(offer.expirationDateParsed / 1000),
         };
         const tokenId = router.query.tokenId;
         const Token = {
           tokenId: Number(tokenId),
           tokenURI: `${process.env.BACKEND_URL}/nfts/metadata/${tokenId}`,
         };
-        const tx = await marketContract.accept(offerC, tokenAddr, nftAddr, Token);
-
-        console.log(tx.hash);
-
-        const res = await axios.post(`${process.env.BACKEND_URL}/offers/${id}/${tx.hash}`);
-        if (res.data) {
-          // if(res.data.status === "pending") {
-          try {
-            const accessToken = localStorage.getItem('accessToken');
-
-            await axios.post(
-              `${process.env.BACKEND_URL}/offers/accept/${id}`,
-              {},
-              {
-                headers: {
-                  Authorization: 'Bearer ' + accessToken,
-                },
-              }
-            );
-            handleClose();
-            dispatch(
-              openSuccess({
-                title: 'Your order was successfully accepted',
-                description:
-                  'To trade this token, you must first complete a free (plus gas) transaction. Confirm it in your wallet and keep this tab open!',
-              })
-            );
-          } catch (e) {
-            dispatch(
-              openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message)
-            );
-          }
-        }
+        const signData = ethers.utils.splitSignature(offer.blockchainHash);
+        const { v, r, s } = signData;
+        await tokenContract.permit(offer.owner, offer.spender, offer.value, offer.deadline, v, r, s);
+        await marketContract.accept(offerC, tokenAddr, nftAddr, Token);
       } else {
         dispatch(openError("Offer's owner has not enough balance"));
       }
