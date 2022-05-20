@@ -241,8 +241,9 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                   } else {
                     fixedSaleData.tokenIds.push(token.id);
                     fixedSaleData.prices.push(
-                      ethers.utils.parseUnits(token.price)
+                      ethers.utils.parseEther(token.price)
                     );
+                      console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 245 ~ ethers.utils.parseUnits(token.price)", ethers.utils.parseEther(token.price))
                     fixedSaleData.startTimes.push(startTime);
                     fixedSaleData.endTimes.push(endTime);
                     fixedSaleData.nftAddrs.push(nftAddr);
@@ -250,6 +251,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                       '🚀 ~ file: CompleteListingModal.jsx ~ line 249 ~ fixedSaleData',
                       fixedSaleData
                     );
+                    await sendFixedPriceToServer({ ...token, currency: currencies.find(({ name }) => name === token.currency) });
                     // TODO: add support for multiple tokens ERC721 permit
                     // const { offer, signature } = await offerClass.makeOffer(
                     //   account,
@@ -357,8 +359,11 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
   }) => {
     if (library) {
       await marketContract
-        .fixedSales(tokenIds, prices, startTimes, endTimes, nftAddrs)
+        .fixedSales(tokenIds, prices, startTimes, endTimes, nftAddrs, {
+          gasLimit: 50000,
+        })
         .then((result) => {
+          console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 364 ~ .then ~ result", result)
           if (result.status === true) {
             dispatch(
               openSuccess({
@@ -392,7 +397,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
   }) => {
     console.log(
       '🚀 ~ file: CompleteListingModal.jsx ~ line 180 ~ auctionSale ~ {tokenIds, prices, startTimes, endTimes, nftAddrs}',
-      { tokenIds, startPrices, endPrices, startTimes, endTimes, nftAddrs }
+      { tokenIds, startPrices, endPrices, startTimes, endTimes, nftAddrs}
     );
     if (library) {
       await marketContract
@@ -402,7 +407,8 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
           endPrices,
           startTimes,
           endTimes,
-          nftAddrs
+          nftAddrs,
+          { gasLimit: 50000 }
         )
         .then((recipt) => {
           if (recipt.status === true) {

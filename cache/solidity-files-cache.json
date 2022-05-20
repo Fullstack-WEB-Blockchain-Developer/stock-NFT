@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "D:\\TASK\\pstar\\interexy\\Stoke Frontend\\contracts\\StokeMarketPlace.sol": {
-      "lastModificationDate": 1652288968633,
-      "contentHash": "421b1796dbfb8192c31a6e01af22703e",
+      "lastModificationDate": 1652965339389,
+      "contentHash": "be3db0e8c4733b49b21bb89dbf355d97",
       "sourceName": "contracts/StokeMarketPlace.sol",
       "solcConfig": {
         "version": "0.8.8",
@@ -36,7 +36,8 @@
         "@openzeppelin/contracts/security/ReentrancyGuard.sol",
         "@openzeppelin/contracts/utils/Address.sol",
         "@openzeppelin/contracts/access/Ownable.sol",
-        "hardhat/console.sol"
+        "hardhat/console.sol",
+        "./StokeNFT.sol"
       ],
       "versionPragmas": [
         ">=0.7.0 <0.9.0"
@@ -528,8 +529,8 @@
       ]
     },
     "D:\\TASK\\pstar\\interexy\\Stoke Frontend\\contracts\\StokeNFT.sol": {
-      "lastModificationDate": 1652035043640,
-      "contentHash": "a640de585bdf06b746be4259f5e3a7a2",
+      "lastModificationDate": 1652965339390,
+      "contentHash": "9dbf7fbc586e68f93133eac72dcaeccf",
       "sourceName": "contracts/StokeNFT.sol",
       "solcConfig": {
         "version": "0.8.8",
@@ -557,8 +558,7 @@
       },
       "imports": [
         "@openzeppelin/contracts/utils/Counters.sol",
-        "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        "@openzeppelin/contracts/token/ERC721/ERC721.sol",
+        "@soliditylabs/erc721-permit/contracts/ERC721Permit.sol",
         "hardhat/console.sol"
       ],
       "versionPragmas": [
@@ -607,8 +607,8 @@
       ]
     },
     "D:\\TASK\\pstar\\interexy\\Stoke Frontend\\contracts\\WETH.sol": {
-      "lastModificationDate": 1652035049361,
-      "contentHash": "46afbca8cc6ad52d43a425f51492c50c",
+      "lastModificationDate": 1652968524147,
+      "contentHash": "e42e727e2492553aa4160a6024d5e7aa",
       "sourceName": "contracts/WETH.sol",
       "solcConfig": {
         "version": "0.5.16",
@@ -645,7 +645,7 @@
       ]
     },
     "D:\\TASK\\pstar\\interexy\\Stoke Frontend\\contracts\\StokeLazyMinting.sol": {
-      "lastModificationDate": 1652035311387,
+      "lastModificationDate": 1652965286825,
       "contentHash": "26642de4e440d7e1820d3b785dc39bf3",
       "sourceName": "contracts/StokeLazyMinting.sol",
       "solcConfig": {
@@ -877,6 +877,159 @@
       "artifacts": [
         "Ownable"
       ]
+    },
+    "D:\\TASK\\pstar\\interexy\\Stoke Frontend\\node_modules\\@soliditylabs\\erc721-permit\\contracts\\ERC721Permit.sol": {
+      "lastModificationDate": 1652684292610,
+      "contentHash": "2396ac778e935db25614a251571ba487",
+      "sourceName": "@soliditylabs/erc721-permit/contracts/ERC721Permit.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC721/ERC721.sol",
+        "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol",
+        "@openzeppelin/contracts/utils/cryptography/ECDSA.sol",
+        "@openzeppelin/contracts/interfaces/IERC1271.sol",
+        "@openzeppelin/contracts/utils/Counters.sol",
+        "./interfaces/IERC721Permit.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC721Permit"
+      ]
+    },
+    "D:\\TASK\\pstar\\interexy\\Stoke Frontend\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC1271.sol": {
+      "lastModificationDate": 1650983105563,
+      "contentHash": "8fe867b95c856b204f954a1910e28a1e",
+      "sourceName": "@openzeppelin/contracts/interfaces/IERC1271.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC1271"
+      ]
+    },
+    "D:\\TASK\\pstar\\interexy\\Stoke Frontend\\node_modules\\@soliditylabs\\erc721-permit\\contracts\\interfaces\\IERC721Permit.sol": {
+      "lastModificationDate": 1652684292615,
+      "contentHash": "fda8e0a84f9a7c772201e938b49126ac",
+      "sourceName": "@soliditylabs/erc721-permit/contracts/interfaces/IERC721Permit.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/interfaces/IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC721Permit"
+      ]
+    },
+    "D:\\TASK\\pstar\\interexy\\Stoke Frontend\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC165.sol": {
+      "lastModificationDate": 1650983105641,
+      "contentHash": "ee9624272968c23d93d4c2e39f06e6e2",
+      "sourceName": "@openzeppelin/contracts/interfaces/IERC165.sol",
+      "solcConfig": {
+        "version": "0.8.8",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/introspection/IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": []
     }
   }
 }

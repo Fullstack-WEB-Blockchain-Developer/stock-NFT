@@ -231,7 +231,7 @@ export const AcceptOfferModal = ({
     } else {
       const offer = offersData.find((offer) => offer.id == id);
       // const sender = offer.seller.publicAddress;
-      const wei = await tokenContract?.balanceOf(sender);
+      const wei = await tokenContract?.balanceOf(account);
       const balance = ethers.utils.formatUnits(wei);
       if (Number(balance) >= price) {
         const offerC = {
