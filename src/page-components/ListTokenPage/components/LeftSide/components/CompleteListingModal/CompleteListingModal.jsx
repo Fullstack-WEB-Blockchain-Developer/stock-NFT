@@ -363,20 +363,19 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
           gasLimit: 50000,
         })
         .then((result) => {
-          console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 364 ~ .then ~ result", result)
-          if (result.status === true) {
-            dispatch(
-              openSuccess({
-                title: 'Fixed sale has been created successfully.',
-              })
-            );
-          } else {
-            dispatch(
-              openError({
-                title: "Fixed sale hasn't been created.",
-              })
-            );
-          }
+          // if (result.wait() === true) {
+          //   dispatch(
+          //     openSuccess({
+          //       title: 'Fixed sale has been created successfully.',
+          //     })
+          //   );
+          // } else {
+          //   dispatch(
+          //     openError({
+          //       title: "Fixed sale hasn't been created.",
+          //     })
+          //   );
+          // }
         })
         .catch((err) => {
           console.log(
@@ -411,24 +410,24 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
           { gasLimit: 50000 }
         )
         .then((recipt) => {
-          if (recipt.status === true) {
-            // ffind?.set("auction", `${price}`)
-            // ffind?.set("days",   `${endday}`)
-            // ffind?.set("hr",   `${endhours}`)
-            // ffind?.set("min", "0")
-            // ffind?.save()
-            dispatch(
-              openSuccess({
-                title: 'Fixed sale has been created successfully.',
-              })
-            );
-          } else {
-            dispatch(
-              openError({
-                title: "Fixed sale hasn't been created.",
-              })
-            );
-          }
+          // if (recipt.status === true) {
+          //   // ffind?.set("auction", `${price}`)
+          //   // ffind?.set("days",   `${endday}`)
+          //   // ffind?.set("hr",   `${endhours}`)
+          //   // ffind?.set("min", "0")
+          //   // ffind?.save()
+          //   dispatch(
+          //     openSuccess({
+          //       title: 'Fixed sale has been created successfully.',
+          //     })
+          //   );
+          // } else {
+          //   dispatch(
+          //     openError({
+          //       title: "Fixed sale hasn't been created.",
+          //     })
+          //   );
+          // }
         })
         .catch((err) => {
           console.log(
