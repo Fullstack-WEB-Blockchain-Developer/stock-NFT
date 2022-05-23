@@ -9,17 +9,7 @@
     "lint": "next lint",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "stylelint": "stylelint \"**/*.@(scss|css)\" --fix",
-    "compile": "npx hardhat compile",
-    "clean": "npx hardhat clean",
-    "chain": "npx hardhat node",
-    "deploy": "npx hardhat run --network localhost scripts/marketPlaceDeploy.js",
-    "deploy:rinkeby": "npx hardhat run --network rinkeby scripts/marketPlaceDeploy.js",
-    "deploy:ropsten": "npx hardhat run --network ropsten scripts/marketPlaceDeploy.js",
-    "deploy:polygonMumbai": "npx hardhat run --network polygonMumbai scripts/marketPlaceDeploy.js",
-    "test": "npx hardhat test",
-    "verify:rinkeby": "npx hardhat verify --network rinkeby 0x39c527F51dfc6465FFb7287E5e011FF58D970340",
-    "verify:polygonMumbai": "npx hardhat verify --network polygonMumbai 0x4054e158C0D7B11c79176535F2Be96e9255c73C0"
+    "stylelint": "stylelint \"**/*.@(scss|css)\" --fix"
   },
   "dependencies": {
     "@coinbase/wallet-sdk": "^3.0.4",

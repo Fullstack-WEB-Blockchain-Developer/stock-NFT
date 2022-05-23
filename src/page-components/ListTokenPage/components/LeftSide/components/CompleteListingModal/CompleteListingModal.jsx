@@ -202,14 +202,14 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                   if (token.listingType === 'timeAuction') {
                     auctionSaleData.tokenIds.push(token.id);
                     auctionSaleData.minPrices.push(
-                      ethers.utils.parseUnits(token.auctionStartingPrice)
+                      ethers.utils.parseUnits(String(token.auctionStartingPrice))
                     );
                     if (token.auctionMethod === 'Sell to the highest bidder') {
                       auctionSaleData.methods.push(true);
                     } else {
                       auctionSaleData.methods.push(false);
                       auctionSaleData.maxPrices.push(
-                        ethers.utils.parseUnits(token.auctionEndPrice)
+                        ethers.utils.parseUnits(String(token.auctionEndPrice))
                       );
                     }
                     auctionSaleData.startTimes.push(startTime);
@@ -241,9 +241,8 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                   } else {
                     fixedSaleData.tokenIds.push(token.id);
                     fixedSaleData.prices.push(
-                      ethers.utils.parseEther(token.price)
+                      ethers.utils.parseEther(String(token.price))
                     );
-                      console.log("🚀 ~ file: CompleteListingModal.jsx ~ line 245 ~ ethers.utils.parseUnits(token.price)", ethers.utils.parseEther(token.price))
                     fixedSaleData.startTimes.push(startTime);
                     fixedSaleData.endTimes.push(endTime);
                     fixedSaleData.nftAddrs.push(nftAddr);

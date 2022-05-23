@@ -230,6 +230,7 @@ export const AcceptOfferModal = ({
       // })()
     } else {
       const offer = offersData.find((offer) => offer.id == id);
+      console.log("🚀 ~ file: AcceptOfferModal.jsx ~ line 233 ~ handleAccept ~ offer", offer)
       // const sender = offer.seller.publicAddress;
       const wei = await tokenContract?.balanceOf(account);
       const balance = ethers.utils.formatUnits(wei);
@@ -239,6 +240,7 @@ export const AcceptOfferModal = ({
           amount: ethers.utils.parseEther(String(price)),
           expiresAt: Math.floor(offer.expirationDateParsed / 1000),
         };
+        console.log("🚀 ~ file: AcceptOfferModal.jsx ~ line 239 ~ handleAccept ~ offerC", offerC)
         const tokenId = router.query.tokenId;
         const Token = {
           tokenId: Number(tokenId),
@@ -246,7 +248,15 @@ export const AcceptOfferModal = ({
         };
         const signData = ethers.utils.splitSignature(offer.blockchainHash);
         const { v, r, s } = signData;
-        await tokenContract.permit(offer.owner, offer.spender, offer.value, offer.deadline, v, r, s);
+        // await tokenContract.permit(
+        //   offerC.account,
+        //   tokenAddr,
+        //   offerC.amount,
+        //   offerC.expiresAt,
+        //   v,
+        //   r,
+        //   s
+        // );
         await marketContract.accept(offerC, tokenAddr, nftAddr, Token);
       } else {
         dispatch(openError("Offer's owner has not enough balance"));
