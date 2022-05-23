@@ -19,22 +19,37 @@ export const getServerSideProps = async ({ params }) => {
 
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
-  const { data } = await axios.get(`${process.env.BACKEND_URL}/nfts/${params.tokenId}`, {
-    httpsAgent,
-  });
+  const { data } = await axios.get(
+    `${process.env.BACKEND_URL}/nfts/${params.tokenId}`,
+    {
+      httpsAgent,
+    }
+  );
 
   const adaptPriceAndType = async (array, type) => {
     const newArray = Promise.all(
       array.map(
         async (elem) =>
           await getEtherPrice().then((result) => {
-            return { ...elem, usdPrice: `$${(elem.price * result).toFixed(3)}`, type };
+            return {
+              ...elem,
+              usdPrice: `$${(elem.price * result).toFixed(3)}`,
+              type,
+            };
           })
       )
     );
     return newArray;
   };
-  //const adaptedListings = await adaptPriceAndType(data.listings, 'Listings');
+  const adaptedFixedPrice = await adaptPriceAndType(
+    data.fixedPriceListings,
+    'Listings'
+  );
+  const adaptedTimeAuction = await adaptPriceAndType(
+    data.timeAuctionListings,
+    'Listings'
+  );
+
   const adaptedOffers = await adaptPriceAndType(data.offers, 'Offers');
 
   return {
@@ -45,7 +60,7 @@ export const getServerSideProps = async ({ params }) => {
       collectionName: data.collection?.name || null,
       offers: adaptedOffers,
       user: data.owner,
-      //listings: adaptedListings
+      listings: adaptedFixedPrice.concat(adaptedTimeAuction)
     },
   };
 };
