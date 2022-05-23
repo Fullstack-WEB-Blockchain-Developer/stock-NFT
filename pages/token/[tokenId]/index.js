@@ -19,16 +19,23 @@ export const getServerSideProps = async ({ params }) => {
 
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
-  const { data } = await axios.get(`${process.env.BACKEND_URL}/nfts/${params.tokenId}`, {
-    httpsAgent,
-  });
+  const { data } = await axios.get(
+    `${process.env.BACKEND_URL}/nfts/${params.tokenId}`,
+    {
+      httpsAgent,
+    }
+  );
 
   const adaptPriceAndType = async (array, type) => {
     const newArray = Promise.all(
       array.map(
         async (elem) =>
           await getEtherPrice().then((result) => {
-            return { ...elem, usdPrice: `$${(elem.price * result).toFixed(2)}`, type };
+            return {
+              ...elem,
+              usdPrice: `$${(elem.price * result).toFixed(2)}`,
+              type,
+            };
           })
       )
     );
@@ -36,9 +43,18 @@ export const getServerSideProps = async ({ params }) => {
   };
 
   const adaptedOffers = await adaptPriceAndType(data.offers, 'Offers');
-  const adatpedFixedPriceListings = await adaptPriceAndType(data.fixedPriceListings, 'Listings');
-  const adaptedTimeAuctionListings = await adaptPriceAndType(data.timeAuctionListings, 'Listings');
-  const adaptedAllListings = [...adatpedFixedPriceListings, ...adaptedTimeAuctionListings];
+  const adatpedFixedPriceListings = await adaptPriceAndType(
+    data.fixedPriceListings,
+    'Listings'
+  );
+  const adaptedTimeAuctionListings = await adaptPriceAndType(
+    data.timeAuctionListings,
+    'Listings'
+  );
+  const adaptedAllListings = [
+    ...adatpedFixedPriceListings,
+    ...adaptedTimeAuctionListings,
+  ];
 
   return {
     props: {

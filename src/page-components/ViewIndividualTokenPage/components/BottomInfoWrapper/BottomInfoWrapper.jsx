@@ -24,7 +24,11 @@ export const BottomInfoWrapper = ({ activity }) => {
     const newArray = [...initial].map((elem) => {
       return {
         ...elem,
+<<<<<<< HEAD
         date: getDateAgo(elem.endDate || elem.updatedAt),
+=======
+        date: getDateAgo(elem?.updatedAt),
+>>>>>>> fb1a31ae1ba79743cdbc4cef42ab06260773eb70
       };
     });
 
