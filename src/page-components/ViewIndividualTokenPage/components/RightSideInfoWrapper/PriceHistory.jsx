@@ -12,7 +12,8 @@ import { Select, MenuItem } from '@mui/material';
 //hooks
 import { useStyles } from '../../../../hooks/useStyles';
 //utils
-import { priceHistorySelectOptions, adaptChartData, getInterval } from './RightSideInfoWrapper.utils';
+import { priceHistorySelectOptions, adaptChartData } from './RightSideInfoWrapper.utils';
+import { getInterval } from 'src/page-components/ProfilePage/components/Chart/Chart.utils';
 //styles
 import styles from './RightSideInfoWrapper.module.css';
 

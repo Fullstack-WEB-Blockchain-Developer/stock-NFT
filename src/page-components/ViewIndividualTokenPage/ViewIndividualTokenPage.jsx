@@ -18,7 +18,7 @@ import { SuccessfulOrderModal } from '../../modals/SuccessfulOrderModal/Successf
 import { Oval } from 'react-loader-spinner';
 //utils
 import { videos, audios, images } from '../../helpers/extentions';
-import { fakeLikes, fakeListing, fakePrice } from './ViewIndividualToken.utils';
+import { fakeLikes, fakePrice } from './ViewIndividualToken.utils';
 //styles
 import styles from './ViewIndividualTokenPage.module.css';
 
@@ -44,6 +44,7 @@ export const ViewIndividualTokenPage = ({
   fileName,
   id,
   levels,
+  listings,
   name,
   offers,
   properties,
@@ -636,7 +637,7 @@ export const ViewIndividualTokenPage = ({
           </div>
         </div>
         <div className={styles.bottomSection}>
-          <BottomInfoWrapper activity={offers.concat(fakeListing)} />
+          <BottomInfoWrapper activity={offers.concat([])} />
         </div>
         <SuccessfulOrderModal />
       </div>

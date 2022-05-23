@@ -34,7 +34,7 @@ export const getServerSideProps = async ({ params }) => {
     );
     return newArray;
   };
-
+  //const adaptedListings = await adaptPriceAndType(data.listings, 'Listings');
   const adaptedOffers = await adaptPriceAndType(data.offers, 'Offers');
 
   return {
@@ -45,6 +45,7 @@ export const getServerSideProps = async ({ params }) => {
       collectionName: data.collection?.name || null,
       offers: adaptedOffers,
       user: data.owner,
+      //listings: adaptedListings
     },
   };
 };

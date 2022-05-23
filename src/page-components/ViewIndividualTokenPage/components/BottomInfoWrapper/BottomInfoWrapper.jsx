@@ -25,7 +25,7 @@ export const BottomInfoWrapper = ({ activity }) => {
     const newArray = [...initial].map((elem) => {
       return {
         ...elem,
-        date: getDateAgo(elem.updatedAt),
+        date: getDateAgo(elem?.updatedAt),
       };
     });
 

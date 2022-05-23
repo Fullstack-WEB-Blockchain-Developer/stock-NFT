@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="27" viewBox="0 0 30 15">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Прямоугольник_125" data-name="Прямоугольник 125" width="30" height="15" transform="translate(0)" fill="var(--primary)"/>
+    </clipPath>
+  </defs>
+  <g id="Группа_масок_5" data-name="Группа масок 5" transform="translate(0)" clip-path="url(#clip-path)">
+    <path id="Icon_awesome-chevron-circle-down" data-name="Icon awesome-chevron-circle-down" d="M505.263,902.142l9.77-10.38a1.912,1.912,0,0,0,0-2.6l-1.225-1.3a1.653,1.653,0,0,0-2.444,0l-7.325,7.783-7.327-7.785a1.652,1.652,0,0,0-2.444,0l-1.232,1.3a1.912,1.912,0,0,0,0,2.6l9.769,10.38a1.661,1.661,0,0,0,2.458,0Z" transform="translate(-488.802 -887.685)" fill="var(--primary)"/>
+  </g>
+</svg>
