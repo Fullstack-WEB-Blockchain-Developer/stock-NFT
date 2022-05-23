@@ -638,7 +638,7 @@ export const ViewIndividualTokenPage = ({
                 </div>
               </div>
             </div>
-            {bundle.length > 0 && (
+            {bundle && bundle.length > 0 && (
               <div className={styles.bundlesWrapper}>
                 {bundle.map(({ fileName, id, coverName, name }) => (
                   <>

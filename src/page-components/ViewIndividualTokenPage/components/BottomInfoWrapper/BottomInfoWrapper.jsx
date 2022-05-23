@@ -24,11 +24,7 @@ export const BottomInfoWrapper = ({ activity }) => {
     const newArray = [...initial].map((elem) => {
       return {
         ...elem,
-<<<<<<< HEAD
         date: getDateAgo(elem.endDate || elem.updatedAt),
-=======
-        date: getDateAgo(elem?.updatedAt),
->>>>>>> fb1a31ae1ba79743cdbc4cef42ab06260773eb70
       };
     });
 
@@ -37,7 +33,9 @@ export const BottomInfoWrapper = ({ activity }) => {
 
   useEffect(() => {
     const adapted = adapterFunction(activity).sort(
-      (prev, curr) => Date.parse(new Date(prev.updatedAt)) - Date.parse(new Date(curr.updatedAt))
+      (prev, curr) =>
+        Date.parse(new Date(prev.updatedAt)) -
+        Date.parse(new Date(curr.updatedAt))
     );
     setActivityData([...adapted]);
   }, [activity]);
@@ -45,7 +43,12 @@ export const BottomInfoWrapper = ({ activity }) => {
   return (
     <div className={styles.box}>
       <div className={styles.sectionHeader}>
-        <Image src="/view-token/Icon-Activity.svg" height={19} width={19} alt="description" />
+        <Image
+          src="/view-token/Icon-Activity.svg"
+          height={19}
+          width={19}
+          alt="description"
+        />
         <div>
           <span>Item Activity</span>
           {isActivityOpened ? (
@@ -84,8 +87,19 @@ export const BottomInfoWrapper = ({ activity }) => {
                 height: '49px',
               }}
               IconComponent={() => (
-                <div style={{ right: '16px', position: 'absolute', pointerEvents: 'none' }}>
-                  <Image src="/view-token/Icon-ArrowDown.svg" height={8} width={16} alt="arrow-up" />
+                <div
+                  style={{
+                    right: '16px',
+                    position: 'absolute',
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <Image
+                    src="/view-token/Icon-ArrowDown.svg"
+                    height={8}
+                    width={16}
+                    alt="arrow-up"
+                  />
                 </div>
               )}
               value={selectedFilter}
@@ -110,7 +124,13 @@ export const BottomInfoWrapper = ({ activity }) => {
             <div className={styles.maxWidth150}>
               <span>Event</span>
             </div>
-            <div className={cn(styles.maxWidth150, styles.marginRight10percent, styles.justufyRight)}>
+            <div
+              className={cn(
+                styles.maxWidth150,
+                styles.marginRight10percent,
+                styles.justufyRight
+              )}
+            >
               <span>Price</span>
             </div>
             <div>
@@ -126,40 +146,71 @@ export const BottomInfoWrapper = ({ activity }) => {
               [styles.closed]: !isActivityOpened,
             })}
           >
-            {activityData.map(({ type, buyer, seller, price, usdPrice, date, id }) => (
-              <div key={id} className={styles.tableRow}>
-                <div className={cn(styles.activityEvent, styles.maxWidth150)}>
-                  {<Image src="/view-token/Icon-Offers.svg" height={19} width={19} alt="eth-icon" />}
-                  <span className={styles.marginLeft12}>{type}</span>
+            {activityData.map(
+              ({ type, buyer, seller, price, usdPrice, date, id }) => (
+                <div key={id} className={styles.tableRow}>
+                  <div className={cn(styles.activityEvent, styles.maxWidth150)}>
+                    {
+                      <Image
+                        src="/view-token/Icon-Offers.svg"
+                        height={19}
+                        width={19}
+                        alt="eth-icon"
+                      />
+                    }
+                    <span className={styles.marginLeft12}>{type}</span>
+                  </div>
+                  <div
+                    className={cn(
+                      styles.column,
+                      styles.maxWidth150,
+                      styles.marginRight10percent,
+                      styles.alignRight
+                    )}
+                  >
+                    <span className={styles.priceText}>
+                      <Image
+                        src="/view-token/Icon-Weth.svg"
+                        height={19}
+                        width={19}
+                        alt="eth-icon"
+                      />
+                      <span
+                        className={cn(styles.marginLeft4, styles.marginBottom4)}
+                      >
+                        {price}
+                      </span>
+                    </span>
+                    <span className={styles.greySmallText}>{usdPrice}</span>
+                  </div>
+                  <div>
+                    <span className={styles.link}>
+                      {buyer.username ||
+                        `${buyer.publicAddress.substring(
+                          0,
+                          6
+                        )}...${buyer.publicAddress.substring(
+                          buyer.publicAddress.length - 6
+                        )}`}
+                    </span>
+                  </div>
+                  <div>
+                    <span className={styles.link}>
+                      {seller.username ||
+                        `${seller.publicAddress.substring(
+                          0,
+                          6
+                        )}...${seller.publicAddress.substring(
+                          seller.publicAddress.length - 6
+                        )}`}
+                    </span>
+                  </div>
+                  <div className={styles.maxWidth150}>
+                    <span className={styles.activityDateText}>{date}</span>
+                  </div>
                 </div>
-                <div className={cn(styles.column, styles.maxWidth150, styles.marginRight10percent, styles.alignRight)}>
-                  <span className={styles.priceText}>
-                    <Image src="/view-token/Icon-Weth.svg" height={19} width={19} alt="eth-icon" />
-                    <span className={cn(styles.marginLeft4, styles.marginBottom4)}>{price}</span>
-                  </span>
-                  <span className={styles.greySmallText}>{usdPrice}</span>
-                </div>
-                <div>
-                  <span className={styles.link}>
-                    {buyer.username ||
-                      `${buyer.publicAddress.substring(0, 6)}...${buyer.publicAddress.substring(
-                        buyer.publicAddress.length - 6
-                      )}`}
-                  </span>
-                </div>
-                <div>
-                  <span className={styles.link}>
-                    {seller.username ||
-                      `${seller.publicAddress.substring(0, 6)}...${seller.publicAddress.substring(
-                        seller.publicAddress.length - 6
-                      )}`}
-                  </span>
-                </div>
-                <div className={styles.maxWidth150}>
-                  <span className={styles.activityDateText}>{date}</span>
-                </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
         </>
       ) : (
