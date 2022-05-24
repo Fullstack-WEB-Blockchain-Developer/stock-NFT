@@ -48,6 +48,7 @@ a {
 
 .slick-dots li button:before:hover {
   color: #617bff !important;
+ 
 }
 
 .slick-dots {
@@ -55,6 +56,10 @@ a {
   bottom: 5px !important;
   right: 0 !important;
   position: absolute !important;
+}
+
+.magic-dots.slick-dots ul li {
+  margin: 0;
 }
 
 :root {

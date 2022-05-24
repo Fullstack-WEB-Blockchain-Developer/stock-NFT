@@ -11,6 +11,6 @@ export const settings = {
   arrows: false,
   centerMode: false,
   appendDots: (dots) => (
-    <MagicSliderDots dots={dots} numDotsToShow={5} dotWidth={20} />
+    <MagicSliderDots dots={dots} numDotsToShow={3} dotWidth={20} />
   ),
 };

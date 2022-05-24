@@ -19,6 +19,8 @@ export const fakeBundle = [
     levels: null,
     name: 'Name',
     nftMediaLink: null,
+    collection: {name: 'collection'},
+    status: 'pending'
   },
   {
     coverName: 'aae0e1d7-b303-4ba4-94c3-bfa36bbbb30f.png',
@@ -33,6 +35,8 @@ export const fakeBundle = [
     levels: null,
     name: 'Name',
     nftMediaLink: null,
+    collection: {name: 'collection'},
+    status: 'pending'
   },
   {
     coverName: null,
@@ -47,6 +51,8 @@ export const fakeBundle = [
     levels: null,
     name: 'Name',
     nftMediaLink: null,
+    collection: {name: 'collection'},
+    status: 'pending'
   },
   {
     coverName: null,
@@ -61,6 +67,8 @@ export const fakeBundle = [
     levels: null,
     name: 'Name',
     nftMediaLink: null,
+    collection: {name: 'collection'},
+    status: 'pending'
   },
   {
     coverName: null,
@@ -75,6 +83,8 @@ export const fakeBundle = [
     levels: null,
     name: 'Name',
     nftMediaLink: null,
+    collection: {name: 'collection'},
+    status: 'pending'
   },
   {
     coverName: 'aae0e1d7-b303-4ba4-94c3-bfa36bbbb30f.png',
@@ -89,6 +99,8 @@ export const fakeBundle = [
     levels: null,
     name: 'Name',
     nftMediaLink: null,
+    collection: {name: 'collection'},
+    status: 'pending'
   },
   {
     coverName: null,
@@ -103,6 +115,8 @@ export const fakeBundle = [
     levels: null,
     name: 'Name',
     nftMediaLink: null,
+    collection: {name: 'collection'},
+    status: 'pending'
   },
   {
     coverName: null,
@@ -117,6 +131,8 @@ export const fakeBundle = [
     levels: null,
     name: 'Name',
     nftMediaLink: null,
+    collection: {name: 'collection'},
+    status: 'pending'
   },
   {
     coverName: null,
@@ -131,6 +147,8 @@ export const fakeBundle = [
     levels: null,
     name: 'Name',
     nftMediaLink: null,
+    collection: {name: 'collection'},
+    status: 'pending'
   },
   {
     coverName: 'aae0e1d7-b303-4ba4-94c3-bfa36bbbb30f.png',
@@ -145,6 +163,8 @@ export const fakeBundle = [
     levels: null,
     name: 'Name',
     nftMediaLink: null,
+    collection: {name: 'collection'},
+    status: 'pending'
   },
   {
     coverName: null,
@@ -159,6 +179,8 @@ export const fakeBundle = [
     levels: null,
     name: 'Name',
     nftMediaLink: null,
+    collection: {name: 'collection'},
+    status: 'pending'
   },
   {
     coverName: null,
@@ -173,5 +195,7 @@ export const fakeBundle = [
     levels: null,
     name: 'Name',
     nftMediaLink: null,
+    collection: {name: 'collection'},
+    status: 'pending'
   },
 ];

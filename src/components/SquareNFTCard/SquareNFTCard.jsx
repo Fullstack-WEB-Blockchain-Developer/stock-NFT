@@ -6,6 +6,9 @@ import { useRouter } from 'next/router';
 import cn from 'classnames';
 //spinner
 import { Oval } from 'react-loader-spinner';
+//slider
+import Slider from 'react-slick';
+import { settings } from './SquareNFTCard.utils';
 //components
 import { Tag } from '../Tag/Tag';
 //utils
@@ -15,8 +18,6 @@ import styles from './SquareNFTCard.module.scss';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { fakeBundle } from 'src/page-components/ViewIndividualTokenPage/ViewIndividualToken.utils';
-import Slider from 'react-slick';
-import { settings } from './SquareNFTCard.utils';
 
 export const SquareNFTCard = ({
   bundle = fakeBundle,
@@ -132,7 +133,12 @@ export const SquareNFTCard = ({
               )}
             </div>
           </div>
-          <div className={styles.infoWrapper}>
+          <div
+            className={styles.infoWrapper}
+            style={{
+              justifyContent: price ? 'space-between' : 'space-evenly',
+            }}
+          >
             <div className={styles.name}>
               <span>{name}</span>
             </div>
@@ -186,7 +192,7 @@ export const SquareNFTCard = ({
                 <div className={styles.imageWrapperWrapper}>
                   <div
                     className={cn(styles.imageWrapper, {
-                      [styles.blur]: status === 'pending',
+                      [styles.blur]: elem.status === 'pending',
                     })}
                   >
                     {isLoading && (
@@ -209,7 +215,7 @@ export const SquareNFTCard = ({
                       <>
                         {images.includes(
                           elem.fileName
-                            ?.substring(fileName.indexOf('.') + 1)
+                            ?.substring(elem.fileName.indexOf('.') + 1)
                             .toLowerCase()
                         ) && (
                           <>
@@ -226,7 +232,7 @@ export const SquareNFTCard = ({
                         )}
                         {videos.includes(
                           elem.fileName
-                            ?.substring(fileName.indexOf('.') + 1)
+                            ?.substring(elem.fileName.indexOf('.') + 1)
                             .toLowerCase()
                         ) && (
                           <video
@@ -264,21 +270,21 @@ export const SquareNFTCard = ({
                 </div>
                 <div className={styles.infoWrapper}>
                   <div className={styles.name}>
-                    <span>{name}</span>
+                    <span>{elem.name}</span>
                   </div>
-                  {price && blockchainType?.icon ? (
+                  {elem.price && elem.blockchainType?.icon ? (
                     <div className={styles.price}>
                       <div className={styles.priceAmount}>
                         <Image
-                          src={blockchainType.icon}
+                          src={elem.blockchainType.icon}
                           loader={({ src }) =>
                             `${process.env.BACKEND_ASSETS_URL}/icons/${src}`
                           }
-                          alt={blockchainType.name}
+                          alt={elem.blockchainType.name}
                           width={19}
                           height={19}
                         />
-                        <span>{price}</span>
+                        <span>{elem.price}</span>
                       </div>
                     </div>
                   ) : (
@@ -287,17 +293,17 @@ export const SquareNFTCard = ({
                   <div className={styles.bottomSection}>
                     <div className={styles.bottomLeft}>
                       <div className={styles.collection}>
-                        <span>{collection?.name}</span>
+                        <span>{elem.collection?.name}</span>
                       </div>
                       <div className={styles.address}>
-                        {owner?.publicAddress.substring(0, 6)}...
-                        {owner?.publicAddress.substring(
-                          owner.publicAddress.length - 6
+                        {elem.owner?.publicAddress.substring(0, 6)}...
+                        {elem.owner?.publicAddress.substring(
+                          elem.owner.publicAddress.length - 6
                         )}
                       </div>
                     </div>
                     <div className={styles.bottomRight}>
-                      <Tag text={status === 'pending' ? status : category} />
+                      <Tag text={status === 'pending' ? elem.status : elem.category} />
                     </div>
                   </div>
                 </div>
