@@ -195,8 +195,8 @@ export const MakeOfferModal = ({ isOpened, handleClose, tokenNetwork }) => {
       const { offer, signature } = await offerClass.makeOffer(
         account,
         stokeMarketAddr,
-        ethers.utils.parseUnits(modalData.amount, 'ether'),
-        // String(modalData.amount * 10 ** 18),
+        // ethers.utils.parseUnits(modalData.amount, 'ether'),
+        String(modalData.amount * 10 ** 18),
         ethers.utils.formatUnits(nonce) * 10 ** 18,
         Date.parse(new Date(expirationDate)) /1000
         );
