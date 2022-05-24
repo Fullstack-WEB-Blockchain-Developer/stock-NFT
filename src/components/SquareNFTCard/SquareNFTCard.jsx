@@ -17,10 +17,9 @@ import { videos, audios, images } from '../../helpers/extentions';
 import styles from './SquareNFTCard.module.scss';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { fakeBundle } from 'src/page-components/ViewIndividualTokenPage/ViewIndividualToken.utils';
 
 export const SquareNFTCard = ({
-  bundle = fakeBundle,
+  bundle,
   category,
   className,
   collection,
@@ -66,7 +65,10 @@ export const SquareNFTCard = ({
     <div className={cn(className, styles.wrapper)}>
       {!bundle || bundle.length === 0 ? (
         <>
-          <div className={styles.imageWrapperWrapper}>
+          <div
+            className={styles.imageWrapperWrapper}
+            onClick={() => router.push(`/token/${id}`)}
+          >
             <div
               className={cn(styles.imageWrapper, {
                 [styles.blur]: status === 'pending',
@@ -189,7 +191,10 @@ export const SquareNFTCard = ({
           >
             {bundle.map((elem) => (
               <>
-                <div className={styles.imageWrapperWrapper}>
+                <div
+                  className={styles.imageWrapperWrapper}
+                  onClick={() => router.push(`/token/${id}`)}
+                >
                   <div
                     className={cn(styles.imageWrapper, {
                       [styles.blur]: elem.status === 'pending',

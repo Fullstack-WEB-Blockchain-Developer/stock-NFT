@@ -38,7 +38,7 @@ const pol_nftAddr = process.env.POL_NFT;
 export const ViewIndividualTokenPage = ({
   about,
   blockchainName,
-  bundle = fakeBundle,
+  bundle,
   collectionName,
   coverName,
   description,
@@ -453,6 +453,8 @@ export const ViewIndividualTokenPage = ({
   // }
 
   const handleChooseTokenInBundle = (fileName, coverName) => {
+    console.log('---fileName', fileName);
+    console.log('---coverName', coverName);
     setTokenFileLink(`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`);
     const end = fileName.substring(fileName.indexOf('.') + 1).toLowerCase();
     if (images.includes(end)) {
@@ -606,23 +608,33 @@ export const ViewIndividualTokenPage = ({
                   )}
                   {typeOfTokenFile === 'audio' && (
                     <>
-                      <Image
-                        src={coverName}
-                        loader={tokenImageLoader}
-                        alt="cover-image"
-                        objectFit="contain"
-                        layout="responsive"
-                        width="100%"
-                        height={`${ratio}%`}
-                        onError={() =>
-                          handleError('404 Token file is not found', () =>
-                            setImageErrors({ ...imageErrors, tokenImage: true })
-                          )
-                        }
-                        onLoadingComplete={({ naturalWidth, naturalHeight }) =>
-                          handleLoadImage(naturalWidth, naturalHeight)
-                        }
-                      />
+                      {imageErrors.tokenImage ? (
+                        <div className={styles.emptySection}>
+                          <span>No file</span>
+                        </div>
+                      ) : (
+                        <Image
+                          src={tokenCoverName}
+                          loader={tokenImageLoader}
+                          alt="cover-image"
+                          objectFit="contain"
+                          layout="responsive"
+                          width="100%"
+                          height={`${ratio}%`}
+                          onError={() =>
+                            handleError('404 Token file is not found', () =>
+                              setImageErrors({
+                                ...imageErrors,
+                                tokenImage: true,
+                              })
+                            )
+                          }
+                          onLoadingComplete={({
+                            naturalWidth,
+                            naturalHeight,
+                          }) => handleLoadImage(naturalWidth, naturalHeight)}
+                        />
+                      )}
                       <div className={styles.audioContainer}>
                         <audio
                           src={tokenFileLink}
@@ -639,17 +651,18 @@ export const ViewIndividualTokenPage = ({
               </div>
             </div>
             {bundle && bundle.length > 0 && (
-              <div className={styles.bundlesWrapper}>
+              <div className={styles.bundleWrapper}>
                 {bundle.map(({ fileName, id, coverName, name }) => (
-                  <>
+                  <div className={styles.bundleItemPreview} key={id}>
                     {images
                       .concat(audios)
                       .includes(
-                        fileName.toLowerCase().substring(fileName.indexOf('.'))
+                        fileName
+                          .toLowerCase()
+                          .substring(fileName.indexOf('.') + 1)
                       ) ? (
                       <Image
                         alt={name}
-                        key={id}
                         layout="fill"
                         loader={({ src }) =>
                           `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`
@@ -658,7 +671,7 @@ export const ViewIndividualTokenPage = ({
                           images.includes(
                             fileName
                               .toLowerCase()
-                              .substring(fileName.indexOf('.'))
+                              .substring(fileName.indexOf('.') + 1)
                           )
                             ? fileName
                             : coverName
@@ -672,12 +685,14 @@ export const ViewIndividualTokenPage = ({
                       <video
                         alt="token-video"
                         className={styles.video}
-                        controls="controls"
                         objectFit="cover"
                         src={tokenFileLink}
+                        onClick={() => {
+                          handleChooseTokenInBundle(fileName, coverName);
+                        }}
                       />
                     )}
-                  </>
+                  </div>
                 ))}
               </div>
             )}

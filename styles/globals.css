@@ -15,16 +15,16 @@ body span::-webkit-scrollbar-track {
 }
 body div::-webkit-scrollbar,
 body span::-webkit-scrollbar {
-  width: 6px;
+  width: 0;
 }
 body div::-webkit-scrollbar-thumb,
 body span::-webkit-scrollbar-thumb {
   border-radius: 4px;
-  background: #f0f2f5;
+  background: #898d96;
 }
 body div:hover::-webkit-scrollbar-thumb,
 body span:hover::-webkit-scrollbar-thumb {
-  background: #6a7d9b;
+  background: #898d96;
 }
 
 a {

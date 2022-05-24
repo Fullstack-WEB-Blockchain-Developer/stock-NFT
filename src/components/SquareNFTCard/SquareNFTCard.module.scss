@@ -6,7 +6,6 @@
 
 	width: 100%;
 
-	cursor: pointer;
 	transition: transform 0.1s;
 
 	border: 1px solid var(--white);
@@ -24,6 +23,7 @@
 
 .imageWrapperWrapper {
 	overflow: hidden;
+	cursor: pointer;
 
 	width: 100%;
 	aspect-ratio: 1 / 0.61;

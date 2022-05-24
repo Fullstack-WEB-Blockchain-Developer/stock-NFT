@@ -8,8 +8,6 @@ import cn from 'classnames';
 import { Oval } from 'react-loader-spinner';
 //components
 import { Tag } from '../Tag/Tag';
-import { AmountWithIcon } from '../AmountWithIcon/AmountWithIcon';
-import { AmountDifference } from '../AmountDifference/AmountDifference';
 //slider
 import Slider from 'react-slick';
 import { settings } from './SmallNFTCard.utils';
@@ -17,10 +15,9 @@ import { settings } from './SmallNFTCard.utils';
 import { videos, audios, images } from '../../helpers/extentions';
 //styles
 import styles from './SmallNFTCard.module.scss';
-import { fakeBundle } from 'src/page-components/ViewIndividualTokenPage/ViewIndividualToken.utils';
 
 export const SmallNFTCard = ({
-  bundle = fakeBundle,
+  bundle,
   blockchainType,
   category,
   collection,
@@ -57,17 +54,20 @@ export const SmallNFTCard = ({
 
   const imageLoader = ({ src }) =>
     `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
-  console.log('---bundle', bundle);
+
   const videoRef = useRef();
   const audioRef = useRef();
-  // onClick={() => router.push(`/token/${id}`)}
+
   return (
     <div className={styles.wrapper}>
       {
         <>
           {!bundle || bundle.length === 0 ? (
             <>
-              <div className={styles.imageWrapperWrapper}>
+              <div
+                className={styles.imageWrapperWrapper}
+                onClick={() => router.push(`/token/${id}`)}
+              >
                 <div
                   className={cn(styles.imageWrapper, {
                     [styles.blur]:
@@ -186,7 +186,10 @@ export const SmallNFTCard = ({
               >
                 {bundle.map((elem) => (
                   <>
-                    <div className={styles.imageWrapperWrapper}>
+                    <div
+                      className={styles.imageWrapperWrapper}
+                      onClick={() => router.push(`/token/${id}`)}
+                    >
                       <div
                         className={cn(styles.imageWrapper, {
                           [styles.blur]: elem.status === 'pending',
