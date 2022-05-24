@@ -18,7 +18,7 @@ import { SuccessfulOrderModal } from '../../modals/SuccessfulOrderModal/Successf
 import { Oval } from 'react-loader-spinner';
 //utils
 import { videos, audios, images } from '../../helpers/extentions';
-import { fakeLikes, fakePrice } from './ViewIndividualToken.utils';
+import { fakeBundle, fakeLikes, fakePrice } from './ViewIndividualToken.utils';
 //styles
 import styles from './ViewIndividualTokenPage.module.css';
 
@@ -38,7 +38,7 @@ const pol_nftAddr = process.env.POL_NFT;
 export const ViewIndividualTokenPage = ({
   about,
   blockchainName,
-  bundle,
+  bundle = fakeBundle,
   collectionName,
   coverName,
   description,
@@ -607,7 +607,7 @@ export const ViewIndividualTokenPage = ({
                   {typeOfTokenFile === 'audio' && (
                     <>
                       <Image
-                        src={tokenCoverName}
+                        src={coverName}
                         loader={tokenImageLoader}
                         alt="cover-image"
                         objectFit="contain"

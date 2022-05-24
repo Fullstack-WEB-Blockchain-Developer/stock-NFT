@@ -1,32 +1,70 @@
 html,
 body {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 
-	background-color: black;
+  background-color: black;
 
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-		Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+body div::-webkit-scrollbar-track,
+body span::-webkit-scrollbar-track {
+  border-radius: 4px;
+}
+body div::-webkit-scrollbar,
+body span::-webkit-scrollbar {
+  width: 6px;
+}
+body div::-webkit-scrollbar-thumb,
+body span::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: #f0f2f5;
+}
+body div:hover::-webkit-scrollbar-thumb,
+body span:hover::-webkit-scrollbar-thumb {
+  background: #6a7d9b;
 }
 
 a {
-	text-decoration: none;
+  text-decoration: none;
 
-	color: inherit;
+  color: inherit;
 }
 
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.magic-dots.slick-dots li.slick-active button:before {
+  color: #617bff !important;
+}
+
+.slick-dots li button:before {
+  color: #898d96 !important;
+  opacity: 1 !important;
+}
+
+.slick-dots li button:before:hover {
+  color: #617bff !important;
+}
+
+.slick-dots {
+  margin: 0 6% 0 auto !important;
+  bottom: 5px !important;
+  right: 0 !important;
+  position: absolute !important;
 }
 
 :root {
-	--primary: #617BFF;
-	--dark-grey: #282829;
-	--light-grey: #898D96;
-	--white:#FFF;
-	--black: #000;
-	--azur: #00EAF4;
-	--red: #FF3856;
-	--purple: #FC3AAA;
-	--shadow: #FFFFFF4D;
+  --primary: #617bff;
+  --dark-grey: #282829;
+  --light-grey: #898d96;
+  --white: #fff;
+  --black: #000;
+  --azur: #00eaf4;
+  --red: #ff3856;
+  --purple: #fc3aaa;
+  --shadow: #ffffff4d;
 }

@@ -81,7 +81,6 @@ export const Header = () => {
         );
     }
   };
-
   useEffect(() => {
     !error && fetchUserData();
   }, [isAuthorized]);
@@ -91,6 +90,7 @@ export const Header = () => {
   );
   const avatar = useSelector((state) => state.userData.imageUrl);
   const username = useSelector((state) => state.userData.username);
+  console.log('---avatar', avatar)
   const openProfilePopup = () => {
     dispatch(openProfilePopupReducer());
   };
@@ -150,13 +150,23 @@ export const Header = () => {
                 isAuthorized ? styles.authorisedIcon : styles.profileIcon
               }
             >
-              <Image
-                src={isAuthorized ? avatar : '/profile-icon.svg'}
-                loader={({src}) => src}
-                objectFit="cover"
-                alt="profileImage"
-                layout="fill"
-              />
+              {isAuthorized && avatar ? (
+                <Image
+                  src={avatar}
+                  loader={({ src }) => src}
+                  objectFit="cover"
+                  alt="profileImage"
+                  layout="fill"
+                />
+              ) : (
+                <Image
+                  src="/profile-icon.png"
+                  loader={({ src }) => src}
+                  objectFit="cover"
+                  alt="profileImage"
+                  layout="fill"
+                />
+              )}
             </div>
             <div className={styles.profileText}>
               {isAuthorized

@@ -12,8 +12,14 @@ import { Tag } from '../Tag/Tag';
 import { videos, audios, images } from '../../helpers/extentions';
 //styles
 import styles from './SquareNFTCard.module.scss';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { fakeBundle } from 'src/page-components/ViewIndividualTokenPage/ViewIndividualToken.utils';
+import Slider from 'react-slick';
+import { settings } from './SquareNFTCard.utils';
 
 export const SquareNFTCard = ({
+  bundle = fakeBundle,
   category,
   className,
   collection,
@@ -49,115 +55,259 @@ export const SquareNFTCard = ({
     }
   }, [typeOfTokenFile]);
 
-  const imageLoader = ({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
+  const imageLoader = ({ src }) =>
+    `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`;
 
   const videoRef = useRef();
   const audioRef = useRef();
 
   return (
-    <div className={cn(className, styles.wrapper)} onClick={() => router.push(`/token/${id}`)}>
-      <div className={styles.imageWrapperWrapper}>
-        <div
-          className={cn(styles.imageWrapper, {
-            [styles.blur]: status === 'pending' && typeOfTokenFile !== 'audio',
-          })}
-        >
-          {isLoading && (
-            <div className={styles.spinner}>
-              <Oval
-                ariaLabel="loading-indicator"
-                color="var(--black)"
-                height={70}
-                secondaryColor="var(--light-grey)"
-                strokeWidth={3}
-                width={70}
-              />
-            </div>
-          )}
-          {tokenFileError ? (
-            <div className={styles.emptySection}>
-              <span>No file</span>
-            </div>
-          ) : (
-            <>
-              {typeOfTokenFile === 'image' && (
-                <>
-                  <Image
-                    alt="token-image"
-                    layout="fill"
-                    objectFit="cover"
-                    loader={imageLoader}
-                    onError={() => setTokenFileError(true)}
-                    onLoadingComplete={() => setIsLoading(false)}
-                    src={fileName}
+    <div className={cn(className, styles.wrapper)}>
+      {!bundle || bundle.length === 0 ? (
+        <>
+          <div className={styles.imageWrapperWrapper}>
+            <div
+              className={cn(styles.imageWrapper, {
+                [styles.blur]: status === 'pending',
+              })}
+            >
+              {isLoading && (
+                <div className={styles.spinner}>
+                  <Oval
+                    ariaLabel="loading-indicator"
+                    color="var(--black)"
+                    height={70}
+                    secondaryColor="var(--light-grey)"
+                    strokeWidth={3}
+                    width={70}
                   />
-                </>
+                </div>
               )}
-              {typeOfTokenFile === 'video' && (
-                <video
-                  alt="token-video"
-                  autoPlay={false}
-                  className={styles.video}
-                  controls={status !== 'pending' ? 'controls' : false}
-                  onError={() => setTokenFileError(true)}
-                  ref={videoRef}
-                  src={`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`}
-                />
-              )}
-              {typeOfTokenFile === 'audio' && (
+              {tokenFileError ? (
+                <div className={styles.emptySection}>
+                  <span>No file</span>
+                </div>
+              ) : (
                 <>
-                  {coverName && (
-                    <Image
-                      alt="token-image"
-                      layout="fill"
-                      objectFit="cover"
-                      loader={imageLoader}
+                  {typeOfTokenFile === 'image' && (
+                    <>
+                      <Image
+                        alt="token-image"
+                        layout="fill"
+                        objectFit="cover"
+                        loader={imageLoader}
+                        onError={() => setTokenFileError(true)}
+                        onLoadingComplete={() => setIsLoading(false)}
+                        src={fileName}
+                      />
+                    </>
+                  )}
+                  {typeOfTokenFile === 'video' && (
+                    <video
+                      alt="token-video"
+                      autoPlay={false}
+                      className={styles.video}
+                      controls={status !== 'pending' ? 'controls' : false}
                       onError={() => setTokenFileError(true)}
-                      onLoadingComplete={() => setIsLoading(false)}
-                      src={coverName}
+                      ref={videoRef}
+                      src={`${process.env.BACKEND_ASSETS_URL}/nftMedia/${fileName}`}
                     />
+                  )}
+                  {typeOfTokenFile === 'audio' && (
+                    <>
+                      {coverName && (
+                        <Image
+                          alt="token-image"
+                          layout="fill"
+                          objectFit="cover"
+                          loader={imageLoader}
+                          onError={() => setTokenFileError(true)}
+                          onLoadingComplete={() => setIsLoading(false)}
+                          src={coverName}
+                        />
+                      )}
+                    </>
                   )}
                 </>
               )}
-            </>
-          )}
-        </div>
-      </div>
-      <div className={styles.infoWrapper}>
-        <div className={styles.name}>
-          <span>{name}</span>
-        </div>
-        {price && blockchainType?.icon ? (
-          <div className={styles.price}>
-            <div className={styles.priceAmount}>
-              <Image
-                src={blockchainType.icon}
-                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`}
-                alt={blockchainType.name}
-                width={19}
-                height={19}
-              />
-              <span>{price}</span>
             </div>
           </div>
-        ) : (
-          <></>
-        )}
-        <div className={styles.bottomSection}>
-          <div className={styles.bottomLeft}>
-            <div className={styles.collection}>
-              <span>{collection?.name}</span>
+          <div className={styles.infoWrapper}>
+            <div className={styles.name}>
+              <span>{name}</span>
             </div>
-            <div className={styles.address}>
-              {owner?.publicAddress.substring(0, 6)}...
-              {owner?.publicAddress.substring(owner.publicAddress.length - 6)}
+            {price && blockchainType?.icon ? (
+              <div className={styles.price}>
+                <div className={styles.priceAmount}>
+                  <Image
+                    src={blockchainType.icon}
+                    loader={({ src }) =>
+                      `${process.env.BACKEND_ASSETS_URL}/icons/${src}`
+                    }
+                    alt={blockchainType.name}
+                    width={19}
+                    height={19}
+                  />
+                  <span>{price}</span>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+            <div className={styles.bottomSection}>
+              <div className={styles.bottomLeft}>
+                <div className={styles.collection}>
+                  <span>{collection?.name}</span>
+                </div>
+                <div className={styles.address}>
+                  {owner?.publicAddress.substring(0, 6)}...
+                  {owner?.publicAddress.substring(
+                    owner.publicAddress.length - 6
+                  )}
+                </div>
+              </div>
+              <div className={styles.bottomRight}>
+                <Tag text={status === 'pending' ? status : category} />
+              </div>
             </div>
           </div>
-          <div className={styles.bottomRight}>
-            <Tag text={status === 'pending' ? status : category} />
-          </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <>
+          <Slider
+            {...settings}
+            lazyLoad="ondemand"
+            draggable={true}
+            adaptiveHeight={true}
+            className={styles.slider}
+          >
+            {bundle.map((elem) => (
+              <>
+                <div className={styles.imageWrapperWrapper}>
+                  <div
+                    className={cn(styles.imageWrapper, {
+                      [styles.blur]: status === 'pending',
+                    })}
+                  >
+                    {isLoading && (
+                      <div className={styles.spinner}>
+                        <Oval
+                          ariaLabel="loading-indicator"
+                          color="var(--black)"
+                          height={70}
+                          secondaryColor="var(--light-grey)"
+                          strokeWidth={3}
+                          width={70}
+                        />
+                      </div>
+                    )}
+                    {tokenFileError ? (
+                      <div className={styles.emptySection}>
+                        <span>No file</span>
+                      </div>
+                    ) : (
+                      <>
+                        {images.includes(
+                          elem.fileName
+                            ?.substring(fileName.indexOf('.') + 1)
+                            .toLowerCase()
+                        ) && (
+                          <>
+                            <Image
+                              alt="token-image"
+                              layout="fill"
+                              objectFit="cover"
+                              loader={imageLoader}
+                              onError={() => setTokenFileError(true)}
+                              onLoadingComplete={() => setIsLoading(false)}
+                              src={elem.fileName}
+                            />
+                          </>
+                        )}
+                        {videos.includes(
+                          elem.fileName
+                            ?.substring(fileName.indexOf('.') + 1)
+                            .toLowerCase()
+                        ) && (
+                          <video
+                            alt="token-video"
+                            autoPlay={false}
+                            className={styles.video}
+                            controls={status !== 'pending' ? 'controls' : false}
+                            onError={() => setTokenFileError(true)}
+                            ref={videoRef}
+                            src={`${process.env.BACKEND_ASSETS_URL}/nftMedia/${elem.fileName}`}
+                          />
+                        )}
+                        {audios.includes(
+                          elem.fileName
+                            ?.substring(fileName.indexOf('.') + 1)
+                            .toLowerCase()
+                        ) && (
+                          <>
+                            {elem.coverName && (
+                              <Image
+                                alt="token-image"
+                                layout="fill"
+                                objectFit="cover"
+                                loader={imageLoader}
+                                onError={() => setTokenFileError(true)}
+                                onLoadingComplete={() => setIsLoading(false)}
+                                src={elem.coverName}
+                              />
+                            )}
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className={styles.infoWrapper}>
+                  <div className={styles.name}>
+                    <span>{name}</span>
+                  </div>
+                  {price && blockchainType?.icon ? (
+                    <div className={styles.price}>
+                      <div className={styles.priceAmount}>
+                        <Image
+                          src={blockchainType.icon}
+                          loader={({ src }) =>
+                            `${process.env.BACKEND_ASSETS_URL}/icons/${src}`
+                          }
+                          alt={blockchainType.name}
+                          width={19}
+                          height={19}
+                        />
+                        <span>{price}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                  <div className={styles.bottomSection}>
+                    <div className={styles.bottomLeft}>
+                      <div className={styles.collection}>
+                        <span>{collection?.name}</span>
+                      </div>
+                      <div className={styles.address}>
+                        {owner?.publicAddress.substring(0, 6)}...
+                        {owner?.publicAddress.substring(
+                          owner.publicAddress.length - 6
+                        )}
+                      </div>
+                    </div>
+                    <div className={styles.bottomRight}>
+                      <Tag text={status === 'pending' ? status : category} />
+                    </div>
+                  </div>
+                </div>
+              </>
+            ))}
+          </Slider>
+          <div className={styles.itemsQuantity}>{bundle.length} Items</div>
+          <div className={styles.line} />
+        </>
+      )}
     </div>
   );
 };
