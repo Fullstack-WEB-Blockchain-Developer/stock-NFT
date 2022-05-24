@@ -303,7 +303,11 @@ export const SquareNFTCard = ({
                       </div>
                     </div>
                     <div className={styles.bottomRight}>
-                      <Tag text={status === 'pending' ? elem.status : elem.category} />
+                      <Tag
+                        text={
+                          status === 'pending' ? elem.status : elem.category
+                        }
+                      />
                     </div>
                   </div>
                 </div>

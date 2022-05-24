@@ -394,3 +394,16 @@
 .offerButton {
 	width: 100%;
 }
+
+.behindBigFirst {
+	position: absolute;
+	top: -5px;
+	left: 5%;
+
+	width: 85%;
+	height: 40px;
+
+	border: 1px solid #FFFFFF1A;
+	border-radius: 30px;
+	background: #282829 0% 0% no-repeat padding-box;
+}

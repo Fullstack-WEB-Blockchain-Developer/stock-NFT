@@ -3,7 +3,12 @@ import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 //redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getItems, setData, clearOffsetAndItems, clearError } from '../../../../redux/slices/profileFiltrationSlice';
+import {
+  getItems,
+  setData,
+  clearOffsetAndItems,
+  clearError,
+} from '../../../../redux/slices/profileFiltrationSlice';
 import { open as openError } from '../../../../redux/slices/errorSnackbarSlice';
 import { getAllCategories } from 'src/redux/slices/generalDataSlice';
 //classnames
@@ -11,19 +16,23 @@ import cn from 'classnames';
 //infivite-scroll
 import InfiniteScroll from 'react-infinite-scroll-component';
 //components
-import { Sidebar } from '../Sidebar/Sidebar';
+import { AcceptOfferModal } from '../../../../modals/AcceptOfferModal/AcceptOfferModal';
+import { CustButton } from '../../../../components/CustButton/CustButton';
 import { NormalFilterSection } from './components/NormalFilterSection/NormalFilterSection';
 import { OffersFilterSection } from './components/OffersFilterSection/OffersFilterSection';
-import { TagsWrapper } from './components/TagsWrapper/TagsWrapper';
-import { SquareNFTCard } from '../../../../components/SquareNFTCard/SquareNFTCard';
+import { OffersPopup } from './components/OffersPopup/OffersPopup';
+import { Sidebar } from '../Sidebar/Sidebar';
 import { SmallNFTCard } from '../../../../components/SmallNFTCard/SmallNFTCard';
+import { SquareNFTCard } from '../../../../components/SquareNFTCard/SquareNFTCard';
+import { TagsWrapper } from './components/TagsWrapper/TagsWrapper';
 //utils
-import { chooseSections, adaptActivities, adaptOffers } from './ContentWrapper.utils';
+import {
+  chooseSections,
+  adaptActivities,
+  adaptOffers,
+} from './ContentWrapper.utils';
 //styles
 import styles from './ContentWrapper.module.scss';
-import { OffersPopup } from './components/OffersPopup/OffersPopup';
-import { CustButton } from 'src/components/CustButton/CustButton';
-import { AcceptOfferModal } from 'src/modals/AcceptOfferModal/AcceptOfferModal';
 
 export const ContentWrapper = () => {
   const dispatch = useDispatch();
@@ -41,7 +50,9 @@ export const ContentWrapper = () => {
   const [adaptedActivities, setAdaptedActivities] = useState([]);
   const [adaptedOffers, setAdaptedOffers] = useState([]);
 
-  const { choosenSection, items, itemsGridScale, error } = useSelector((state) => state.profileFiltration);
+  const { choosenSection, items, itemsGridScale, error } = useSelector(
+    (state) => state.profileFiltration
+  );
   const filtrationOptions = useSelector((state) => state.profileFiltration);
 
   useEffect(() => {
@@ -56,7 +67,13 @@ export const ContentWrapper = () => {
   }, [dispatch]);
 
   const handleOpenAccept = ({ collection, id, tokenFileName, price }) => {
-    setAcceptOfferInfo({ collection, id, tokenFileName, price, isOpened: true });
+    setAcceptOfferInfo({
+      collection,
+      id,
+      tokenFileName,
+      price,
+      isOpened: true,
+    });
   };
 
   useEffect(() => {
@@ -68,7 +85,9 @@ export const ContentWrapper = () => {
     if (error) {
       dispatch(
         openError(
-          error.response?.data ? `${error.response.data.statusCode} ${error.response.data.message}` : error.message
+          error.response?.data
+            ? `${error.response.data.statusCode} ${error.response.data.message}`
+            : error.message
         )
       );
       dispatch(clearError());
@@ -91,7 +110,10 @@ export const ContentWrapper = () => {
   }, [items, choosenSection]);
 
   useEffect(() => {
-    if (choosenSection === 'offersReceived' || choosenSection === 'offersMade') {
+    if (
+      choosenSection === 'offersReceived' ||
+      choosenSection === 'offersMade'
+    ) {
       adaptOffers(items).then((res) => setAdaptedOffers(res));
     }
   }, [items, choosenSection]);
@@ -107,13 +129,18 @@ export const ContentWrapper = () => {
                 className={cn(styles.chooseSection, {
                   [styles.chooseSectionActive]: choosenSection === nameForBE,
                 })}
-                onClick={() => dispatch(setData({ field: 'choosenSection', data: nameForBE }))}
+                onClick={() =>
+                  dispatch(
+                    setData({ field: 'choosenSection', data: nameForBE })
+                  )
+                }
                 key={text}
               >
                 {icon}
                 <span>
                   {text}
-                  {nameForBE !== 'activity' && `(${filtrationOptions[forRedux]})`}
+                  {nameForBE !== 'activity' &&
+                    `(${filtrationOptions[forRedux]})`}
                 </span>
               </div>
             ) : (
@@ -121,7 +148,8 @@ export const ContentWrapper = () => {
                 <div
                   className={cn(styles.chooseSection, {
                     [styles.chooseSectionActive]:
-                      choosenSection === 'offersReceived' || choosenSection === 'offersMade',
+                      choosenSection === 'offersReceived' ||
+                      choosenSection === 'offersMade',
                   })}
                   onClick={() => setIsOffersPopupOpened(true)}
                   key={text}
@@ -129,7 +157,10 @@ export const ContentWrapper = () => {
                   {icon}
                   <span>{text}</span>
                   {isOffersPopupOpened && (
-                    <OffersPopup className={styles.offersPopup} setIsOffersPopupOpened={setIsOffersPopupOpened} />
+                    <OffersPopup
+                      className={styles.offersPopup}
+                      setIsOffersPopupOpened={setIsOffersPopupOpened}
+                    />
                   )}
                 </div>
               </>
@@ -139,130 +170,203 @@ export const ContentWrapper = () => {
       </div>
       {chooseSections.map(({ nameForBE, isOffers }) => (
         <>
-          {isOffers && (choosenSection === 'offersMade' || choosenSection === 'offersReceived') && (
-            <div key={nameForBE} className={styles.bottomSideWrapper}>
-              <Sidebar
-                choosenTopSection={choosenSection}
-                handleToggleSidebar={() => setIsSidebarOpened(!isSidebarOpened)}
-                isOpened={isSidebarOpened}
-              />
-              <div className={styles.rightBottomSide}>
-                <OffersFilterSection />
-                <TagsWrapper choosenSection={choosenSection} />
-                {items && items.length > 0 && adaptedOffers.length > 0 && adaptedOffers[0].nft && (
-                  <div className={styles.offersWrapper}>
-                    <div className={styles.offersTitle}>
-                      <Image src="/view-token/Icon-Offers.svg" alt="offers-icon" width={19} height={19} />
-                      <span>{choosenSection === 'offersReceived' ? 'Offers received' : 'Offers made'}</span>
-                    </div>
-                    <div className={styles.offersLegend}>
-                      <div className={styles.offerItemColumn}>
-                        <span>Items</span>
-                      </div>
-                      {['Price', 'USD Price', 'Expiration'].map((elem) => (
-                        <div key={elem} className={styles.offer9PercentColumn}>
-                          <span>{elem}</span>
+          {isOffers &&
+            (choosenSection === 'offersMade' ||
+              choosenSection === 'offersReceived') && (
+              <div key={nameForBE} className={styles.bottomSideWrapper}>
+                <Sidebar
+                  choosenTopSection={choosenSection}
+                  handleToggleSidebar={() =>
+                    setIsSidebarOpened(!isSidebarOpened)
+                  }
+                  isOpened={isSidebarOpened}
+                />
+                <div className={styles.rightBottomSide}>
+                  <OffersFilterSection />
+                  <TagsWrapper choosenSection={choosenSection} />
+                  {items &&
+                    items.length > 0 &&
+                    adaptedOffers.length > 0 &&
+                    adaptedOffers[0].nft && (
+                      <div className={styles.offersWrapper}>
+                        <div className={styles.offersTitle}>
+                          <Image
+                            src="/view-token/Icon-Offers.svg"
+                            alt="offers-icon"
+                            width={19}
+                            height={19}
+                          />
+                          <span>
+                            {choosenSection === 'offersReceived'
+                              ? 'Offers received'
+                              : 'Offers made'}
+                          </span>
                         </div>
-                      ))}
-                      <div className={styles.offer9PercentColumn}>
-                        <span>{choosenSection === 'offersMade' ? 'To' : 'From'}</span>
-                      </div>
-                      <div className={styles.offerButtonColumn} />
-                    </div>
-                    {adaptedOffers.length > 0 &&
-                      adaptedOffers.map(({ buyer, expirationDate, id, nft, price, seller, usdPrice }) => (
-                        <div key={id} className={styles.offerWrapper}>
+                        <div className={styles.offersLegend}>
                           <div className={styles.offerItemColumn}>
-                            <div className={styles.offerItemImageWrapper}>
-                              <Image
-                                src={nft.fileName}
-                                loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
-                                layout="fill"
-                                alt={nft.name}
-                              />
+                            <span>Items</span>
+                          </div>
+                          {['Price', 'USD Price', 'Expiration'].map((elem) => (
+                            <div
+                              key={elem}
+                              className={styles.offer9PercentColumn}
+                            >
+                              <span>{elem}</span>
                             </div>
-                            <div className={styles.offerItemInfoWrapper}>
-                              <span className={styles.nftCollection}>{nft.collection.name}</span>
-                              <span className={styles.nftName}>{nft.name}</span>
-                            </div>
+                          ))}
+                          <div className={styles.offer9PercentColumn}>
+                            <span>
+                              {choosenSection === 'offersMade' ? 'To' : 'From'}
+                            </span>
                           </div>
-                          <div className={cn(styles.offer9PercentColumn, styles.offerPrice)}>
-                            <span>{price}</span>
-                          </div>
-                          <div className={cn(styles.offer9PercentColumn, styles.offerPrice)}>
-                            <span>${usdPrice}</span>
-                          </div>
-                          <div className={cn(styles.offer9PercentColumn, styles.offerExpiration)}>
-                            <span>{expirationDate}</span>
-                          </div>
-                          <div className={cn(styles.offer9PercentColumn, styles.offerUser)}>
-                            {choosenSection === 'offersReceived' && (
-                              <span>
-                                {buyer?.username
-                                  ? buyer?.publicAddress === account
-                                    ? 'you'
-                                    : buyer.username
-                                  : `${buyer?.publicAddress.substring(0, 6)}...${buyer?.publicAddress.substring(
-                                      buyer?.publicAddress.length - 6
-                                    )}`}
-                              </span>
-                            )}
-                            {choosenSection === 'offersMade' && (
-                              <span>
-                                {seller?.username
-                                  ? seller?.publicAddress === account
-                                    ? 'you'
-                                    : seller.username
-                                  : `${seller?.publicAddress.substring(0, 6)}...${seller?.publicAddress.substring(
-                                      seller?.publicAddress.length - 6
-                                    )}`}
-                              </span>
-                            )}
-                          </div>
-                          <div className={styles.offerButtonColumn}>
-                            {choosenSection === 'offersReceived' && (
-                              <CustButton
-                                color="ghost"
-                                text="Accept"
-                                onClick={() =>
-                                  handleOpenAccept({
-                                    collection: nft.collection.name,
-                                    id,
-                                    price,
-                                    tokenFileName: nft.fileName,
-                                  })
-                                }
-                                className={styles.offerButton}
-                              />
-                            )}
-                            {choosenSection === 'offersMade' && (
-                              <CustButton
-                                color="ghost"
-                                text="Cancel"
-                                onClick={() => {}}
-                                className={styles.offerButton}
-                              />
-                            )}
-                          </div>
+                          <div className={styles.offerButtonColumn} />
                         </div>
-                      ))}
-                    {(!items || items.length === 0) && (
-                      <div className={styles.emptyItems}>
-                        <Image src="/profile/Icon-Empty.svg" height={156} width={160} alt="no-items" />
-                        <span>No Items to display</span>
+                        {adaptedOffers.length > 0 &&
+                          adaptedOffers.map(
+                            ({
+                              buyer,
+                              expirationDate,
+                              id,
+                              nft,
+                              price,
+                              seller,
+                              usdPrice,
+                            }) => (
+                              <div key={id} className={styles.offerWrapper}>
+                                <div className={styles.offerItemColumn}>
+                                  <div className={styles.offerItemImageWrapper}>
+                                    <Image
+                                      src={nft.fileName}
+                                      loader={({ src }) =>
+                                        `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`
+                                      }
+                                      layout="fill"
+                                      alt={nft.name}
+                                    />
+                                  </div>
+                                  <div className={styles.offerItemInfoWrapper}>
+                                    <span className={styles.nftCollection}>
+                                      {nft.collection.name}
+                                    </span>
+                                    <span className={styles.nftName}>
+                                      {nft.name}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div
+                                  className={cn(
+                                    styles.offer9PercentColumn,
+                                    styles.offerPrice
+                                  )}
+                                >
+                                  <span>{price}</span>
+                                </div>
+                                <div
+                                  className={cn(
+                                    styles.offer9PercentColumn,
+                                    styles.offerPrice
+                                  )}
+                                >
+                                  <span>${usdPrice}</span>
+                                </div>
+                                <div
+                                  className={cn(
+                                    styles.offer9PercentColumn,
+                                    styles.offerExpiration
+                                  )}
+                                >
+                                  <span>{expirationDate}</span>
+                                </div>
+                                <div
+                                  className={cn(
+                                    styles.offer9PercentColumn,
+                                    styles.offerUser
+                                  )}
+                                >
+                                  {choosenSection === 'offersReceived' && (
+                                    <span>
+                                      {buyer?.username
+                                        ? buyer?.publicAddress === account
+                                          ? 'you'
+                                          : buyer.username
+                                        : `${buyer?.publicAddress.substring(
+                                            0,
+                                            6
+                                          )}...${buyer?.publicAddress.substring(
+                                            buyer?.publicAddress.length - 6
+                                          )}`}
+                                    </span>
+                                  )}
+                                  {choosenSection === 'offersMade' && (
+                                    <span>
+                                      {seller?.username
+                                        ? seller?.publicAddress === account
+                                          ? 'you'
+                                          : seller.username
+                                        : `${seller?.publicAddress.substring(
+                                            0,
+                                            6
+                                          )}...${seller?.publicAddress.substring(
+                                            seller?.publicAddress.length - 6
+                                          )}`}
+                                    </span>
+                                  )}
+                                </div>
+                                <div className={styles.offerButtonColumn}>
+                                  {choosenSection === 'offersReceived' && (
+                                    <CustButton
+                                      color="ghost"
+                                      text="Accept"
+                                      onClick={() =>
+                                        handleOpenAccept({
+                                          collection: nft.collection.name,
+                                          id,
+                                          price,
+                                          tokenFileName: nft.fileName,
+                                        })
+                                      }
+                                      className={styles.offerButton}
+                                    />
+                                  )}
+                                  {choosenSection === 'offersMade' && (
+                                    <CustButton
+                                      color="ghost"
+                                      text="Cancel"
+                                      onClick={() => {}}
+                                      className={styles.offerButton}
+                                    />
+                                  )}
+                                </div>
+                              </div>
+                            )
+                          )}
+                        {(!items || items.length === 0) && (
+                          <div className={styles.emptyItems}>
+                            <Image
+                              src="/profile/Icon-Empty.svg"
+                              height={156}
+                              width={160}
+                              alt="no-items"
+                            />
+                            <span>No Items to display</span>
+                          </div>
+                        )}
                       </div>
                     )}
-                  </div>
-                )}
-                {(!items || items.length === 0) && (
-                  <div className={styles.emptyItems}>
-                    <Image src="/profile/Icon-Empty.svg" height={156} width={160} alt="no-items" />
-                    <span>No Items to display</span>
-                  </div>
-                )}
+                  {(!items || items.length === 0) && (
+                    <div className={styles.emptyItems}>
+                      <Image
+                        src="/profile/Icon-Empty.svg"
+                        height={156}
+                        width={160}
+                        alt="no-items"
+                      />
+                      <span>No Items to display</span>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
           {choosenSection === nameForBE && (
             <div key={nameForBE} className={styles.bottomSideWrapper}>
               <Sidebar
@@ -271,28 +375,38 @@ export const ContentWrapper = () => {
                 isOpened={isSidebarOpened}
               />
               <div className={styles.rightBottomSide}>
-                {choosenSection !== 'activity' && choosenSection !== 'offers' && <NormalFilterSection />}
+                {choosenSection !== 'activity' &&
+                  choosenSection !== 'offers' && <NormalFilterSection />}
                 <TagsWrapper choosenSection={choosenSection} />
                 {items && items.length > 0 && (
                   <div>
-                    {choosenSection !== 'activity' && choosenSection !== 'offers' && (
+                    {choosenSection !== 'activity' &&
+                      choosenSection !== 'offers' && (
+                        <InfiniteScroll
+                          className={cn(styles.itemsGrid, {
+                            [styles.itemsGridSmall]: itemsGridScale === 'small',
+                            [styles.itemsGridLarge]: itemsGridScale === 'large',
+                          })}
+                          dataLength={30}
+                          next={handleGetItems}
+                          hasMore={true}
+                        >
+                          {itemsGridScale === 'large' &&
+                            items.map((fields) => (
+                              <SquareNFTCard key={fields.id} {...fields} />
+                            ))}
+                          {itemsGridScale === 'small' &&
+                            items.map((fields) => (
+                              <SmallNFTCard {...fields} key={fields.id} />
+                            ))}
+                        </InfiniteScroll>
+                      )}
+                    {choosenSection === 'activity' && (
                       <InfiniteScroll
-                        className={cn(styles.itemsGrid, {
-                          [styles.itemsGridSmall]: itemsGridScale === 'small',
-                          [styles.itemsGridLarge]: itemsGridScale === 'large',
-                        })}
                         dataLength={30}
                         next={handleGetItems}
                         hasMore={true}
                       >
-                        {itemsGridScale === 'large' &&
-                          items.map((fields) => <SquareNFTCard key={fields.id} {...fields} />)}
-                        {itemsGridScale === 'small' &&
-                          items.map((fields) => <SmallNFTCard {...fields} key={fields.id} />)}
-                      </InfiniteScroll>
-                    )}
-                    {choosenSection === 'activity' && (
-                      <InfiniteScroll dataLength={30} next={handleGetItems} hasMore={true}>
                         <div className={styles.activitiesHead}>
                           <div className={styles.eventType} />
                           <div className={styles.itemInfo}>
@@ -318,28 +432,63 @@ export const ContentWrapper = () => {
                           adaptedActivities[0] &&
                           adaptedActivities[0].eventType &&
                           adaptedActivities.map(
-                            ({ id, userFrom, userTo, price, eventType, quantity, item, usdPrice, date }) => (
+                            ({
+                              id,
+                              userFrom,
+                              userTo,
+                              price,
+                              eventType,
+                              quantity,
+                              item,
+                              usdPrice,
+                              date,
+                            }) => (
                               <div className={styles.activityRow} key={id}>
                                 <div className={styles.eventType}>
                                   {eventType === 'listings' && (
-                                    <Image src="/activity/Icon-List.svg" alt="list" width={19} height={19} />
+                                    <Image
+                                      src="/activity/Icon-List.svg"
+                                      alt="list"
+                                      width={19}
+                                      height={19}
+                                    />
                                   )}
                                   {eventType === 'sales' && (
-                                    <Image src="/activity/Icon-Sale.svg" alt="list" width={19} height={19} />
+                                    <Image
+                                      src="/activity/Icon-Sale.svg"
+                                      alt="list"
+                                      width={19}
+                                      height={19}
+                                    />
                                   )}
                                   {eventType === 'bids' && (
-                                    <Image src="/activity/Icon-Minted.svg" alt="list" width={19} height={19} />
+                                    <Image
+                                      src="/activity/Icon-Minted.svg"
+                                      alt="list"
+                                      width={19}
+                                      height={19}
+                                    />
                                   )}
                                   {eventType === 'transfers' && (
-                                    <Image src="/activity/Icon-Offer.svg" alt="list" width={19} height={19} />
+                                    <Image
+                                      src="/activity/Icon-Offer.svg"
+                                      alt="list"
+                                      width={19}
+                                      height={19}
+                                    />
                                   )}
-                                  <span>{eventType[0].toUpperCase() + eventType.substring(1)}</span>
+                                  <span>
+                                    {eventType[0].toUpperCase() +
+                                      eventType.substring(1)}
+                                  </span>
                                 </div>
                                 <div className={styles.itemInfo}>
                                   <div className={styles.activityImageWrapper}>
                                     <Image
                                       src={item.fileName}
-                                      loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`}
+                                      loader={({ src }) =>
+                                        `${process.env.BACKEND_ASSETS_URL}/nftMedia/${src}`
+                                      }
                                       alt="nft-prewiev"
                                       layout="fill"
                                     />
@@ -353,14 +502,18 @@ export const ContentWrapper = () => {
                                   <span className={styles.currency}>
                                     <Image
                                       src={item.blockchainType.icon}
-                                      loader={({ src }) => `${process.env.BACKEND_ASSETS_URL}/icons/${src}`}
+                                      loader={({ src }) =>
+                                        `${process.env.BACKEND_ASSETS_URL}/icons/${src}`
+                                      }
                                       alt="blockchain"
                                       width={19}
                                       height={19}
                                     />
                                     {price}
                                   </span>
-                                  <span className={styles.usdPrice}>${usdPrice}</span>
+                                  <span className={styles.usdPrice}>
+                                    ${usdPrice}
+                                  </span>
                                 </div>
                                 <div className={styles.quantity}>
                                   <span>{quantity}</span>
@@ -385,7 +538,12 @@ export const ContentWrapper = () => {
                                 </div>
                                 <div className={styles.time}>
                                   <span>{date}</span>
-                                  <Image src="/activity/Icon-FullSc.svg" alt="fullscreen" width={19} height={19} />
+                                  <Image
+                                    src="/activity/Icon-FullSc.svg"
+                                    alt="fullscreen"
+                                    width={19}
+                                    height={19}
+                                  />
                                 </div>
                               </div>
                             )
@@ -397,7 +555,12 @@ export const ContentWrapper = () => {
                 {!items ||
                   (items.length === 0 && (
                     <div className={styles.emptyItems}>
-                      <Image src="/profile/Icon-Empty.svg" height={156} width={160} alt="no-items" />
+                      <Image
+                        src="/profile/Icon-Empty.svg"
+                        height={156}
+                        width={160}
+                        alt="no-items"
+                      />
                       <span>No Items to display</span>
                     </div>
                   ))}
@@ -408,7 +571,9 @@ export const ContentWrapper = () => {
       ))}
       <AcceptOfferModal
         {...acceptOfferInfo}
-        handleClose={() => setAcceptOfferInfo({ ...acceptOfferInfo, isOpened: false })}
+        handleClose={() =>
+          setAcceptOfferInfo({ ...acceptOfferInfo, isOpened: false })
+        }
       />
     </div>
   );
