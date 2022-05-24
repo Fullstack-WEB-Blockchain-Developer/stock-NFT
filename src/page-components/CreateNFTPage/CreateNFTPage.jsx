@@ -24,7 +24,11 @@ import { Level } from '../../components/Level/Level';
 import { Property } from '../../components/Property/Property';
 import { AddPropertiesModal } from '../../modals/AddToNFTModal/AddPropertiesModal';
 //utils
-import { textFields, selects, uploadAndSwitchFields } from './CreateNFTPage.utils';
+import {
+  textFields,
+  selects,
+  uploadAndSwitchFields,
+} from './CreateNFTPage.utils';
 //web3
 import { useWeb3React } from '@web3-react/core';
 //hooks
@@ -126,20 +130,28 @@ export const CreateNFTPage = () => {
   const sendDataToServer = async () => {
     const imageHash = await pinFileToIPFS(values.file); //use `https://ipfs.io/ipfs/${imageHash}` as image
     //code here.
-    const blockchainTypeId = blockchainTypes.find((type) => type.name === values.blockchainType)?.id || 0;
-    const collectionId = collections.find((elem) => elem.name === values.collection)?.id || 0;
+    const blockchainTypeId =
+      blockchainTypes.find((type) => type.name === values.blockchainType)?.id ||
+      0;
+    const collectionId =
+      collections.find((elem) => elem.name === values.collection)?.id || 0;
 
     try {
       const accessToken = localStorage.getItem('accessToken');
       const form = new FormData();
       form.append('content', values.file);
 
-      const response = await axios.post(`${process.env.BACKEND_URL}/nfts/upload/media`, form, {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-          'Content-type': 'multipart/form-data; boundary=MyBoundary',
-        },
-      });
+      const response = await axios.post(
+        `${process.env.BACKEND_URL}/nfts/upload/media`,
+        form,
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+            'Content-type': 'multipart/form-data; boundary=MyBoundary',
+          },
+        }
+      );
+
       const body = {
         name: values.name,
         fileName: response.data,
@@ -158,19 +170,25 @@ export const CreateNFTPage = () => {
         const form = new FormData();
         form.append('content', values.audioPreviewFile);
 
-        audioPreviewResponse = await axios.post(`${process.env.BACKEND_URL}/nfts/upload/media`, form, {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-            'Content-type': 'multipart/form-data; boundary=MyBoundary',
-          },
-        });
+        audioPreviewResponse = await axios.post(
+          `${process.env.BACKEND_URL}/nfts/upload/media`,
+          form,
+          {
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+              'Content-type': 'multipart/form-data; boundary=MyBoundary',
+            },
+          }
+        );
       }
 
-      if (audioPreviewResponse.data) body.coverName = audioPreviewResponse.data;
-      if (values.audioPreviewFile) if (values.stats.length > 0) body.stats = values.stats;
+      if (audioPreviewResponse?.data)
+        body.coverName = audioPreviewResponse.data;
+      if (values.audioPreviewFile)
+        if (values.stats.length > 0) body.stats = values.stats;
       if (values.properties.length > 0) body.properties = values.properties;
       if (values.levels.length > 0) body.levels = values.levels;
-      
+
       const {
         data: { id },
       } = await axios.post(`${process.env.BACKEND_URL}/nfts`, body, {
@@ -178,10 +196,17 @@ export const CreateNFTPage = () => {
           Authorization: 'Bearer ' + accessToken,
         },
       });
+
       dispatch(openSuccess(`Thank you! Your NFT will be under review`));
       router.push(`/token/${id}`);
     } catch (e) {
-      dispatch(openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message));
+      dispatch(
+        openError(
+          e.response?.data
+            ? `${e.response.data.statusCode} ${e.response.data.message}`
+            : e.message
+        )
+      );
     }
   };
 
@@ -217,23 +242,31 @@ export const CreateNFTPage = () => {
     let data = new FormData();
     data.append('file', file);
 
-    const responsive = await axios.post(`https://api.pinata.cloud/pinning/pinFileToIPFS`, data, {
-      maxBodyLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
-      headers: {
-        pinata_api_key: process.env.PINATA_API_KEY,
-        pinata_secret_api_key: process.env.PINATA_SECRET_API_KEY,
-      },
-    });
+    const responsive = await axios.post(
+      `https://api.pinata.cloud/pinning/pinFileToIPFS`,
+      data,
+      {
+        maxBodyLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
+        headers: {
+          pinata_api_key: process.env.PINATA_API_KEY,
+          pinata_secret_api_key: process.env.PINATA_SECRET_API_KEY,
+        },
+      }
+    );
     return responsive.data.IpfsHash;
   };
 
   const pinJSONToIPFS = async (JSONBody) => {
-    const responsive = await axios.post(`https://api.pinata.cloud/pinning/pinJSONToIPFS`, JSONBody, {
-      headers: {
-        pinata_api_key: process.env.PINATA_API_KEY,
-        pinata_secret_api_key: process.env.PINATA_SECRET_API_KEY,
-      },
-    });
+    const responsive = await axios.post(
+      `https://api.pinata.cloud/pinning/pinJSONToIPFS`,
+      JSONBody,
+      {
+        headers: {
+          pinata_api_key: process.env.PINATA_API_KEY,
+          pinata_secret_api_key: process.env.PINATA_SECRET_API_KEY,
+        },
+      }
+    );
     return responsive.data.IpfsHash;
   };
 
@@ -242,27 +275,44 @@ export const CreateNFTPage = () => {
   const fetchCollections = async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      const { data } = await axios.get(`${process.env.BACKEND_URL}/collections`, {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-      });
+      const { data } = await axios.get(
+        `${process.env.BACKEND_URL}/collections`,
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        }
+      );
       setCollections([...data]);
     } catch (e) {
-      dispatch(openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message));
+      dispatch(
+        openError(
+          e.response?.data
+            ? `${e.response.data.statusCode} ${e.response.data.message}`
+            : e.message
+        )
+      );
     }
   };
 
   const fetchBlockchainTypes = async () => {
     try {
-      const { data } = await axios.get(`${process.env.BACKEND_URL}/nfts/blockchainTypes/all`);
+      const { data } = await axios.get(
+        `${process.env.BACKEND_URL}/nfts/blockchainTypes/all`
+      );
       const array = [];
       data.forEach(({ name, id }) => {
         array.push({ name, id });
       });
       setBlockchainTypes(array);
     } catch (e) {
-      dispatch(openError(e.response?.data ? `${e.response.data.statusCode} ${e.response.data.message}` : e.message));
+      dispatch(
+        openError(
+          e.response?.data
+            ? `${e.response.data.statusCode} ${e.response.data.message}`
+            : e.message
+        )
+      );
     }
   };
 
@@ -284,7 +334,12 @@ export const CreateNFTPage = () => {
   }, [isAuthorized]);
 
   useEffect(() => {
-    if (values.file && values.name && values.blockchainType !== 'none' && values.description) {
+    if (
+      values.file &&
+      values.name &&
+      values.blockchainType !== 'none' &&
+      values.description
+    ) {
       setDisabledButton(false);
     } else {
       setDisabledButton(true);
@@ -316,7 +371,11 @@ export const CreateNFTPage = () => {
   }, [values.audioPreviewFile]);
 
   useEffect(() => {
-    if (previewFile && values.file?.type.startsWith('video') && videoRef.current?.src) {
+    if (
+      previewFile &&
+      values.file?.type.startsWith('video') &&
+      videoRef.current?.src
+    ) {
       const width = videoRef.current.clientWidth;
       const height = videoRef.current.clientHeight;
       const ratio = width / height;
@@ -340,7 +399,10 @@ export const CreateNFTPage = () => {
             <span>Image, Video, Audio, or 3D Model {star}</span>
           </div>
           <div className={styles.description}>
-            <span>File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB, GLTF. Max size: 100 MB</span>
+            <span>
+              File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV,
+              OGG, GLB, GLTF. Max size: 100 MB
+            </span>
           </div>
           <div className={styles.uploadFileWrapper}>
             <div
@@ -352,11 +414,18 @@ export const CreateNFTPage = () => {
               <div
                 className={styles.imageWrapper}
                 style={{
-                  background: previewFile ? 'none' : 'url("/create-nft/Icon-Image.png") no-repeat center',
+                  background: previewFile
+                    ? 'none'
+                    : 'url("/create-nft/Icon-Image.png") no-repeat center',
                   height:
                     (!previewFile && '100%') ||
-                    (previewFile && values.file?.type.startsWith('video') && videoRef.current && videoSizes.height) ||
-                    (previewFile && values.file?.type.startsWith('audio') && '200px'),
+                    (previewFile &&
+                      values.file?.type.startsWith('video') &&
+                      videoRef.current &&
+                      videoSizes.height) ||
+                    (previewFile &&
+                      values.file?.type.startsWith('audio') &&
+                      '200px'),
                 }}
               >
                 {previewFile && values.file?.type.startsWith('image') && (
@@ -381,10 +450,21 @@ export const CreateNFTPage = () => {
                 accept=".png, .jpg, .gif, .svg, .mp4, .webm, .mp3, .wav, .ogg, .glb, .gltf"
               />
               {previewFile && values.file?.type.startsWith('video') && (
-                <video src={previewFile} ref={videoRef} controls="controls" autoPlay="true" className={styles.video} />
+                <video
+                  src={previewFile}
+                  ref={videoRef}
+                  controls="controls"
+                  autoPlay="true"
+                  className={styles.video}
+                />
               )}
               {previewFile && values.file?.type.startsWith('audio') && (
-                <audio src={previewFile} controls="controls" autoPlay="true" className={styles.audio} />
+                <audio
+                  src={previewFile}
+                  controls="controls"
+                  autoPlay="true"
+                  className={styles.audio}
+                />
               )}
             </div>
             <div className={styles.uploadButtonsWrapper}>
@@ -395,7 +475,12 @@ export const CreateNFTPage = () => {
                 className={styles.uploadButton}
                 fullWidth
               />
-              <CustButton color="red" text="Delete File" onClick={handleDeleteFile} fullWidth />
+              <CustButton
+                color="red"
+                text="Delete File"
+                onClick={handleDeleteFile}
+                fullWidth
+              />
             </div>
           </div>
         </div>
@@ -405,7 +490,9 @@ export const CreateNFTPage = () => {
               <span>Image as audio preview file {star}</span>
             </div>
             <div className={styles.description}>
-              <span>File types supported: JPG, PNG, GIF, SVG. Max size: 100 MB</span>
+              <span>
+                File types supported: JPG, PNG, GIF, SVG. Max size: 100 MB
+              </span>
             </div>
             <div className={styles.uploadFileWrapper}>
               <div
@@ -417,7 +504,9 @@ export const CreateNFTPage = () => {
                 <div
                   className={styles.imageWrapper}
                   style={{
-                    background: previewAudio ? 'none' : 'url("/create-nft/Icon-Image.png") no-repeat center',
+                    background: previewAudio
+                      ? 'none'
+                      : 'url("/create-nft/Icon-Image.png") no-repeat center',
                     height: !previewAudio && '100%',
                   }}
                 >
@@ -451,47 +540,62 @@ export const CreateNFTPage = () => {
                   className={styles.uploadButton}
                   fullWidth
                 />
-                <CustButton color="red" text="Delete File" onClick={handleDeleteAudioPreview} fullWidth />
+                <CustButton
+                  color="red"
+                  text="Delete File"
+                  onClick={handleDeleteAudioPreview}
+                  fullWidth
+                />
               </div>
             </div>
           </>
         ) : (
           <></>
         )}
-        {textFields.map(({ title, description, required, label, multiline, id, maxLength }) => (
-          <div key={id} className={styles.section}>
-            <div
-              className={cn(styles.title, {
-                [styles.name]: title === 'Name',
-              })}
-            >
-              <span>
-                {title} {required && star}
-              </span>
-            </div>
-            {description && (
-              <div className={styles.description}>
-                <span>{description}</span>
+        {textFields.map(
+          ({
+            title,
+            description,
+            required,
+            label,
+            multiline,
+            id,
+            maxLength,
+          }) => (
+            <div key={id} className={styles.section}>
+              <div
+                className={cn(styles.title, {
+                  [styles.name]: title === 'Name',
+                })}
+              >
+                <span>
+                  {title} {required && star}
+                </span>
               </div>
-            )}
-            <TextField
-              fullWidth
-              id={label}
-              label={label}
-              variant="outlined"
-              className={muiClasses.textField}
-              value={values[id]}
-              onChange={(e) => handleChange(e, id, 'string')}
-              InputProps={{ style: { color: 'white' } }}
-              multiline={multiline}
-              inputProps={{
-                maxLength: maxLength || 524288,
-              }}
-              minRows={multiline && 3}
-              maxRows={multiline && 10}
-            />
-          </div>
-        ))}
+              {description && (
+                <div className={styles.description}>
+                  <span>{description}</span>
+                </div>
+              )}
+              <TextField
+                fullWidth
+                id={label}
+                label={label}
+                variant="outlined"
+                className={muiClasses.textField}
+                value={values[id]}
+                onChange={(e) => handleChange(e, id, 'string')}
+                InputProps={{ style: { color: 'white' } }}
+                multiline={multiline}
+                inputProps={{
+                  maxLength: maxLength || 524288,
+                }}
+                minRows={multiline && 3}
+                maxRows={multiline && 10}
+              />
+            </div>
+          )
+        )}
         <div className={styles.section}>
           <div className={styles.title}>
             <span>{selects[0].title}</span>
@@ -511,7 +615,9 @@ export const CreateNFTPage = () => {
             className={muiClasses.select}
           >
             <MenuItem disabled value="none">
-              <span style={{ color: 'rgb(77, 77, 77)' }}>{selects[0].placeholder}</span>
+              <span style={{ color: 'rgb(77, 77, 77)' }}>
+                {selects[0].placeholder}
+              </span>
             </MenuItem>
             {collections.map(({ id, name }) => (
               <MenuItem key={id} value={name}>
@@ -535,13 +641,20 @@ export const CreateNFTPage = () => {
                 </div>
               </div>
               {type === 'add' ? (
-                <div className={styles.plus} onClick={() => handleOpenPopup(id)}>
+                <div
+                  className={styles.plus}
+                  onClick={() => handleOpenPopup(id)}
+                >
                   <span>+</span>
                 </div>
               ) : (
                 <CustSwitch
                   className={styles.switch}
-                  checked={title === 'Unlockable Content' ? enabledUnlockable : values[id]}
+                  checked={
+                    title === 'Unlockable Content'
+                      ? enabledUnlockable
+                      : values[id]
+                  }
                   onChange={(e) => handleChange(e, id, 'boolean')}
                 />
               )}
@@ -578,11 +691,21 @@ export const CreateNFTPage = () => {
             )}
             {id === 'stats' &&
               values.stats.map(({ name, nftValue, maxValue, id }) => (
-                <Stat key={id} name={name} nftValue={nftValue} maxValue={maxValue} />
+                <Stat
+                  key={id}
+                  name={name}
+                  nftValue={nftValue}
+                  maxValue={maxValue}
+                />
               ))}
             {id === 'levels' &&
               values.levels.map(({ name, nftValue, maxValue, id }) => (
-                <Level key={id} name={name} nftValue={nftValue} maxValue={maxValue} />
+                <Level
+                  key={id}
+                  name={name}
+                  nftValue={nftValue}
+                  maxValue={maxValue}
+                />
               ))}
             {id === 'properties' && (
               <div className={styles.propertiesWrapper}>
@@ -593,44 +716,48 @@ export const CreateNFTPage = () => {
             )}
           </div>
         ))}
-        {selects.slice(1).map(({ title, description, options, placeholder, required, id }) => (
-          <div
-            className={cn(styles.section, {
-              [styles.sectionWithMarginTop]: title === 'Blockchain', //"Supply",
-              [styles.sectionWithBigMarginBottom]: title === 'Blockchain', //"Freeze Metadata",
-            })}
-            key={id}
-          >
-            <div className={styles.title}>
-              <span>
-                {title} {required && star}
-              </span>
-            </div>
-            <div className={styles.description}>
-              <span>{description}</span>
-            </div>
-            <Select
-              fullWidth
-              labelId="demo-simple-select-filled-label"
-              id="demo-simple-select-filled"
-              style={{
-                color: 'white',
-              }}
-              onChange={(e) => handleChange(e, id, 'string')}
-              value={values[id]}
-              className={muiClasses.select}
+        {selects
+          .slice(1)
+          .map(({ title, description, options, placeholder, required, id }) => (
+            <div
+              className={cn(styles.section, {
+                [styles.sectionWithMarginTop]: title === 'Blockchain', //"Supply",
+                [styles.sectionWithBigMarginBottom]: title === 'Blockchain', //"Freeze Metadata",
+              })}
+              key={id}
             >
-              <MenuItem disabled value="none">
-                <span style={{ color: 'rgb(77, 77, 77)' }}>{placeholder}</span>
-              </MenuItem>
-              {blockchainTypes.map(({ id, name }) => (
-                <MenuItem key={id} value={name}>
-                  <span>{name}</span>
+              <div className={styles.title}>
+                <span>
+                  {title} {required && star}
+                </span>
+              </div>
+              <div className={styles.description}>
+                <span>{description}</span>
+              </div>
+              <Select
+                fullWidth
+                labelId="demo-simple-select-filled-label"
+                id="demo-simple-select-filled"
+                style={{
+                  color: 'white',
+                }}
+                onChange={(e) => handleChange(e, id, 'string')}
+                value={values[id]}
+                className={muiClasses.select}
+              >
+                <MenuItem disabled value="none">
+                  <span style={{ color: 'rgb(77, 77, 77)' }}>
+                    {placeholder}
+                  </span>
                 </MenuItem>
-              ))}
-            </Select>
-          </div>
-        ))}
+                {blockchainTypes.map(({ id, name }) => (
+                  <MenuItem key={id} value={name}>
+                    <span>{name}</span>
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
+          ))}
         <CustButton
           color="primary"
           text="Save"
@@ -661,7 +788,10 @@ export const CreateNFTPage = () => {
           setData={setValues}
         />
       </div>
-      <ConnectWalletModal isOpened={isConnectWalletOpened} onClose={() => setIsConnectWalletOpened(false)} />
+      <ConnectWalletModal
+        isOpened={isConnectWalletOpened}
+        onClose={() => setIsConnectWalletOpened(false)}
+      />
     </div>
   );
 };
