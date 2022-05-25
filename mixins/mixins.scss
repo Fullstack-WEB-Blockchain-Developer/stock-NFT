@@ -1,0 +1,10 @@
+@mixin flex($align-value, $justify-value) {
+  display: flex;
+  align-items: $align-value;
+  justify-content: $justify-value;
+}
+
+@mixin reset {
+  margin: 0;
+  padding: 0;
+}
