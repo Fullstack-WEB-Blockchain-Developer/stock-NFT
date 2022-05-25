@@ -69,7 +69,11 @@ export const adaptOffers = async (offers) => {
                 usdPrice: (result * elem.price).toFixed(2),
                 expirationDate: getExpirationString(elem.expirationDate),
               }
-            : { ...elem, usdPrice: 0, date: getExpirationString(elem.expirationDate) }
+            : {
+                ...elem,
+                usdPrice: 0,
+                date: getExpirationString(elem.expirationDate),
+              }
         )
     )
   );
@@ -83,21 +87,28 @@ export const constructUrl = (
   selectedChains,
   selectedCategories,
   filterText,
+  itemsSelect,
   choosenSeltion
 ) => {
   const statuses = selectedStatuses.map(({ name }) => name).join(',');
   const collections = selectedCollections.rows.map(({ id }) => id).join(',');
   const chains = selectedChains.map(({ id }) => id).join(',');
   const categories = selectedCategories.map(({ id }) => id).join(',');
+  const nftType =
+    (itemsSelect === 'Single Items' && 'singleItems') ||
+    (itemsSelect === 'Bundles' && 'bundles');
   const { min, max, currency } = selectedPrice;
 
   initialUrl += collections.length > 0 ? `&collectionId=${collections}` : '';
   initialUrl += chains.length > 0 ? `&blockchainId=${chains}` : '';
 
   if (choosenSeltion !== 'activity') {
+    initialUrl += nftType ? `&nftType=${nftType}` : '';
     initialUrl += filterText ? `&search=${filterText}` : '';
     initialUrl += statuses.length > 0 ? `&status=${statuses}` : '';
-    initialUrl += min ? `&priceFilterType=${currency}&priceFilterMin=${min}&priceFilterMax=${max}` : '';
+    initialUrl += min
+      ? `&priceFilterType=${currency}&priceFilterMin=${min}&priceFilterMax=${max}`
+      : '';
     initialUrl += categories.length > 0 ? `&categoryId=${categories}` : '';
   }
 

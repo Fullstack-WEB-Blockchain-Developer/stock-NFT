@@ -45,6 +45,7 @@ export const getItems = createAsyncThunk('items/getItems', async (isOffers, { ge
       selectedEventTypes,
       selectedPrice,
       selectedStatuses,
+      itemsSelect
     },
   } = getState();
 
@@ -62,6 +63,7 @@ export const getItems = createAsyncThunk('items/getItems', async (isOffers, { ge
       selectedChains,
       selectedCategories,
       filterText,
+      itemsSelect,
       choosenSection
     );
 

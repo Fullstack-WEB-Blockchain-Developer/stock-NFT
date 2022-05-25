@@ -1,7 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 //redux
 import { useDispatch, useSelector } from 'react-redux';
-import { setData, clearOffsetAndItems, getItems } from '../../../../../../redux/slices/profileFiltrationSlice';
+import {
+  setData,
+  clearOffsetAndItems,
+  getItems,
+} from '../../../../../../redux/slices/profileFiltrationSlice';
 //classnames
 import cn from 'classnames';
 //mui
@@ -16,11 +20,13 @@ import { readyFilterOptions } from './NormalFilterSection.utils';
 import styles from './NormalFilterSection.module.scss';
 import Image from 'next/image';
 
-export const NormalFilterSection = ({isOffers}) => {
+export const NormalFilterSection = () => {
   const dispatch = useDispatch();
   const muiClasses = useStyles();
 
-  const { itemsSelect, readyFilterOption, itemsGridScale, items } = useSelector((state) => state.profileFiltration);
+  const { itemsSelect, readyFilterOption, itemsGridScale } = useSelector(
+    (state) => state.profileFiltration
+  );
 
   const [searchText, setSearchText] = useState(undefined);
   const [debouncedValue, setDebouncedValue] = useState(undefined);
@@ -37,7 +43,15 @@ export const NormalFilterSection = ({isOffers}) => {
   const handleChangeRightSelect = (selectValue) => {
     const result = readyFilterOptions.find((elem) => elem.text === selectValue);
     const { text, sortOrder, sortBy } = result;
-    dispatch(setData({ field: 'readyFilterOption', data: { text, sortBy, sortOrder } }));
+    dispatch(
+      setData({ field: 'readyFilterOption', data: { text, sortBy, sortOrder } })
+    );
+    dispatch(clearOffsetAndItems());
+    dispatch(getItems());
+  };
+
+  const handleChangeBundlesSelect = (value) => {
+    dispatch(setData({ field: 'itemsSelect', data: value }));
     dispatch(clearOffsetAndItems());
     dispatch(getItems());
   };
@@ -58,8 +72,19 @@ export const NormalFilterSection = ({isOffers}) => {
         InputProps={{
           style: { color: 'white' },
           startAdornment: (
-            <span style={{ marginRight: '8px', display: 'flex', alignItems: 'center' }}>
-              <Image src="/search-icon.svg" width={19} height={19} alt="search" />
+            <span
+              style={{
+                marginRight: '8px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Image
+                src="/search-icon.svg"
+                width={19}
+                height={19}
+                alt="search"
+              />
             </span>
           ),
         }}
@@ -77,7 +102,7 @@ export const NormalFilterSection = ({isOffers}) => {
           style={{
             color: 'white',
           }}
-          onChange={({ target: { value } }) => dispatch(setData({ field: 'itemsSelect', data: value }))}
+          onChange={({ target: { value } }) => handleChangeBundlesSelect(value)}
           value={itemsSelect}
           className={muiClasses.select}
         >
@@ -113,17 +138,31 @@ export const NormalFilterSection = ({isOffers}) => {
           className={cn(styles.styleButton, {
             [styles.activeButton]: itemsGridScale === 'large',
           })}
-          onClick={() => dispatch(setData({ field: 'itemsGridScale', data: 'large' }))}
+          onClick={() =>
+            dispatch(setData({ field: 'itemsGridScale', data: 'large' }))
+          }
         >
-          <Image src="/profile/SquaresFour.svg" width={27} height={27} alt="squares" />
+          <Image
+            src="/profile/SquaresFour.svg"
+            width={27}
+            height={27}
+            alt="squares"
+          />
         </div>
         <div
           className={cn(styles.styleButton, {
             [styles.activeButton]: itemsGridScale === 'small',
           })}
-          onClick={() => dispatch(setData({ field: 'itemsGridScale', data: 'small' }))}
+          onClick={() =>
+            dispatch(setData({ field: 'itemsGridScale', data: 'small' }))
+          }
         >
-          <Image src="/profile/SquaresFour-1.svg" width={27} height={27} alt="squares" />
+          <Image
+            src="/profile/SquaresFour-1.svg"
+            width={27}
+            height={27}
+            alt="squares"
+          />
         </div>
       </div>
     </div>
