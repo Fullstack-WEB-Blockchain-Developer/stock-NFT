@@ -156,6 +156,23 @@ export const ContentWrapper = () => {
                 >
                   {icon}
                   <span>{text}</span>
+                  <span className={styles.dropdownIcon}>
+                    {isOffersPopupOpened ? (
+                      <Image
+                        src="/view-token/Icon-ArrowUp.svg"
+                        alt="arrow-down-icon"
+                        width={12}
+                        height={8}
+                      />
+                    ) : (
+                      <Image
+                        src="/view-token/Icon-ArrowDown.svg"
+                        alt="arrow-up-icon"
+                        width={12}
+                        height={8}
+                      />
+                    )}
+                  </span>
                   {isOffersPopupOpened && (
                     <OffersPopup
                       className={styles.offersPopup}
