@@ -36,6 +36,7 @@ import { useStyles } from '../../hooks/useStyles';
 import useAuth from '../../hooks/useAuth';
 //styles
 import styles from './CreateNFTPage.module.css';
+import { audios } from 'src/helpers/extentions';
 
 var contractAddress;
 export const CreateNFTPage = () => {
@@ -87,6 +88,9 @@ export const CreateNFTPage = () => {
 
   const handleChange = (e, value, type) => {
     let file;
+    console.log('---e', e);
+    console.log('---value', value);
+    console.log('---type', type);
 
     switch (type) {
       case 'string':
@@ -233,13 +237,15 @@ export const CreateNFTPage = () => {
     setPreviewAudio(undefined);
     setValues({ ...values, file: undefined, audioPreviewFile: undefined });
   };
-
+console.log('---audioPreviewRef', audioPreviewRef)
   const handleDeleteAudioPreview = () => {
-    audioPreviewRef.current?.value === null;
+    audioPreviewRef.current.value = null;
+    audioPreviewRef.current.files = null;
     setValues({ ...values, audioPreviewFile: undefined });
     setPreviewAudio(undefined);
   };
-
+  // console.log('---values.audioPreviewFile', values.audioPreviewFile);
+  // console.log('---previewAudio', previewAudio);
   const pinFileToIPFS = async (file) => {
     let data = new FormData();
     data.append('file', file);
@@ -329,7 +335,7 @@ export const CreateNFTPage = () => {
   useEffect(() => {
     isAuthorized && !error && fetchCollections();
     !error && fetchBlockchainTypes();
-  }, []);
+  }, [error]);
 
   useEffect(() => {
     isAuthorized && setIsConnectWalletOpened(false);
@@ -338,6 +344,7 @@ export const CreateNFTPage = () => {
   useEffect(() => {
     if (
       values.file &&
+      (values.file.type.startsWith('audio') ? values.audioPreviewFile : true) &&
       values.name &&
       values.blockchainType !== 'none' &&
       values.description
@@ -346,7 +353,14 @@ export const CreateNFTPage = () => {
     } else {
       setDisabledButton(true);
     }
-  }, [values.file, values.name, values.description, values.blockchainType]);
+  }, [
+    values.audioPreviewFile,
+    values.file,
+    previewFile,
+    values.name,
+    values.description,
+    values.blockchainType,
+  ]);
 
   useEffect(() => {
     if (!values.file) {
@@ -672,7 +686,7 @@ export const CreateNFTPage = () => {
                   className={cn(styles.title, {
                     [styles.name]: title === 'Name',
                   })}
-                ></div>
+                />
                 <TextField
                   fullWidth
                   id="Unlockable"
