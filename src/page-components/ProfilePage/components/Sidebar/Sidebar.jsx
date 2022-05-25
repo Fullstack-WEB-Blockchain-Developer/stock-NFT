@@ -18,7 +18,6 @@ import {
   clearError,
 } from '../../../../redux/slices/generalDataSlice';
 //mui
-import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 //components
 import { Price } from './components/Price/Price';
@@ -28,7 +27,7 @@ import { useDebounce } from '../../../../hooks/useDebounce';
 //classnames
 import cn from 'classnames';
 //utils
-import { getSections, statuses, getSectionsForUseState, fakeOnSaleIn, eventTypes } from './Sidebar.utils';
+import { getSections, statuses, getSectionsForUseState, eventTypes } from './Sidebar.utils';
 //styles
 import styles from './Sidebar.module.scss';
 
@@ -38,7 +37,6 @@ export const Sidebar = ({ isOpened, handleToggleSidebar, choosenTopSection }) =>
 
   //useSelectors
   const {
-    choosenSection,
     selectedCategories,
     selectedChains,
     selectedCollections,
