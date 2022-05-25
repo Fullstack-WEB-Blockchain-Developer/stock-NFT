@@ -410,11 +410,19 @@ export const ContentWrapper = () => {
                         >
                           {itemsGridScale === 'large' &&
                             items.map((fields) => (
-                              <SquareNFTCard key={fields.id} {...fields} />
+                              <SquareNFTCard
+                                isExpanded={!isSidebarOpened}
+                                key={fields.id}
+                                {...fields}
+                              />
                             ))}
                           {itemsGridScale === 'small' &&
                             items.map((fields) => (
-                              <SmallNFTCard {...fields} key={fields.id} />
+                              <SmallNFTCard
+                                isExpanded={!isSidebarOpened}
+                                key={fields.id}
+                                {...fields}
+                              />
                             ))}
                         </InfiniteScroll>
                       )}

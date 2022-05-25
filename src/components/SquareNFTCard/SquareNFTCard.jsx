@@ -26,6 +26,7 @@ export const SquareNFTCard = ({
   coverName,
   fileName,
   id,
+  isExpanded,
   name,
   owner,
   price,
@@ -37,7 +38,6 @@ export const SquareNFTCard = ({
   const [isLoading, setIsLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
   const router = useRouter();
-console.log('---blockCainType', blockchainType)
   useEffect(() => {
     const end = fileName?.substring(fileName.indexOf('.') + 1).toLowerCase();
 
@@ -142,7 +142,7 @@ console.log('---blockCainType', blockchainType)
               justifyContent: price ? 'space-between' : 'space-evenly',
             }}
           >
-            <div className={styles.name}>
+            <div className={styles.name} style={{fontSize: isExpanded && '20px'}}>
               <span>{name}</span>
             </div>
             {price && blockchainType?.icon ? (
@@ -157,7 +157,7 @@ console.log('---blockCainType', blockchainType)
                     width={19}
                     height={19}
                   />
-                  <span>{price}</span>
+                  <span style={{fontSize: isExpanded && '16px'}}>{price}</span>
                 </div>
               </div>
             ) : (
@@ -166,9 +166,9 @@ console.log('---blockCainType', blockchainType)
             <div className={styles.bottomSection}>
               <div className={styles.bottomLeft}>
                 <div className={styles.collection}>
-                  <span>{collection?.name}</span>
+                  <span style={{fontSize: isExpanded && '12px'}}>{collection?.name}</span>
                 </div>
-                <div className={styles.address}>
+                <div className={styles.address} style={{fontSize: isExpanded && '12px'}}>
                   {owner?.publicAddress.substring(0, 6)}...
                   {owner?.publicAddress.substring(
                     owner.publicAddress.length - 6
