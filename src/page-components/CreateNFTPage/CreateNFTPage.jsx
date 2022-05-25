@@ -86,6 +86,8 @@ export const CreateNFTPage = () => {
   //handle functions
 
   const handleChange = (e, value, type) => {
+    let file;
+
     switch (type) {
       case 'string':
         setValues({ ...values, [value]: e.target.value });
@@ -95,7 +97,7 @@ export const CreateNFTPage = () => {
           setValues({ ...values, [value]: undefined });
           return;
         }
-        const file = e.target.files[0];
+        file = e.target?.files[0];
 
         if (file.size < 100000000) {
           setValues({ ...values, [value]: file });
