@@ -1,7 +1,7 @@
 FROM node:lts as dependencies
 WORKDIR /stoke-frontend
 COPY package.json ./
-RUN npm install --frozen-lockfile
+RUN npm install --frozen-lockfile --legacy-peer-deps
 
 FROM node:lts as builder
 WORKDIR /stoke-frontend
