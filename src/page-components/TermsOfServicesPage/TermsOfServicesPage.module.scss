@@ -1,0 +1,51 @@
+@import '../../../mixins/mixins.scss';
+
+.wrapperTerms {
+  width: 100%;
+  color: var(--white);
+  font-family: 'Poppins', sans-serif;
+  @include flex(center, center);
+
+  .contentTerms {
+    width: 60%;
+
+    .blockCondition {
+      @include flex(center, flex-start);
+      margin-bottom: 200px;
+      box-sizing: border-box;
+
+      .textCondition {
+        text-align: left;
+        font: normal normal normal 16px/24px Poppins;
+        letter-spacing: 0.01px;
+        color: var(--white);
+        opacity: 1;
+        padding-bottom: 60px;
+      }
+    }
+
+    .blockHeaderTerms {
+      display: flex;
+      flex-direction: column;
+      padding-top: 40px;
+
+      .titleTerms {
+        font: normal normal bold 36px/55px Poppins;
+        letter-spacing: 0px;
+        color: var(--white);
+        opacity: 1;
+
+        @include reset;
+      }
+
+      .updateText {
+        margin-top: 8px;
+        margin: 8px 0 24px 0;
+        font: normal normal normal 16px/33px Poppins;
+        letter-spacing: 0.01px;
+        color: var(--light-grey);
+        opacity: 1;
+      }
+    }
+  }
+}
