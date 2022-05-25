@@ -3,7 +3,12 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 //redux
 import { useDispatch, useSelector } from 'react-redux';
-import { addToken, getAllUserTokens, clearError, setTokens } from '../../redux/slices/ListTokenSlice';
+import {
+  addToken,
+  getAllUserTokens,
+  clearError,
+  setTokens,
+} from '../../redux/slices/ListTokenSlice';
 import { open as openError } from '../../redux/slices/errorSnackbarSlice';
 //components
 import { LeftSide } from './components/LeftSide/LeftSide';
@@ -12,7 +17,18 @@ import { RightSide } from './components/RightSide/RightSide';
 import styles from './ListTokenPage.module.scss';
 
 export const UserContext = createContext();
-export const ListTokenPage = ({ id, name, price, owner, fileName, category, collection, status, coverName }) => {
+export const ListTokenPage = ({
+  blockchainType,
+  category,
+  collection,
+  coverName,
+  fileName,
+  id,
+  name,
+  owner,
+  price,
+  status,
+}) => {
   const router = useRouter();
   const { tokenId } = router.query;
   const dispatch = useDispatch();
@@ -34,6 +50,7 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
         auctionEndCurrency: 'none',
         includeReservePrice: false,
         asBundle: false,
+        blockchainType,
         bundle: [],
         bundleDescription: '',
         bundleName: '',
@@ -41,7 +58,10 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
         collection,
         coverName,
         currency: 'none',
-        duration: [Date.parse(new Date()), Date.parse(new Date()) + 1000 * 60 * 60 * 24 * 7],
+        duration: [
+          Date.parse(new Date()),
+          Date.parse(new Date()) + 1000 * 60 * 60 * 24 * 7,
+        ],
         fileName,
         id,
         initialPrice: price,
@@ -54,12 +74,25 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
         status,
       })
     );
-  }, [dispatch, id, name, owner, fileName, category, price, collection, status, coverName]);
+  }, [
+    dispatch,
+    id,
+    name,
+    owner,
+    fileName,
+    category,
+    price,
+    collection,
+    status,
+    coverName,
+  ]);
 
   useEffect(() => {
     dispatch(getAllUserTokens());
     (async () => {
-      const response = await axios.get(`${process.env.BACKEND_URL}/nfts/${tokenId}`);
+      const response = await axios.get(
+        `${process.env.BACKEND_URL}/nfts/${tokenId}`
+      );
       const { blockchainType } = response.data;
       setTokenNetwork(String(blockchainType.name).toLowerCase());
     })();
@@ -69,7 +102,9 @@ export const ListTokenPage = ({ id, name, price, owner, fileName, category, coll
     if (error) {
       dispatch(
         openError(
-          error.response?.data ? `${error.response.data.statusCode} ${error.response.data.message}` : error.message
+          error.response?.data
+            ? `${error.response.data.statusCode} ${error.response.data.message}`
+            : error.message
         )
       );
       dispatch(clearError());

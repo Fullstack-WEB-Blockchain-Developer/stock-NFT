@@ -31,12 +31,13 @@ export const SquareNFTCard = ({
   price,
   status,
   blockchainType,
+  notBundle
 }) => {
   const [tokenFileError, setTokenFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [typeOfTokenFile, setTypeOfTokenFile] = useState();
   const router = useRouter();
-
+console.log('---blockCainType', blockchainType)
   useEffect(() => {
     const end = fileName?.substring(fileName.indexOf('.') + 1).toLowerCase();
 
@@ -63,7 +64,7 @@ export const SquareNFTCard = ({
 
   return (
     <div className={cn(className, styles.wrapper)}>
-      {!bundle || bundle.length === 0 ? (
+      {!bundle || bundle.length === 0 || notBundle ? (
         <>
           <div
             className={styles.imageWrapperWrapper}
