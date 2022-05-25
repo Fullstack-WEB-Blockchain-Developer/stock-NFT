@@ -140,7 +140,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
           } else {
             setActiveStep('confirm');
             (async () => {
-              if (isOpened && activeStep === 'confirm') {
+              // if (isOpened && activeStep === 'confirm') {
                 const fixedSaleData = {
                   tokenIds: [],
                   prices: [],
@@ -157,7 +157,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                   nftAddrs: [],
                 };
 
-                // const offerClass = new Offer({ contractAddress: tokenAddr, signer: library.getSigner(), library });
+                const offerClass = new Offer({ contractAddress: nftAddr, signer: library.getSigner(), library });
                 // const nonce = await tokenContract.nonces(account);
                 // // TODO: add support for multiple tokens ERC721 permit
                 // const { offer, signature } = await offerClass.makeOffer(
@@ -216,19 +216,19 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                     auctionSaleData.endTimes.push(endTime);
                     auctionSaleData.nftAddrs.push(nftAddr);
                     // TODO: add support for multiple tokens ERC721 permit
-                    // const { offer, signature } = await offerClass.makeOffer(
-                    //   account,
-                    //   stokeMarketAddr,
-                    //   token.auctionStartingPrice * 10 ** 18,
-                    //   ethers.utils.formatUnits(nonce) * 10 ** 18,
-                    //   endTime
-                    // );
-                    // console.log(
-                    //   '🚀 ~ file: CompleteListingModal.jsx ~ line 200 ~ signature',
-                    //   signature
-                    // );
+                    const { offer, signature } = await offerClass.makeOffer(
+                      account,
+                      stokeMarketAddr,
+                      token.auctionStartingPrice * 10 ** 18,
+                      ethers.utils.formatUnits(nonce) * 10 ** 18,
+                      endTime
+                    );
+                    console.log(
+                      '🚀 ~ file: CompleteListingModal.jsx ~ line 200 ~ signature',
+                      signature
+                    );
 
-                    // if (signature)
+                    if (signature)
                     await sendTimedAuctionToServer({
                       ...token,
                       auctionStartingCurrency: currencies.find(
@@ -237,6 +237,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                       auctionReserveCurrency: currencies.find(
                         ({ name }) => name === token.auctionReserveCurrency
                       ),
+                      blockchainHash: signature,
                     });
                   } else {
                     fixedSaleData.tokenIds.push(token.id);
@@ -250,20 +251,25 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                       '🚀 ~ file: CompleteListingModal.jsx ~ line 249 ~ fixedSaleData',
                       fixedSaleData
                     );
-                    await sendFixedPriceToServer({ ...token, currency: currencies.find(({ name }) => name === token.currency) });
                     // TODO: add support for multiple tokens ERC721 permit
-                    // const { offer, signature } = await offerClass.makeOffer(
-                    //   account,
-                    //   stokeMarketAddr,
-                    //   token.price * 10 ** 18,
-                    //   ethers.utils.formatUnits(nonce) * 10 ** 18,
-                    //   endTime
-                    // );
-                    // console.log(
-                    //   '🚀 ~ file: CompleteListingModal.jsx ~ line 200 ~ signature',
-                    //   signature
-                    // );
-                    // if (signature) await sendFixedPriceToServer(token);
+                    const { offer, signature } = await offerClass.makeOffer(
+                      account,
+                      stokeMarketAddr,
+                      String(token.price * 10 ** 18),
+                      ethers.utils.formatUnits(nonce) * 10 ** 18,
+                      endTime
+                    );
+                    console.log(
+                      '🚀 ~ file: CompleteListingModal.jsx ~ line 200 ~ signature',
+                      signature
+                    );
+                    if (signature) await sendFixedPriceToServer({
+                      ...token,
+                      currency: currencies.find(
+                        ({ name }) => name === token.currency
+                      ),
+                      blockchainHash: signature,
+                    });
                   }
                 }
                 // TODO: add support for multiple tokens ERC721 permit
@@ -314,22 +320,22 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                 //   });
                 // }));
 
-                if (auctionSaleData.tokenIds.length > 0) {
-                  console.log(
-                    '🚀 ~ file: CompleteListingModal.jsx ~ line 313 ~ auctionSaleData',
-                    auctionSaleData
-                  );
-                  await auctionSale(auctionSaleData);
-                }
+                // if (auctionSaleData.tokenIds.length > 0) {
+                //   console.log(
+                //     '🚀 ~ file: CompleteListingModal.jsx ~ line 313 ~ auctionSaleData',
+                //     auctionSaleData
+                //   );
+                //   await auctionSale(auctionSaleData);
+                // }
 
-                if (fixedSaleData.tokenIds.length > 0) {
-                  console.log(
-                    '🚀 ~ file: CompleteListingModal.jsx ~ line 318 ~ fixedSaleData',
-                    fixedSaleData
-                  );
-                  await fixedSale(fixedSaleData);
-                }
-              }
+                // if (fixedSaleData.tokenIds.length > 0) {
+                //   console.log(
+                //     '🚀 ~ file: CompleteListingModal.jsx ~ line 318 ~ fixedSaleData',
+                //     fixedSaleData
+                //   );
+                //   await fixedSale(fixedSaleData);
+                // }
+              // }
             })();
           }
         } catch (e) {
