@@ -160,7 +160,7 @@ export const Header = () => {
                 />
               ) : (
                 <Image
-                  src="/profile-icon.png"
+                  src="/profile-icon.svg"
                   loader={({ src }) => src}
                   objectFit="cover"
                   alt="profileImage"
