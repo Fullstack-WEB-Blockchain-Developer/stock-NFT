@@ -140,8 +140,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
           } else {
             setActiveStep('confirm');
             (async () => {
-              if (isOpened) {
-              // if (isOpened && activeStep === 'confirm') {
+              if (isOpened && activeStep === 'confirm') {
                 const fixedSaleData = {
                   tokenIds: [],
                   prices: [],

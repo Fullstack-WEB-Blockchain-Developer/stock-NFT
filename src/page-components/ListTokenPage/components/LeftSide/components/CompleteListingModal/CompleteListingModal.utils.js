@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const sendFixedPriceToServer = async (token) => {
-  const { id, asBundle, duration, bundle, currency, price, specificBuyerAddress } = token;
+  const { id, asBundle, duration, bundle, currency, price, specificBuyerAddress, blockchainHash } = token;
   const [start, end] = duration;
   const startDate = new Date(start).toISOString();
   const endDate = new Date(end).toISOString();
@@ -17,6 +17,7 @@ export const sendFixedPriceToServer = async (token) => {
       price: Number(price),
       reservedBuyerAddress: specificBuyerAddress,
       startDate,
+      blockchainHash,
     },
     {
       headers: {
@@ -36,6 +37,7 @@ export const sendTimedAuctionToServer = async (token) => {
     auctionReserveCurrency,
     bundle,
     duration,
+    blockchainHash,
   } = token;
   const [start, end] = duration;
   const startDate = new Date(start).toISOString();
@@ -54,6 +56,7 @@ export const sendTimedAuctionToServer = async (token) => {
       pricePaymentTokenId: Number(auctionStartingCurrency?.id),
       reservedPricePaymentTokenId: Number(auctionReserveCurrency?.id),
       startDate,
+      blockchainHash,
     },
     {
       headers: {
