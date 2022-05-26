@@ -140,6 +140,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
           } else {
             setActiveStep('confirm');
             (async () => {
+              if (isOpened) {
               // if (isOpened && activeStep === 'confirm') {
                 const fixedSaleData = {
                   tokenIds: [],
@@ -335,7 +336,7 @@ export const CompleteListingModal = ({ isOpened, handleClose, currencies }) => {
                 //   );
                 //   await fixedSale(fixedSaleData);
                 // }
-              // }
+              }
             })();
           }
         } catch (e) {
