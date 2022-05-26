@@ -184,26 +184,34 @@ export const BottomInfoWrapper = ({ activity }) => {
                     <span className={styles.greySmallText}>{usdPrice}</span>
                   </div>
                   <div>
-                    <span className={styles.link}>
-                      {buyer ? (buyer?.username ||
-                        `${buyer?.publicAddress.substring(
-                          0,
-                          6
-                        )}...${buyer?.publicAddress.substring(
-                          buyer?.publicAddress.length - 6
-                        )}`) : '---'}
-                    </span>
+                    {buyer ? (
+                      <span className={styles.link}>
+                        {buyer?.username ||
+                          `${buyer?.publicAddress.substring(
+                            0,
+                            6
+                          )}...${buyer?.publicAddress.substring(
+                            buyer?.publicAddress.length - 6
+                          )}`}
+                      </span>
+                    ) : (
+                      <span style={{ color: 'white' }}>---</span>
+                    )}
                   </div>
                   <div>
-                    <span className={styles.link}>
-                      {seller ? (seller?.username ||
-                        `${seller?.publicAddress.substring(
-                          0,
-                          6
-                        )}...${seller?.publicAddress.substring(
-                          seller?.publicAddress.length - 6
-                        )}`) : '---'}
-                    </span>
+                    {seller ? (
+                      <span className={styles.link}>
+                        {seller?.username ||
+                          `${seller?.publicAddress.substring(
+                            0,
+                            6
+                          )}...${seller?.publicAddress.substring(
+                            seller?.publicAddress.length - 6
+                          )}`}
+                      </span>
+                    ) : (
+                      <span style={{ color: 'white' }}>---</span>
+                    )}
                   </div>
                   <div className={styles.maxWidth150}>
                     <span className={styles.activityDateText}>{date}</span>
