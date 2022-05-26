@@ -147,7 +147,7 @@ export const BottomInfoWrapper = ({ activity }) => {
             })}
           >
             {activityData.map(
-              ({ type, buyer, seller, price, usdPrice, date, id }) => (
+              ({ type, buyer, seller, price, usdPrice, date, id, user }) => (
                 <div key={id} className={styles.tableRow}>
                   <div className={cn(styles.activityEvent, styles.maxWidth150)}>
                     {
@@ -184,18 +184,38 @@ export const BottomInfoWrapper = ({ activity }) => {
                     <span className={styles.greySmallText}>{usdPrice}</span>
                   </div>
                   <div>
-                    {buyer ? (
-                      <span className={styles.link}>
-                        {buyer?.username ||
-                          `${buyer?.publicAddress.substring(
-                            0,
-                            6
-                          )}...${buyer?.publicAddress.substring(
-                            buyer?.publicAddress.length - 6
-                          )}`}
-                      </span>
+                    {type === 'Listings' ? (
+                      <>
+                        {user ? (
+                          <span className={styles.link}>
+                            {user?.username ||
+                              `${user?.publicAddress.substring(
+                                0,
+                                6
+                              )}...${user?.publicAddress.substring(
+                                user?.publicAddress.length - 6
+                              )}`}
+                          </span>
+                        ) : (
+                          <span style={{ color: 'white' }}>---</span>
+                        )}
+                      </>
                     ) : (
-                      <span style={{ color: 'white' }}>---</span>
+                      <>
+                        {buyer ? (
+                          <span className={styles.link}>
+                            {buyer?.username ||
+                              `${buyer?.publicAddress.substring(
+                                0,
+                                6
+                              )}...${buyer?.publicAddress.substring(
+                                buyer?.publicAddress.length - 6
+                              )}`}
+                          </span>
+                        ) : (
+                          <span style={{ color: 'white' }}>---</span>
+                        )}
+                      </>
                     )}
                   </div>
                   <div>
