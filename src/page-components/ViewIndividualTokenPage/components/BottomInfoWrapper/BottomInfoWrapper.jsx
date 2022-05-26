@@ -185,24 +185,24 @@ export const BottomInfoWrapper = ({ activity }) => {
                   </div>
                   <div>
                     <span className={styles.link}>
-                      {buyer.username ||
-                        `${buyer.publicAddress.substring(
+                      {buyer ? (buyer?.username ||
+                        `${buyer?.publicAddress.substring(
                           0,
                           6
-                        )}...${buyer.publicAddress.substring(
-                          buyer.publicAddress.length - 6
-                        )}`}
+                        )}...${buyer?.publicAddress.substring(
+                          buyer?.publicAddress.length - 6
+                        )}`) : '---'}
                     </span>
                   </div>
                   <div>
                     <span className={styles.link}>
-                      {seller.username ||
-                        `${seller.publicAddress.substring(
+                      {seller ? (seller?.username ||
+                        `${seller?.publicAddress.substring(
                           0,
                           6
-                        )}...${seller.publicAddress.substring(
-                          seller.publicAddress.length - 6
-                        )}`}
+                        )}...${seller?.publicAddress.substring(
+                          seller?.publicAddress.length - 6
+                        )}`) : '---'}
                     </span>
                   </div>
                   <div className={styles.maxWidth150}>

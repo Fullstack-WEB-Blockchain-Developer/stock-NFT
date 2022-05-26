@@ -55,6 +55,8 @@ export const getServerSideProps = async ({ params }) => {
     ...adatpedFixedPriceListings,
     ...adaptedTimeAuctionListings,
   ];
+  console.log('---data', data)
+  console.log('---adaptedAllListings', adaptedAllListings)
 
   return {
     props: {
