@@ -8,7 +8,7 @@ export const TermsOfServicesPage = () => (
   <div className={styles.wrapperTerms}>
     <div className={styles.contentTerms}>
       <div className={styles.blockHeaderTerms}>
-        <h2 className={styles.titleTerms}>Terms & Conditions</h2>
+        <h2 className={styles.titleTerms}>Terms &amp; Conditions</h2>
         <span className={styles.updateText}>
           Last Updated: {getDateUpdate()}
         </span>

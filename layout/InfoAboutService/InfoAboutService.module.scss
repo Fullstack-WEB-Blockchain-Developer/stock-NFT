@@ -1,0 +1,50 @@
+@import '../../mixins/mixins.scss';
+
+.infoFooter {
+  width: 100%;
+  border-top: 1px solid var(--dark-grey);
+  padding: 24px 120px;
+  color: var(--white);
+  @include flex(center, space-between);
+
+  .infoText {
+    text-align: left;
+    font: normal normal normal 18px/33px Poppins;
+    letter-spacing: 0.02px;
+    color: var(--white);
+    opacity: 1;
+  }
+
+  .infoButtons {
+    display: flex;
+
+    .buttonTerms {
+      margin-right: 30px;
+      cursor: pointer;
+      text-align: right;
+      font: normal normal normal 18px/33px Poppins;
+      letter-spacing: 0.02px;
+      color: var(--white);
+      opacity: 1;
+      transition: 0.2s opacity ease-out;
+    }
+
+    .buttonTerms:hover {
+      opacity: 0.8;
+    }
+
+    .buttonPrivacy {
+      cursor: pointer;
+      text-align: right;
+      font: normal normal normal 18px/33px Poppins;
+      letter-spacing: 0.02px;
+      color: var(--white);
+      opacity: 1;
+      transition: 0.2s opacity ease-out;
+    }
+
+    .buttonPrivacy:hover {
+      opacity: 0.8;
+    }
+  }
+}
