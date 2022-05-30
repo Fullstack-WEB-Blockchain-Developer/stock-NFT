@@ -11,7 +11,7 @@ export const InfoAboutService = () => (
         <Link href="/terms-of-services">Terms of Service</Link>
       </div>
       <div className={styles.buttonPrivacy} role="button">
-        <Link href="/">Privacy Policy</Link>
+        <Link href="/privacy-policy">Privacy Policy</Link>
       </div>
     </div>
   </div>
