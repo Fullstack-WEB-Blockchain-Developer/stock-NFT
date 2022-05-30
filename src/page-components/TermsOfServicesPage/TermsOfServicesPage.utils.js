@@ -1,5 +1,6 @@
 //to do getting date and getting text for terms-of-services
 
+import axios from 'axios';
 import { getMonth } from 'date-fns';
 
 const monthNames = [
@@ -31,4 +32,24 @@ export const getDateUpdate = () => {
   return `${monthNames[result]} ${date?.split('.')?.[2]}, ${
     date?.split('.')?.[0]
   }`;
+};
+
+export const getServices = async () => {
+  const accessToken = localStorage.getItem('accessToken');
+
+  console.log('---accessToken', accessToken);
+
+  const data = { type: 'privacy_policy', text: 'hello' };
+
+  const result = await axios.post(
+    `${process.env.BACKEND_URL}/documents`,
+    JSON.stringify(data),
+    {
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+      },
+    }
+  );
+
+  return result;
 };
